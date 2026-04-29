@@ -16,9 +16,10 @@
 
 ---
 
+
 ## 1. Project Status
 
-**Current Phase:** Not started
+**Current Phase:** Foundation: Project scaffold พร้อมใช้งาน
 
 **Current Focus:** Setup
 
@@ -31,7 +32,7 @@
 ## 2. Delivery Plan
 
 ### Phase 0: Foundation
-- [ ] Project scaffold พร้อมใช้งาน
+- [x] Project scaffold พร้อมใช้งาน
 - [ ] App structure และ shared types พร้อม
 - [ ] Storage abstraction พร้อม
 - [ ] Mobile-first shell พร้อม
