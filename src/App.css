@@ -182,3 +182,66 @@
     border-right-color: var(--border);
   }
 }
+
+/* --- Mobile-first shell styles --- */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto;
+  background: #fafbfc;
+  padding: 0 1rem;
+}
+
+.app-header {
+  padding: 2rem 0 1rem 0;
+  text-align: center;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.quick-add {
+  padding: 1.5rem 0 1rem 0;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.quick-add-input {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.expense-list {
+  flex: 1 1 auto;
+  padding: 1.5rem 0;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1rem 0 2rem 0;
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  .app-header {
+    padding: 1.2rem 0 0.7rem 0;
+  }
+  .quick-add {
+    padding: 1rem 0 0.7rem 0;
+  }
+  .expense-list {
+    padding: 1rem 0;
+  }
+  .app-footer {
+    padding: 0.7rem 0 1.2rem 0;
+  }
+}

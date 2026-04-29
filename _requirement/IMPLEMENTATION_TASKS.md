@@ -33,9 +33,9 @@
 
 ### Phase 0: Foundation
 - [x] Project scaffold พร้อมใช้งาน
-- [ ] App structure และ shared types พร้อม
-- [ ] Storage abstraction พร้อม
-- [ ] Mobile-first shell พร้อม
+- [x] App structure และ shared types พร้อม
+- [x] Storage abstraction พร้อม
+- [x] Mobile-first shell พร้อม
 
 ### Phase 1: MVP
 - [ ] Quick add ใช้งานได้ครบ
