@@ -402,22 +402,22 @@ Requirement refs: FR-11
 Status: Completed. Added current-month daily aggregation utility sorted by date.
 
 ### E5. Integrate chart library
-- [ ] Install chart library
-- [ ] Render pie chart for category breakdown
-- [ ] Render line chart for daily spending
-- [ ] Ensure charts are mobile-friendly
+- [x] Install chart library
+- [x] Render pie chart for category breakdown
+- [x] Render line chart for daily spending
+- [x] Ensure charts are mobile-friendly
 
 Requirement refs: FR-11, Tech Constraints
 
-Status: Not started
+Status: Completed. Installed Chart.js + react-chartjs-2, added CategoryPieChart and DailyLineChart components, integrated with Summary UI. Charts are responsive and show fallback if no data.
 
 ### E6. Add empty states and chart fallback handling
-- [ ] Show graceful state when no expense data exists
-- [ ] Prevent chart rendering errors with empty datasets
+- [x] Show graceful state when no expense data exists
+- [x] Prevent chart rendering errors with empty datasets
 
 Requirement refs: Reliability
 
-Status: Not started
+Status: Completed. Chart components show fallback message if no data.
 
 ### E7. Add tests for dashboard logic
 - [x] Today summary calculation test
