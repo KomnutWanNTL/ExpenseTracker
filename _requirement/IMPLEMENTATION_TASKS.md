@@ -45,8 +45,8 @@
 - [x] Data persist หลัง reload
 
 ### Phase 2: Smart Categorization + Dashboard
-- [ ] Auto category ใช้งานได้ครบ
-- [ ] Category override ใช้งานได้ครบ
+- [x] Auto category ใช้งานได้ครบ
+- [x] Category override ใช้งานได้ครบ
 - [ ] Monthly summary ใช้งานได้ครบ
 - [ ] Pie chart และ line chart ใช้งานได้ครบ
 
@@ -308,62 +308,62 @@ Acceptance checklist:
 ## D. Auto Categorization
 
 ### D1. Define category set for v1
-- [ ] Finalize category names for MVP
-- [ ] Add default category `อื่น ๆ`
+- [x] Finalize category names for MVP
+- [x] Add default category `อื่น ๆ`
 
 Requirement refs: FR-08
 
-Status: Not started
+Status: Completed. Category v1 set: food, transport, shopping, bills, entertainment, health, other.
 
 ### D2. Implement keyword mapping table
-- [ ] Add food keywords
-- [ ] Add transport keywords
-- [ ] Add household/general purchase keywords
-- [ ] Add bill/payment keywords
-- [ ] Add entertainment keywords
+- [x] Add food keywords
+- [x] Add transport keywords
+- [x] Add household/general purchase keywords
+- [x] Add bill/payment keywords
+- [x] Add entertainment keywords
 
 Requirement refs: FR-07
 
-Status: Not started
+Status: Completed. Added keyword map for food/transport/shopping/bills/entertainment (+ health support).
 
 ### D3. Implement category detection utility
-- [ ] Detect category from note text
-- [ ] Normalize input before matching
-- [ ] Fallback to `อื่น ๆ` when no match exists
+- [x] Detect category from note text
+- [x] Normalize input before matching
+- [x] Fallback to `อื่น ๆ` when no match exists
 
 Requirement refs: FR-07, FR-08
 
-Status: Not started
+Status: Completed. Utility normalizes text and detects category by ordered keyword matching.
 
 ### D4. Connect auto categorization to save flow
-- [ ] Apply detected category during quick add
-- [ ] Store detected category in expense record
+- [x] Apply detected category during quick add
+- [x] Store detected category in expense record
 
 Requirement refs: FR-02, FR-07, FR-08
 
-Status: Not started
+Status: Completed. Quick add now persists detected category into saved expense record.
 
 ### D5. Implement manual category override
-- [ ] Allow category override during edit
+- [x] Allow category override during edit
 - [ ] Optionally allow override before save if UX supports it
 
 Requirement refs: FR-09
 
-Status: Not started
+Status: Completed for edit flow. Category can be manually overridden in edit drawer and is persisted.
 
 ### D6. Add tests for categorization
-- [ ] Keyword match returns expected category
-- [ ] Unknown text returns `อื่น ๆ`
-- [ ] Manual override persists correctly
+- [x] Keyword match returns expected category
+- [x] Unknown text returns `อื่น ๆ`
+- [x] Manual override persists correctly
 
 Requirement refs: FR-07 to FR-09
 
-Status: Not started
+Status: Completed. Added detection tests and persistence test for manual override category.
 
 Acceptance checklist:
-- [ ] Category is auto-detected for known keywords
-- [ ] Unknown notes default to `อื่น ๆ`
-- [ ] User can override category manually
+- [x] Category is auto-detected for known keywords
+- [x] Unknown notes default to `อื่น ๆ`
+- [x] User can override category manually
 
 ---
 

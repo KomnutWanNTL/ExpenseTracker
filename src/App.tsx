@@ -7,6 +7,7 @@ import ExpenseList from './components/ExpenseList';
 import Summary from './components/Summary';
 import EditExpense from './components/EditExpense';
 import { parseExpenseInput } from './utils/expenseParser';
+import { detectCategoryFromNote } from './utils/categoryDetection';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
 import type { Expense } from './types/expense';
 
@@ -58,7 +59,7 @@ function App() {
       id: crypto.randomUUID(),
       note: parsed.note,
       amount: parsed.amount,
-      category: 'other', // default, will implement auto-category later
+      category: detectCategoryFromNote(parsed.note),
       date: new Date().toISOString().slice(0, 10),
       createdAt: new Date().toISOString(),
     };
