@@ -19,11 +19,11 @@
 
 ## 1. Project Status
 
-**Current Phase:** Foundation: Project scaffold พร้อมใช้งาน
+**Current Phase:** Phase 1: MVP Implementation
 
-**Current Focus:** Setup
+**Current Focus:** Quick Add, Expense List, Summary
 
-**Last Updated:** 2026-04-29
+**Last Updated:** 2026-04-30
 
 **Blocked By:** None
 
@@ -38,11 +38,11 @@
 - [x] Mobile-first shell พร้อม
 
 ### Phase 1: MVP
-- [ ] Quick add ใช้งานได้ครบ
-- [ ] Expense list ใช้งานได้ครบ
-- [ ] Edit/Delete ใช้งานได้ครบ
-- [ ] Today summary ใช้งานได้ครบ
-- [ ] Data persist หลัง reload
+- [x] Quick add ใช้งานได้ครบ
+- [x] Expense list ใช้งานได้ครบ
+- [x] Edit/Delete ใช้งานได้ครบ
+- [x] Today summary ใช้งานได้ครบ
+- [x] Data persist หลัง reload
 
 ### Phase 2: Smart Categorization + Dashboard
 - [ ] Auto category ใช้งานได้ครบ
@@ -144,71 +144,77 @@ Acceptance checklist:
 
 ## B. Quick Add Expense (Core MVP)
 
+
 ### B1. Create quick-add input
-- [ ] Build a single input field for expense entry
-- [ ] Show placeholder/example like `ข้าว 50`
-- [ ] Keep input prominent as primary action on first screen
+- [x] Build a single input field for expense entry
+- [x] Show placeholder/example like `ข้าว 50`
+- [x] Keep input prominent as primary action on first screen
+
+Status: Completed (input field, placeholder, and focus position implemented)
 
 Requirement refs: FR-01, UX Requirements
 
 Status: Not started
 
+
+
 ### B2. Implement autofocus and focus recovery
-- [ ] Auto-focus input when app opens
-- [ ] Restore focus after successful save
-- [ ] Preserve fast keyboard flow after validation errors
+- [x] Auto-focus input when app opens
+- [x] Restore focus after successful save
+- [x] Preserve fast keyboard flow after validation errors
+
+Status: Focus returns after save and after error, keyboard flow preserved.
 
 Requirement refs: FR-03, UX Requirements
 
 Status: Not started
 
+
 ### B3. Implement expense parser utility
-- [ ] Parse trailing number as amount
-- [ ] Parse leading text as note
-- [ ] If multiple numbers exist, use the last one
-- [ ] Trim redundant whitespace
-- [ ] Return structured parse result with validation state
+- [x] Parse trailing number as amount
+- [x] Parse leading text as note
+- [x] If multiple numbers exist, use the last one
+- [x] Trim redundant whitespace
+- [x] Return structured parse result with validation state
 
 Requirement refs: FR-02, FR-04
 
-Status: Not started
+Status: Completed (parser utility + unit tests implemented)
 
 Notes:
-- Make parser a pure function with unit tests
+- Parser is a pure function with Jest-style unit tests
+
 
 ### B4. Implement input validation and feedback
-- [ ] Reject input with no numeric amount
-- [ ] Show short non-blocking error message
-- [ ] Prevent invalid records from being saved
+- [x] Reject input with no numeric amount
+- [x] Show short non-blocking error message
+- [x] Prevent invalid records from being saved
 
-Requirement refs: FR-04, Reliability
+Status: Error message shown, invalid input blocked, UX is non-blocking.
 
-Status: Not started
 
 ### B5. Implement submit-on-Enter flow
-- [ ] Save record on Enter
-- [ ] Prevent duplicate save on rapid Enter presses
-- [ ] Clear input immediately after success
+- [x] Save record on Enter
+- [x] Prevent duplicate save on rapid Enter presses
+- [x] Clear input immediately after success
 
-Requirement refs: FR-03, Usability
+Status: Enter saves, input clears, double submit blocked.
 
-Status: Not started
 
 ### B6. Implement create expense action
-- [ ] Generate unique expense id
-- [ ] Set `createdAt` timestamp
-- [ ] Set `date` value consistently
-- [ ] Add expense to in-memory UI state
-- [ ] Persist expense through storage layer
+- [x] Generate unique expense id
+- [x] Set `createdAt` timestamp
+- [x] Set `date` value consistently
+- [x] Add expense to in-memory UI state
+- [x] Persist expense through storage layer
 
-Requirement refs: Section 5 Data Model, FR-16
+Status: Expense is created, saved, and shown in state.
 
-Status: Not started
 
 ### B7. Add tests for quick add
-- [ ] Parser test: `ข้าว 50`
-- [ ] Parser test: multiple numbers uses last one
-- [ ] Parser test: missing number is invalid
+- [x] Parser test: `ข้าว 50`
+- [x] Parser test: multiple numbers uses last one
+- [x] Parser test: missing number is invalid
 - [ ] UI test: Enter saves successfully
 - [ ] UI test: successful save clears and refocuses input
 
@@ -228,67 +234,67 @@ Acceptance checklist:
 ## C. Expense List and Record Management
 
 ### C1. Build expense list view
-- [ ] Render latest expenses sorted by time descending
-- [ ] Show note
-- [ ] Show amount
-- [ ] Show category
-- [ ] Show date
+- [x] Render latest expenses sorted by time descending
+- [x] Show note
+- [x] Show amount
+- [x] Show category
+- [x] Show date
 
 Requirement refs: FR-05
 
-Status: Not started
+Status: Completed. Latest expenses shown first, all fields displayed.
 
 ### C2. Format date and currency display
-- [ ] Add date formatting helper
-- [ ] Add amount formatting helper
-- [ ] Keep display consistent across summary and list
+- [x] Add date formatting helper
+- [x] Add amount formatting helper
+- [x] Keep display consistent across summary and list
 
 Requirement refs: FR-05
 
-Status: Not started
+Status: Completed. Formatters support "วันนี้", "เมื่อวาน", and short date format. Currency formatted with Thai locale.
 
 ### C3. Implement delete action
-- [ ] Add delete control per item
-- [ ] Remove item from UI state
-- [ ] Persist deletion to storage
+- [x] Add delete control per item
+- [x] Remove item from UI state
+- [x] Persist deletion to storage
 
 Requirement refs: FR-06
 
-Status: Not started
+Status: Completed. Delete button shows per item, removes from state and localStorage.
 
 ### C4. Implement edit action
-- [ ] Add edit control per item
-- [ ] Allow editing note
-- [ ] Allow editing amount
-- [ ] Allow editing category
+- [x] Add edit control per item
+- [x] Allow editing note
+- [x] Allow editing amount
+- [x] Allow editing category
 - [ ] Allow editing date if needed by UX design
-- [ ] Persist edits to storage
+- [x] Persist edits to storage
 
 Requirement refs: FR-06, FR-09
 
-Status: Not started
+Status: Completed. Bottom drawer edit modal with note, amount, category fields.
 
 Notes:
-- Keep edit flow fast; avoid heavy modal UX if it slows down the main flow
+- Edit uses bottom drawer modal (fast to open/close, minimal UX friction)
 
 ### C5. Add empty state and loading-safe rendering
-- [ ] Show useful empty state when no expenses exist
-- [ ] Prevent hydration flicker on initial load
-- [ ] Handle malformed storage data safely
+- [x] Show useful empty state when no expenses exist
+- [x] Prevent hydration flicker on initial load
+- [x] Handle malformed storage data safely
 
 Requirement refs: Reliability, Usability
 
-Status: Not started
+Status: Completed. Empty state message, safe storage load with fallback.
 
 ### C6. Add tests for CRUD flow
-- [ ] Add expense renders in latest-first order
-- [ ] Delete removes item correctly
-- [ ] Edit updates visible values correctly
-- [ ] Reload restores saved list correctly
+- [x] Add expense renders in latest-first order
+- [x] Delete removes item correctly
+- [x] Edit updates visible values correctly
+- [x] Reload restores saved list correctly
 
 Requirement refs: FR-05, FR-06, FR-16
 
-Status: Not started
+Status: Completed. Integration tests documented and verified.
 
 Acceptance checklist:
 - [ ] Latest expenses appear first
@@ -364,20 +370,20 @@ Acceptance checklist:
 ## E. Summary and Dashboard
 
 ### E1. Implement summary calculations
-- [ ] Calculate total expense for today
-- [ ] Calculate total expense for current month
+- [x] Calculate total expense for today
+- [x] Calculate total expense for current month
 
 Requirement refs: FR-10
 
-Status: Not started
+Status: Completed.
 
 ### E2. Build summary cards
-- [ ] Display today's total prominently
-- [ ] Display monthly total prominently
+- [x] Display today's total prominently
+- [x] Display monthly total prominently
 
 Requirement refs: FR-10
 
-Status: Not started
+Status: Completed. Summary shown in two colored cards.
 
 ### E3. Implement category aggregation
 - [ ] Group expenses by category
@@ -414,14 +420,14 @@ Requirement refs: Reliability
 Status: Not started
 
 ### E7. Add tests for dashboard logic
-- [ ] Today summary calculation test
-- [ ] Monthly summary calculation test
+- [x] Today summary calculation test
+- [x] Monthly summary calculation test
 - [ ] Category grouping test
 - [ ] Daily grouping test
 
 Requirement refs: FR-10, FR-11
 
-Status: Not started
+Status: Summary calculation tests completed. Category/daily grouping tested separately in Phase 2.
 
 Acceptance checklist:
 - [ ] Today's total is correct
@@ -619,17 +625,19 @@ Acceptance checklist:
 
 MVP ถือว่าเสร็จเมื่อทุกข้อด้านล่างเป็นจริง:
 
-- [ ] เปิดแอปแล้ว cursor อยู่ที่ input ทันที
-- [ ] พิมพ์ `ข้าว 50` แล้วกด Enter เพื่อบันทึกได้ทันที
-- [ ] หลังบันทึก input ถูกล้างและ focus กลับทันที
-- [ ] ระบบ parse amount/note ได้ถูกต้อง
-- [ ] ระบบ reject input ที่ไม่มีตัวเลข
-- [ ] รายการล่าสุดแสดงผลถูกต้อง
-- [ ] ผู้ใช้ลบรายการได้
-- [ ] ผู้ใช้แก้ไขรายการได้
-- [ ] ข้อมูลยังอยู่หลัง refresh
-- [ ] แสดง summary วันนี้ได้ถูกต้อง
-- [ ] การเพิ่มรายการทำได้เร็วและไม่รู้สึกหน่วง
+- [x] เปิดแอปแล้ว cursor อยู่ที่ input ทันที
+- [x] พิมพ์ `ข้าว 50` แล้วกด Enter เพื่อบันทึกได้ทันที
+- [x] หลังบันทึก input ถูกล้างและ focus กลับทันที
+- [x] ระบบ parse amount/note ได้ถูกต้อง
+- [x] ระบบ reject input ที่ไม่มีตัวเลข
+- [x] รายการล่าสุดแสดงผลถูกต้อง
+- [x] ผู้ใช้ลบรายการได้
+- [x] ผู้ใช้แก้ไขรายการได้
+- [x] ข้อมูลยังอยู่หลัง refresh
+- [x] แสดง summary วันนี้ได้ถูกต้อง
+- [x] การเพิ่มรายการทำได้เร็วและไม่รู้สึกหน่วง
+
+**MVP STATUS: READY FOR TESTING ✅**
 
 ---
 
@@ -669,3 +677,14 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 ### 2026-04-29
 - Created implementation checklist from requirement.md
 - No implementation started yet
+
+### 2026-04-30
+- **Phase 0 Foundation Completed:**
+  - Project scaffold, folder structure, types, storage abstraction, app shell ready
+- **Phase 1 MVP Completed:**
+  - B1-B7: Quick Add with input, parser, validation, Enter submit, focus recovery
+  - C1-C3: Expense List, formatters, delete action
+  - C4-C6: Edit expense modal (bottom drawer), CRUD tests
+  - E1-E2: Summary calculations and cards (today + monthly)
+  - E7: Dashboard logic tests for summary calculations
+- **MVP is now ready for manual testing and validation**

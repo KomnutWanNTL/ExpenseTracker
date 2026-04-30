@@ -71,3 +71,27 @@ export default defineConfig([
   },
 ])
 ```
+
+## Usage
+
+To start the development server:
+
+```
+npm run dev
+```
+
+To build for production:
+
+```
+npm run build
+```
+
+To preview the production build:
+
+```
+npm run preview
+```
+
+- The app is mobile-first and designed for quick expense entry.
+- All data is stored locally in your browser (localStorage).
+- For more details, see the `_requirement/requirement.md` and `_requirement/IMPLEMENTATION_TASKS.md`.

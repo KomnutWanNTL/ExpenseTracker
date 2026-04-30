@@ -1,0 +1,165 @@
+import { useState } from 'react';
+import type { Expense } from '../types/expense';
+import { formatAmount } from '../utils/formatters';
+
+interface EditExpenseProps {
+  expense: Expense;
+  onSave: (expense: Expense) => void;
+  onClose: () => void;
+}
+
+export default function EditExpense({ expense, onSave, onClose }: EditExpenseProps) {
+  const [note, setNote] = useState(expense.note);
+  const [amount, setAmount] = useState(expense.amount.toString());
+  const [category, setCategory] = useState(expense.category);
+
+  function handleSave() {
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      alert('จำนวนเงินไม่ถูกต้อง');
+      return;
+    }
+    onSave({
+      ...expense,
+      note,
+      amount: parsedAmount,
+      category,
+    });
+    onClose();
+  }
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'flex-end',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          backgroundColor: 'white',
+          borderRadius: '16px 16px 0 0',
+          width: '100%',
+          maxHeight: '80vh',
+          padding: '20px 16px',
+          boxSizing: 'border-box',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ marginBottom: 16, textAlign: 'center' }}>
+          <h2 style={{ margin: '0 0 16px 0', fontSize: '1.1rem' }}>แก้ไขรายการ</h2>
+        </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
+            หมายเหตุ
+          </label>
+          <input
+            type="text"
+            value={note}
+            onChange={e => setNote(e.target.value)}
+            placeholder="เช่น ข้าว"
+            style={{
+              width: '100%',
+              padding: '8px 12px',
+              fontSize: '1rem',
+              border: '1px solid #e5e7eb',
+              borderRadius: 6,
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
+            จำนวนเงิน
+          </label>
+          <input
+            type="number"
+            value={amount}
+            onChange={e => setAmount(e.target.value)}
+            placeholder="0"
+            step="0.01"
+            min="0"
+            style={{
+              width: '100%',
+              padding: '8px 12px',
+              fontSize: '1rem',
+              border: '1px solid #e5e7eb',
+              borderRadius: 6,
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
+            หมวดหมู่
+          </label>
+          <select
+            value={category}
+            onChange={e => setCategory(e.target.value as any)}
+            style={{
+              width: '100%',
+              padding: '8px 12px',
+              fontSize: '1rem',
+              border: '1px solid #e5e7eb',
+              borderRadius: 6,
+              boxSizing: 'border-box',
+            }}
+          >
+            <option value="food">อาหาร</option>
+            <option value="transport">ขนส่ง</option>
+            <option value="shopping">ช้อปปิ้ง</option>
+            <option value="bills">ค่าบิล</option>
+            <option value="entertainment">ความบันเทิง</option>
+            <option value="health">สุขภาพ</option>
+            <option value="other">อื่น ๆ</option>
+          </select>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={onClose}
+            style={{
+              flex: 1,
+              padding: '10px 16px',
+              fontSize: '1rem',
+              backgroundColor: '#e5e7eb',
+              border: 'none',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 500,
+            }}
+          >
+            ยกเลิก
+          </button>
+          <button
+            onClick={handleSave}
+            style={{
+              flex: 1,
+              padding: '10px 16px',
+              fontSize: '1rem',
+              backgroundColor: '#2563eb',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 500,
+            }}
+          >
+            บันทึก
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
