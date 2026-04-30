@@ -88,36 +88,18 @@ function App() {
 
   return (
     <main className="container" style={{ marginTop: '10px' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-        <h1>Expense Tracker</h1>
-        <div style={{ display: 'flex', gap: '8px' }}>
+      <header className="app-header-row">
+        <h1 className="app-title">Expense Tracker</h1>
+        <div className="header-btn-group">
           <button
+            className="header-btn export-btn"
             onClick={() => downloadExpensesAsCSV(expenses)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: '#059669',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
           >
             Export
           </button>
           <button
+            className="header-btn budget-btn"
             onClick={() => setShowBudgetSettings(true)}
-            style={{
-              padding: '6px 12px',
-              backgroundColor: '#0369a1',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
           >
             Budget
           </button>

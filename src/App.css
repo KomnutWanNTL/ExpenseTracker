@@ -1,3 +1,69 @@
+/* Header row redesign */
+.app-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.app-title {
+  flex: 1 1 auto;
+  text-align: center;
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.header-btn-group {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.header-btn {
+  padding: 7px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.export-btn {
+  background: #059669;
+  color: #fff;
+}
+.export-btn:hover {
+  background: #047857;
+}
+
+.budget-btn {
+  background: #0369a1;
+  color: #fff;
+}
+.budget-btn:hover {
+  background: #0ea5e9;
+}
+
+@media (max-width: 600px) {
+  .app-header-row {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .header-btn-group {
+    justify-content: center;
+  }
+  .app-title {
+    font-size: 1.15rem;
+  }
+}
 /* Layout tokens */
 :root {
   --space-xs: 4px;
@@ -35,12 +101,44 @@ body {
   min-height: 100vh;
   background: var(--color-bg);
   box-sizing: border-box;
+
+  :root {
+    --space-xs: 6px;
+    --space-sm: 12px;
+    --space-md: 24px;
+    --space-lg: 36px;
+    --space-xl: 48px;
+
+    --color-bg: #f6f8fa;
+    --color-primary: #2563eb;
+    --color-danger: #ef4444;
+    --color-card: #fff;
+    --color-border: #e0e4ea;
+    --color-text: #23272f;
+    --color-muted: #8a94a6;
+    --color-shadow: 0 2px 16px 0 rgba(60,72,88,0.06);
+
+    --font-base: 'Inter', 'Segoe UI', 'Roboto', system-ui, sans-serif;
+    --font-size-base: 1.05rem;
+    --font-size-lg: 1.5rem;
+    --font-size-sm: 0.98rem;
+  }
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
 header {
+
+  body {
+    background: var(--color-bg);
+    font-family: var(--font-base);
+    color: var(--color-text);
+    margin: 0;
+    font-size: var(--font-size-base);
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
   margin-bottom: 0;
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--color-border);
@@ -53,16 +151,44 @@ h1 {
 }
 
 section {
+
+  .container {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto var(--space-lg) auto;
+    padding: 0 var(--space-lg);
+    min-height: 100vh;
+    background: var(--color-bg);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
   background: var(--color-card);
   border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.03);
   padding: var(--space-lg);
   border: 1px solid var(--color-border);
+
+  header {
+    margin-bottom: 0;
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    background: transparent;
+  }
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
+
+  h1 {
+    font-size: var(--font-size-lg);
+    margin: 0 0 var(--space-md) 0;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: -0.5px;
+  }
 .section-card {
   background: var(--color-card);
   border-radius: 12px;
@@ -73,6 +199,17 @@ section {
 
 @media (max-width: 600px) {
   .container {
+
+  section {
+    background: var(--color-card);
+    border-radius: 18px;
+    box-shadow: var(--color-shadow);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
     padding: var(--space-md) var(--space-xs);
   }
   section {
@@ -80,6 +217,14 @@ section {
   }
   .section-card {
     padding: var(--space-md);
+
+  .section-card {
+    background: var(--color-card);
+    border-radius: 18px;
+    box-shadow: var(--color-shadow);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+  }
   }
 }
 .counter {
@@ -88,27 +233,77 @@ section {
   border-radius: 5px;
   color: var(--accent);
   background: var(--accent-bg);
+
+  .quick-add-input {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.85rem 1.1rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: #fafdff;
+    transition: border-color 0.2s;
+  }
+
+  .quick-add-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: #fff;
+  }
   border: 2px solid transparent;
   transition: border-color 0.3s;
   margin-bottom: 24px;
 
   &:hover {
     border-color: var(--accent-border);
+
+  .app-header {
+    padding: 2.5rem 0 1.5rem 0;
+    text-align: center;
+    background: transparent;
+    border-bottom: none;
+  }
   }
   &:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  .quick-add {
+    padding: 2rem 0 1.2rem 0;
+    background: var(--color-card);
+    border-radius: 14px;
+    margin-bottom: var(--space-md);
+    box-shadow: var(--color-shadow);
+    border: 1px solid var(--color-border);
   }
 }
 
 .hero {
   position: relative;
 
+  .expense-list {
+    flex: 1 1 auto;
+    padding: 2rem 0;
+    background: var(--color-card);
+    border-radius: 14px;
+    box-shadow: var(--color-shadow);
+    border: 1px solid var(--color-border);
+  }
+
   .base,
   .framework,
   .vite {
     inset-inline: 0;
     margin: 0 auto;
+
+  .app-footer {
+    text-align: center;
+    padding: 1.2rem 0 2.2rem 0;
+    color: var(--color-muted);
+    font-size: var(--font-size-sm);
+    background: transparent;
+  }
   }
 
   .base {
@@ -126,6 +321,24 @@ section {
     z-index: 1;
     top: 34px;
     height: 28px;
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 0 var(--space-xs);
+    }
+    .app-header {
+      padding: 1.2rem 0 0.7rem 0;
+    }
+    .quick-add {
+      padding: 1.2rem 0 0.7rem 0;
+    }
+    .expense-list {
+      padding: 1.1rem 0;
+    }
+    .app-footer {
+      padding: 0.7rem 0 1.2rem 0;
+    }
+  }
     transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
       scale(1.4);
   }

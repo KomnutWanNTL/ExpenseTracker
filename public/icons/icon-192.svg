@@ -1,0 +1,12 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" rx="40" fill="#2563eb"/>
+  <g filter="url(#shadow)">
+    <circle cx="96" cy="96" r="64" fill="#fff"/>
+    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="#2563eb" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="bold">฿</text>
+  </g>
+  <defs>
+    <filter id="shadow" x="16" y="16" width="160" height="160" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#2563eb" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+</svg>
