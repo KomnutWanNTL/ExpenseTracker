@@ -87,7 +87,7 @@ function App() {
 
 
   return (
-    <main className="container">
+    <main className="container" style={{ marginTop: '10px' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
         <h1>Expense Tracker</h1>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -134,7 +134,7 @@ function App() {
         ref={inputRef}
       />
       {error && (
-        <div style={{ color: '#ef4444', marginBottom: 8, fontSize: '0.98rem' }}>{error}</div>
+        <div style={{ color: '#ef4444', fontSize: '0.98rem', padding: '8px 12px', backgroundColor: '#fee2e2', borderRadius: '8px' }}>{error}</div>
       )}
       <Summary expenses={expenses} />
       {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={expenses} />}

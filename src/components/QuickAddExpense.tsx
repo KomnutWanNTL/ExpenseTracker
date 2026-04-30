@@ -31,7 +31,7 @@ const QuickAddExpense = forwardRef<HTMLInputElement, QuickAddExpenseProps>(
     };
 
     return (
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <input
           ref={setRefs}
           type="text"
