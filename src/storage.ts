@@ -1,7 +1,7 @@
 // Storage abstraction for Expense Tracker
 // Handles CRUD for expenses using localStorage
 
-import type { Expense } from '../types/expense'
+import type { Expense } from './types/expense'
 
 const STORAGE_KEY = 'expenses';
 
