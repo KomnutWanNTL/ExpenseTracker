@@ -92,6 +92,25 @@ To preview the production build:
 npm run preview
 ```
 
+## Deploy to gh-pages (without workflow)
+
+This project can deploy directly to the `gh-pages` branch from your local machine.
+
+1. Make sure your changes are pushed to `main`.
+2. Build and publish:
+
+```
+npm run deploy
+```
+
+The deploy command will run `predeploy` first (`npm run build`) and then publish `dist` to the `gh-pages` branch.
+
+After deploying, verify GitHub Pages settings:
+
+- Repository Settings > Pages
+- Source: `Deploy from a branch`
+- Branch: `gh-pages` and folder `/ (root)`
+
 - The app is mobile-first and designed for quick expense entry.
 - All data is stored locally in your browser (localStorage).
 - For more details, see the `_requirement/requirement.md` and `_requirement/IMPLEMENTATION_TASKS.md`.

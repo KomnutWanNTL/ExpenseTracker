@@ -59,7 +59,6 @@
     "flat-cache": "^4.0.1",
     "flatted": "^3.4.2",
     "fs-extra": "^11.3.4",
-    
     "gensync": "^1.0.0-beta.2",
     "gh-pages": "^6.3.0",
     "glob-parent": "^6.0.2",
@@ -84,7 +83,6 @@
     "keyv": "^4.5.4",
     "levn": "^0.4.1",
     "lightningcss": "^1.32.0",
-    
     "locate-path": "^6.0.0",
     "lru-cache": "^5.1.1",
     "magic-string": "^0.30.21",
@@ -153,10 +151,13 @@
     "zod": "^4.3.6",
     "zod-validation-error": "^4.0.2"
   },
-  "devDependencies": {},
   "scripts": {
     "build": "vite build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "dev": "vite",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -169,5 +170,8 @@
   "bugs": {
     "url": "https://github.com/KomnutWanNTL/ExpenseTracker/issues"
   },
-  "homepage": "https://github.com/KomnutWanNTL/ExpenseTracker#readme"
+  "homepage": "https://komnutwanntl.github.io/ExpenseTracker/",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1"
+  }
 }
