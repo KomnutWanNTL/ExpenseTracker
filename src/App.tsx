@@ -6,9 +6,13 @@ import QuickAddExpense from './components/QuickAddExpense';
 import ExpenseList from './components/ExpenseList';
 import Summary from './components/Summary';
 import EditExpense from './components/EditExpense';
+import BudgetSettings from './components/BudgetSettings';
+import BudgetStatus from './components/BudgetStatus';
 import { parseExpenseInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
+import { loadBudgets } from './storage/budgetStorage';
+import { downloadExpensesAsCSV } from './utils/csvExport';
 import type { Expense } from './types/expense';
 
 function App() {
@@ -19,6 +23,8 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [expenses, setExpenses] = useState<Expense[]>(() => loadExpenses());
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [budgets, setBudgets] = useState(() => loadBudgets());
+  const [showBudgetSettings, setShowBudgetSettings] = useState(false);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -39,6 +45,10 @@ function App() {
     setEditingExpense(null);
   }
 
+  function handleCloseBudgetSettings() {
+    setBudgets(loadBudgets());
+    setShowBudgetSettings(false);
+  }
 
   function handleSubmit() {
     if (!input.trim() || isSubmitting) return;
@@ -78,8 +88,40 @@ function App() {
 
   return (
     <main className="container">
-      <header>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
         <h1>Expense Tracker</h1>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={() => downloadExpensesAsCSV(expenses)}
+            style={{
+              padding: '6px 12px',
+              backgroundColor: '#059669',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Export
+          </button>
+          <button
+            onClick={() => setShowBudgetSettings(true)}
+            style={{
+              padding: '6px 12px',
+              backgroundColor: '#0369a1',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Budget
+          </button>
+        </div>
       </header>
       <QuickAddExpense
         value={input}
@@ -95,6 +137,7 @@ function App() {
         <div style={{ color: '#ef4444', marginBottom: 8, fontSize: '0.98rem' }}>{error}</div>
       )}
       <Summary expenses={expenses} />
+      {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={expenses} />}
       <section>
         <ExpenseList
           expenses={expenses}
@@ -109,9 +152,40 @@ function App() {
           onClose={() => setEditingExpense(null)}
         />
       )}
+      {showBudgetSettings && (
+        <div style={bottomDrawerStyle}>
+          <div style={bottomDrawerContentStyle}>
+            <BudgetSettings
+              expenses={expenses}
+              onClose={handleCloseBudgetSettings}
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
 
+const bottomDrawerStyle: React.CSSProperties = {
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  display: 'flex',
+  alignItems: 'flex-end',
+  zIndex: 999,
+};
+
+const bottomDrawerContentStyle: React.CSSProperties = {
+  width: '100%',
+  backgroundColor: 'white',
+  borderTopLeftRadius: '12px',
+  borderTopRightRadius: '12px',
+  maxHeight: '80vh',
+  overflowY: 'auto',
+  animation: 'slideUp 0.3s ease-out',
+};
 
 export default App
+
