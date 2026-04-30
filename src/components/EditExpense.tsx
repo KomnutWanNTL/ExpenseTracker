@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { Expense } from '../types/expense';
-import { formatAmount } from '../utils/formatters';
 
 interface EditExpenseProps {
   expense: Expense;
