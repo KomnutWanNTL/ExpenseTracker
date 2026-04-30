@@ -47,13 +47,13 @@
 ### Phase 2: Smart Categorization + Dashboard
 - [x] Auto category ใช้งานได้ครบ
 - [x] Category override ใช้งานได้ครบ
-- [ ] Monthly summary ใช้งานได้ครบ
-- [ ] Pie chart และ line chart ใช้งานได้ครบ
+- [x] Monthly summary ใช้งานได้ครบ
+- [x] Pie chart และ line chart ใช้งานได้ครบ
 
 ### Phase 3: Budget + Export
-- [ ] Budget per category ใช้งานได้ครบ
-- [ ] Budget status/alert ใช้งานได้ครบ
-- [ ] CSV export ใช้งานได้ครบ
+- [x] Budget per category ใช้งานได้ครบ
+- [x] Budget status/alert ใช้งานได้ครบ
+- [x] CSV export ใช้งานได้ครบ
 
 ---
 
@@ -62,83 +62,86 @@
 ## A. Setup and Architecture
 
 ### A1. Bootstrap project
-- [ ] Create React + Vite project
-- [ ] Confirm dev server starts successfully
-- [ ] Confirm production build succeeds
-- [ ] Add basic README usage notes
+- [x] Create React + Vite project
+- [x] Confirm dev server starts successfully
+- [x] Confirm production build succeeds
+- [x] Add basic README usage notes
 
 Requirement refs: Tech Constraints, NFR Performance
 
-Status: Not started
+Status: Completed
 
 Notes:
-- Build tool must be Vite
-- Frontend must be React
+- Build tool: Vite
+- Frontend: React
+- README มี usage note และ deploy note
 
 ### A2. Define folder structure
-- [ ] Create folders for `src/app`
-- [ ] Create folders for `src/components`
-- [ ] Create folders for `src/features/expenses`
-- [ ] Create folders for `src/features/dashboard`
-- [ ] Create folders for `src/features/budget`
-- [ ] Create folders for `src/storage`
-- [ ] Create folders for `src/utils`
-- [ ] Create folders for `src/types`
+- [x] Create folders for `src/app`
+- [x] Create folders for `src/components`
+- [x] Create folders for `src/features/expenses`
+- [x] Create folders for `src/features/dashboard`
+- [x] Create folders for `src/features/budget`
+- [x] Create folders for `src/storage`
+- [x] Create folders for `src/utils`
+- [x] Create folders for `src/types`
 
 Requirement refs: Tech Constraints
 
-Status: Not started
+Status: Completed
 
 Notes:
-- Keep feature boundaries clear to reduce refactor cost later
+- Feature boundaries แยกชัดเจน ลด refactor cost
 
 ### A3. Define shared domain types
-- [ ] Define `Expense` type from the requirement data model
-- [ ] Define `Category` type/list
-- [ ] Define `Budget` type
-- [ ] Define `BudgetStatus` type
-- [ ] Define storage payload types if needed
+- [x] Define `Expense` type from the requirement data model
+- [x] Define `Category` type/list
+- [x] Define `Budget` type
+- [x] Define `BudgetStatus` type
+- [x] Define storage payload types if needed
 
 Requirement refs: Section 5 Data Model, FR-12, FR-13
 
-Status: Not started
+Status: Completed
 
 Notes:
-- Expense should include `id`, `amount`, `category`, `note`, `date`, `createdAt`
+- Expense: id, amount, category, note, date, createdAt (src/types/expense.ts)
+- Budget/type อื่นๆ ครบใน src/types/
 
 ### A4. Create storage abstraction
-- [ ] Create expense storage service
-- [ ] Create budget storage service
-- [ ] Add safe parse/serialize handling
-- [ ] Add fallback for empty or corrupted local data
-- [ ] Ensure reload persists data correctly
+- [x] Create expense storage service
+- [x] Create budget storage service
+- [x] Add safe parse/serialize handling
+- [x] Add fallback for empty or corrupted local data
+- [x] Ensure reload persists data correctly
 
 Requirement refs: FR-15, FR-16, Reliability
 
-Status: Not started
+Status: Completed
 
 Notes:
-- Start with localStorage
-- Keep API abstraction ready for IndexedDB later if needed
+- ใช้ localStorage (src/storage/expenseStorage.ts, budgetStorage.ts)
+- API abstraction พร้อมต่อยอด IndexedDB
 
 ### A5. Create app shell and base UI system
-- [ ] Build mobile-first page shell
-- [ ] Add layout spacing tokens
-- [ ] Add color tokens and state colors
-- [ ] Add typography scale
-- [ ] Add reusable button/input/card primitives if needed
+- [x] Build mobile-first page shell
+- [x] Add layout spacing tokens
+- [x] Add color tokens and state colors
+- [x] Add typography scale
+- [x] Add reusable button/input/card primitives if needed
 
 Requirement refs: Usability, Mobile-first, Responsive
 
-Status: Not started
+Status: Completed
 
 Notes:
-- Main flow must be usable one-handed on mobile
+- Layout, spacing, color, typography ครบใน App.css, index.css
+- Shell พร้อม quick add, mobile-first, touch target เหมาะสม
 
 Acceptance checklist:
-- [ ] App layout works on mobile width first
-- [ ] Touch targets are usable on small screens
-- [ ] Base shell is ready for quick add as first focus area
+- [x] App layout works on mobile width first
+- [x] Touch targets are usable on small screens
+- [x] Base shell is ready for quick add as first focus area
 
 ---
 
@@ -559,10 +562,13 @@ Requirement refs: Reliability, FR-04
 
 Status: Not started
 
+
 ### H2. Offline-ready behavior
-- [ ] Ensure app works without internet
-- [ ] Keep all core flows local-first
-- [ ] Prepare PWA-ready structure if included in v1
+- [x] Ensure app works without internet (PWA + service worker implemented)
+- [x] Keep all core flows local-first
+- [x] Prepare PWA-ready structure if included in v1
+Notes:
+- PWA manifest, service worker, and offline cache are implemented and tested.
 
 Requirement refs: Offline Support, Scope
 
@@ -643,14 +649,15 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 
 ## 6. Phase 2 Exit Criteria
 
-- [ ] ระบบ auto-detect category ได้
-- [ ] หากไม่ match ให้เป็น `อื่น ๆ`
-- [ ] ผู้ใช้ override category ได้
-- [ ] แสดงรายจ่ายเดือนนี้ได้
-- [ ] Pie chart ใช้งานได้
-- [ ] Line chart ใช้งานได้
+- [x] ระบบ auto-detect category ได้
+- [x] หากไม่ match ให้เป็น `อื่น ๆ`
+- [x] ผู้ใช้ override category ได้
+- [x] แสดงรายจ่ายเดือนนี้ได้
+- [x] Pie chart ใช้งานได้
+- [x] Line chart ใช้งานได้
 
 ---
+
 
 ## 7. Phase 3 Exit Criteria
 
