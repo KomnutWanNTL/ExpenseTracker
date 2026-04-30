@@ -386,20 +386,20 @@ Requirement refs: FR-10
 Status: Completed. Summary shown in two colored cards.
 
 ### E3. Implement category aggregation
-- [ ] Group expenses by category
-- [ ] Calculate totals for pie chart data
+- [x] Group expenses by category
+- [x] Calculate totals for pie chart data
 
 Requirement refs: FR-11
 
-Status: Not started
+Status: Completed. Added current-month category aggregation utility with deterministic sort.
 
 ### E4. Implement daily aggregation
-- [ ] Group expenses by day
-- [ ] Calculate totals for line chart data
+- [x] Group expenses by day
+- [x] Calculate totals for line chart data
 
 Requirement refs: FR-11
 
-Status: Not started
+Status: Completed. Added current-month daily aggregation utility sorted by date.
 
 ### E5. Integrate chart library
 - [ ] Install chart library
@@ -422,12 +422,12 @@ Status: Not started
 ### E7. Add tests for dashboard logic
 - [x] Today summary calculation test
 - [x] Monthly summary calculation test
-- [ ] Category grouping test
-- [ ] Daily grouping test
+- [x] Category grouping test
+- [x] Daily grouping test
 
 Requirement refs: FR-10, FR-11
 
-Status: Summary calculation tests completed. Category/daily grouping tested separately in Phase 2.
+Status: Completed. Summary + category grouping + daily grouping tests implemented in utility test suite.
 
 Acceptance checklist:
 - [ ] Today's total is correct

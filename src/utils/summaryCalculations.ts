@@ -1,5 +1,20 @@
 // Summary calculation utilities
 import type { Expense } from '../types/expense';
+import type { Category } from '../types/expense';
+
+export interface CategoryTotal {
+  category: Category;
+  total: number;
+}
+
+export interface DailyTotal {
+  date: string;
+  total: number;
+}
+
+function getMonthPrefix(referenceDate: Date): string {
+  return `${referenceDate.getFullYear()}-${String(referenceDate.getMonth() + 1).padStart(2, '0')}`;
+}
 
 export function calculateTodayTotal(expenses: Expense[]): number {
   const today = new Date().toISOString().slice(0, 10);
@@ -10,8 +25,45 @@ export function calculateTodayTotal(expenses: Expense[]): number {
 
 export function calculateMonthlyTotal(expenses: Expense[]): number {
   const now = new Date();
-  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const currentMonth = getMonthPrefix(now);
   return expenses
     .filter(e => e.date.startsWith(currentMonth))
     .reduce((sum, e) => sum + e.amount, 0);
+}
+
+export function groupCurrentMonthByCategory(
+  expenses: Expense[],
+  referenceDate: Date = new Date(),
+): CategoryTotal[] {
+  const currentMonth = getMonthPrefix(referenceDate);
+  const totals = new Map<Category, number>();
+
+  for (const expense of expenses) {
+    if (!expense.date.startsWith(currentMonth)) continue;
+    totals.set(expense.category, (totals.get(expense.category) ?? 0) + expense.amount);
+  }
+
+  return Array.from(totals.entries())
+    .map(([category, total]) => ({ category, total }))
+    .sort((a, b) => {
+      if (b.total !== a.total) return b.total - a.total;
+      return a.category.localeCompare(b.category);
+    });
+}
+
+export function groupCurrentMonthByDay(
+  expenses: Expense[],
+  referenceDate: Date = new Date(),
+): DailyTotal[] {
+  const currentMonth = getMonthPrefix(referenceDate);
+  const totals = new Map<string, number>();
+
+  for (const expense of expenses) {
+    if (!expense.date.startsWith(currentMonth)) continue;
+    totals.set(expense.date, (totals.get(expense.date) ?? 0) + expense.amount);
+  }
+
+  return Array.from(totals.entries())
+    .map(([date, total]) => ({ date, total }))
+    .sort((a, b) => a.date.localeCompare(b.date));
 }
