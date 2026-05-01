@@ -265,17 +265,21 @@ Requirement refs: FR-06
 
 Status: Completed. Delete button shows per item, removes from state and localStorage.
 
+
+
 ### C4. Implement edit action
 - [x] Add edit control per item
 - [x] Allow editing note
 - [x] Allow editing amount
 - [x] Allow editing category
-- [ ] Allow editing date if needed by UX design
+- [x] Allow editing date (new: user can fix date for old/incorrect records)
 - [x] Persist edits to storage
 
 Requirement refs: FR-06, FR-09
 
-Status: Completed. Bottom drawer edit modal with note, amount, category fields.
+Status: Completed. Bottom drawer edit modal with note, amount, category, and date fields.
+### 2026-05-01
+- Completed: Edit expense now supports editing date (แก้ไขวันที่ได้ใน modal แล้ว, รองรับการแก้ไขข้อมูลเก่า/ผิดพลาด)
 
 Notes:
 - Edit uses bottom drawer modal (fast to open/close, minimal UX friction)

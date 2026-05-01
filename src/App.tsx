@@ -8,12 +8,22 @@ import Summary from './components/Summary';
 import EditExpense from './components/EditExpense';
 import BudgetSettings from './components/BudgetSettings';
 import BudgetStatus from './components/BudgetStatus';
+
 import { parseExpenseInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
 import { loadBudgets } from './storage/budgetStorage';
 import { downloadExpensesAsCSV } from './utils/csvExport';
 import type { Expense } from './types/expense';
+
+// Always use Thailand local date (YYYY-MM-DD)
+function getLocalDateString(): string {
+  const now = new Date();
+  // Convert to Asia/Bangkok timezone (UTC+7)
+  const tzOffset = -420; // minutes
+  const local = new Date(now.getTime() - (now.getTimezoneOffset() - tzOffset) * 60000);
+  return local.toISOString().slice(0, 10);
+}
 
 function App() {
   // State for quick add input
@@ -39,7 +49,12 @@ function App() {
   }
 
   function handleSaveEdit(updatedExpense: Expense) {
-    const updated = expenses.map(e => (e.id === updatedExpense.id ? updatedExpense : e));
+    // Ensure edited date is also local date string if changed
+    const fixedExpense = {
+      ...updatedExpense,
+      date: updatedExpense.date ? updatedExpense.date : getLocalDateString(),
+    };
+    const updated = expenses.map(e => (e.id === updatedExpense.id ? fixedExpense : e));
     setExpenses(updated);
     saveExpenses(updated);
     setEditingExpense(null);
@@ -70,7 +85,7 @@ function App() {
       note: parsed.note,
       amount: parsed.amount,
       category: detectCategoryFromNote(parsed.note),
-      date: new Date().toISOString().slice(0, 10),
+      date: getLocalDateString(),
       createdAt: new Date().toISOString(),
     };
     const newExpenses = [expense, ...expenses];

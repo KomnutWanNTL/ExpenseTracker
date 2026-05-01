@@ -11,6 +11,7 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
   const [note, setNote] = useState(expense.note);
   const [amount, setAmount] = useState(expense.amount.toString());
   const [category, setCategory] = useState(expense.category);
+  const [date, setDate] = useState(expense.date);
 
   function handleSave() {
     const parsedAmount = parseFloat(amount);
@@ -18,14 +19,37 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
       alert('จำนวนเงินไม่ถูกต้อง');
       return;
     }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      alert('วันที่ไม่ถูกต้อง');
+      return;
+    }
     onSave({
       ...expense,
       note,
       amount: parsedAmount,
       category,
+      date,
     });
     onClose();
   }
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
+            วันที่
+          </label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '8px 12px',
+              fontSize: '1rem',
+              border: '1px solid #e5e7eb',
+              borderRadius: 6,
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
 
   return (
     <div
@@ -57,6 +81,7 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
           <h2 style={{ margin: '0 0 16px 0', fontSize: '1.1rem' }}>แก้ไขรายการ</h2>
         </div>
 
+
         <div style={{ marginBottom: 12 }}>
           <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
             หมายเหตุ
@@ -66,6 +91,25 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
             value={note}
             onChange={e => setNote(e.target.value)}
             placeholder="เช่น ข้าว"
+            style={{
+              width: '100%',
+              padding: '8px 12px',
+              fontSize: '1rem',
+              border: '1px solid #e5e7eb',
+              borderRadius: 6,
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: 4 }}>
+            วันที่
+          </label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
             style={{
               width: '100%',
               padding: '8px 12px',
