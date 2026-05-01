@@ -14,6 +14,7 @@ import ImportExpenses from './components/ImportExpenses';
 import { parseExpenseInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
+import MonthSelector from './components/MonthSelector';
 import { loadBudgets } from './storage/budgetStorage';
 import { downloadExpensesAsCSV } from './utils/csvExport';
 import type { Expense } from './types/expense';
@@ -27,6 +28,12 @@ function getLocalDateString(): string {
   return local.toISOString().slice(0, 10);
 }
 
+function getAllMonths(expenses: Expense[]): string[] {
+  // Return all months in format YYYY-MM, sorted desc, unique
+  const months = Array.from(new Set(expenses.map(e => e.date.slice(0, 7))));
+  return months.sort((a, b) => b.localeCompare(a));
+}
+
 function App() {
   // State for quick add input
 
@@ -37,6 +44,10 @@ function App() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [budgets, setBudgets] = useState(() => loadBudgets());
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
+  // Month selector state
+  const allMonths = getAllMonths(expenses);
+  const defaultMonth = allMonths.length > 0 ? allMonths[0] : getLocalDateString().slice(0, 7);
+  const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -103,6 +114,10 @@ function App() {
   }
 
 
+  // Filter expenses by selected month
+  const filteredExpenses = expenses.filter(e => e.date.startsWith(selectedMonth));
+  // ถ้าเดือนที่เลือกไม่มีข้อมูล ให้ส่ง [] ให้กับ Summary, BudgetStatus, ExpenseList เพื่อแสดง empty state/good UX
+
   return (
     <main className="container" style={{ marginTop: '10px' }}>
       <header className="app-header-row">
@@ -129,6 +144,11 @@ function App() {
           </button>
         </div>
       </header>
+      <MonthSelector
+        months={allMonths.length > 0 ? allMonths : [defaultMonth]}
+        value={selectedMonth}
+        onChange={setSelectedMonth}
+      />
       <QuickAddExpense
         value={input}
         onChange={v => {
@@ -142,11 +162,11 @@ function App() {
       {error && (
         <div style={{ color: '#ef4444', fontSize: '0.98rem', padding: '8px 12px', backgroundColor: '#fee2e2', borderRadius: '8px' }}>{error}</div>
       )}
-      <Summary expenses={expenses} />
-      {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={expenses} />}
+      <Summary expenses={filteredExpenses} month={selectedMonth} />
+      {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
       <section>
         <ExpenseList
-          expenses={expenses}
+          expenses={filteredExpenses}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

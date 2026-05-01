@@ -16,16 +16,15 @@ function getMonthPrefix(referenceDate: Date): string {
   return `${referenceDate.getFullYear()}-${String(referenceDate.getMonth() + 1).padStart(2, '0')}`;
 }
 
-export function calculateTodayTotal(expenses: Expense[]): number {
-  const today = new Date().toISOString().slice(0, 10);
+export function calculateTodayTotal(expenses: Expense[], referenceDate: Date = new Date()): number {
+  const today = referenceDate.toISOString().slice(0, 10);
   return expenses
     .filter(e => e.date === today)
     .reduce((sum, e) => sum + e.amount, 0);
 }
 
-export function calculateMonthlyTotal(expenses: Expense[]): number {
-  const now = new Date();
-  const currentMonth = getMonthPrefix(now);
+export function calculateMonthlyTotal(expenses: Expense[], referenceDate: Date = new Date()): number {
+  const currentMonth = getMonthPrefix(referenceDate);
   return expenses
     .filter(e => e.date.startsWith(currentMonth))
     .reduce((sum, e) => sum + e.amount, 0);

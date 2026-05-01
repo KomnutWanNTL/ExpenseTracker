@@ -567,16 +567,16 @@ Acceptance checklist:
 ## I. Historical Data View
 
 ### I1. Implement month selector UI
-- [ ] Add dropdown or calendar for month selection
-- [ ] Default to current month
+- [x] Add dropdown or calendar for month selection
+- [x] Default to current month
 
 ### I2. Filter expense list by selected month
-- [ ] Show only expenses for selected month
-- [ ] Update summary, charts, and budget to reflect selected month
+- [x] Show only expenses for selected month
+- [x] Update summary, charts, and budget to reflect selected month
 
 ### I3. Acceptance checklist
-- [ ] User can select any past month
-- [ ] All views update to show data for selected month
+- [x] User can select any past month
+- [x] All views update to show data for selected month
 
 ---
 

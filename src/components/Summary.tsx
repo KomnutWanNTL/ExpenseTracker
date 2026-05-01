@@ -11,14 +11,19 @@ import type { Expense } from '../types/expense';
 
 interface SummaryProps {
   expenses: Expense[];
+  month?: string; // YYYY-MM
 }
 
-export default function Summary({ expenses }: SummaryProps) {
-  const todayTotal = calculateTodayTotal(expenses);
-  const monthlyTotal = calculateMonthlyTotal(expenses);
+export default function Summary({ expenses, month }: SummaryProps) {
+  // referenceDate = first day of selected month, or today if not provided
+  const referenceDate = (typeof month === 'string' && month.length === 7)
+    ? new Date(month + '-01')
+    : new Date();
 
-  const categoryData = groupCurrentMonthByCategory(expenses);
-  const dailyData = groupCurrentMonthByDay(expenses);
+  const todayTotal = calculateTodayTotal(expenses, referenceDate);
+  const monthlyTotal = calculateMonthlyTotal(expenses, referenceDate);
+  const categoryData = groupCurrentMonthByCategory(expenses, referenceDate);
+  const dailyData = groupCurrentMonthByDay(expenses, referenceDate);
 
   return (
     <section>
