@@ -1,3 +1,9 @@
+### 2026-05-01 (ต่อ)
+- เพิ่มฟีเจอร์ pagination ใน Expense List (เลือกจำนวนแสดงต่อหน้า 10/20/50/100, มีปุ่มเปลี่ยนหน้า)
+- ปรับปุ่มทุกจุดในระบบให้ใช้ style/className เดียวกัน (primary/secondary/danger)
+- ปรับ dropdown selector (จำนวนแสดงต่อหน้า) ให้ใช้ style เดียวกับปุ่ม
+- เพิ่มลูกศร (arrow icon) ให้กับปุ่ม pagination (ก่อนหน้า/ถัดไป) และ dropdown selector
+- ปรับ layout ให้ label "แสดงต่อหน้า:" และ selector ชัดเจนขึ้น
 # Expense Tracker Implementation Checklist
 
 อ้างอิงจาก [requirement.md](./requirement.md)

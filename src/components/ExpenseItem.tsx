@@ -34,14 +34,8 @@ export default function ExpenseItem({ expense, onEdit, onDelete }: ExpenseItemPr
         {onEdit && (
           <button
             onClick={() => onEdit(expense)}
-            style={{
-              padding: '4px 8px',
-              fontSize: '0.75rem',
-              backgroundColor: '#e5e7eb',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-            }}
+            className="app-btn app-btn-secondary"
+            style={{ padding: '4px 8px', fontSize: '0.85rem' }}
           >
             แก้ไข
           </button>
@@ -49,15 +43,8 @@ export default function ExpenseItem({ expense, onEdit, onDelete }: ExpenseItemPr
         {onDelete && (
           <button
             onClick={() => onDelete(expense.id)}
-            style={{
-              padding: '4px 8px',
-              fontSize: '0.75rem',
-              backgroundColor: '#fee2e2',
-              color: '#dc2626',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-            }}
+            className="app-btn app-btn-danger"
+            style={{ padding: '4px 8px', fontSize: '0.85rem' }}
           >
             ลบ
           </button>

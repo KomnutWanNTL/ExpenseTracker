@@ -18,7 +18,7 @@ export default function ExpenseList({ expenses, onEdit, onDelete }: ExpenseListP
           fontSize: '0.95rem',
         }}
       >
-        ยังไม่มีรายการค่าใช้จ่าย เริ่มเพิ่มรายการแรกใหม่
+        ยังไม่มีรายการค่าใช้จ่ายในหน้านี้
       </div>
     );
   }

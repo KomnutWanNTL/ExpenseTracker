@@ -34,9 +34,9 @@ function getAllMonths(expenses: Expense[]): string[] {
   return months.sort((a, b) => b.localeCompare(a));
 }
 
+
 function App() {
   // State for quick add input
-
   const [input, setInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +50,9 @@ function App() {
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   function handleDelete(id: string) {
     const filtered = expenses.filter(e => e.id !== id);
@@ -116,7 +119,13 @@ function App() {
 
   // Filter expenses by selected month
   const filteredExpenses = expenses.filter(e => e.date.startsWith(selectedMonth));
-  // ถ้าเดือนที่เลือกไม่มีข้อมูล ให้ส่ง [] ให้กับ Summary, BudgetStatus, ExpenseList เพื่อแสดง empty state/good UX
+  // Pagination logic
+  const totalItems = filteredExpenses.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const pagedExpenses = filteredExpenses.slice((page - 1) * pageSize, page * pageSize);
+  // Reset page if pageSize or filteredExpenses change
+  // (useEffect is safer, but for simplicity, reset page to 1 if page > totalPages)
+  if (page > totalPages) setPage(1);
 
   return (
     <main className="container" style={{ marginTop: '10px' }}>
@@ -165,11 +174,68 @@ function App() {
       <Summary expenses={filteredExpenses} month={selectedMonth} />
       {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
       <section>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div>
+            <label htmlFor="pageSize" style={{ fontSize: '0.95rem', marginRight: 8 }}>แสดงต่อหน้า:</label>
+            <select
+              id="pageSize"
+              value={pageSize}
+              onChange={e => {
+                setPageSize(Number(e.target.value));
+                setPage(1);
+              }}
+              className="app-select"
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
+          <div style={{ fontSize: '0.95rem' }}>
+            {totalItems > 0 && (
+              <span>
+                {`หน้า ${page} / ${totalPages} (${totalItems} รายการ)`}
+              </span>
+            )}
+          </div>
+        </div>
         <ExpenseList
-          expenses={filteredExpenses}
+          expenses={pagedExpenses}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
+        {/* Pagination controls */}
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0' }}>
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="app-btn app-btn-secondary"
+              style={{ padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 4 }}
+            >
+              <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
+                  <path d="M13 15l-5-5 5-5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                ก่อนหน้า
+              </span>
+            </button>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="app-btn app-btn-secondary"
+              style={{ padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 4 }}
+            >
+              <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                ถัดไป
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: 4 }}>
+                  <path d="M7 5l5 5-5 5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+        )}
       </section>
       {editingExpense && (
         <EditExpense

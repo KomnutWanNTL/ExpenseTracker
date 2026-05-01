@@ -172,32 +172,15 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
         <div style={{ display: 'flex', gap: 8 }}>
           <button
             onClick={onClose}
-            style={{
-              flex: 1,
-              padding: '10px 16px',
-              fontSize: '1rem',
-              backgroundColor: '#e5e7eb',
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer',
-              fontWeight: 500,
-            }}
+            className="app-btn app-btn-secondary"
+            style={{ flex: 1 }}
           >
             ยกเลิก
           </button>
           <button
             onClick={handleSave}
-            style={{
-              flex: 1,
-              padding: '10px 16px',
-              fontSize: '1rem',
-              backgroundColor: '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer',
-              fontWeight: 500,
-            }}
+            className="app-btn app-btn-primary"
+            style={{ flex: 1 }}
           >
             บันทึก
           </button>

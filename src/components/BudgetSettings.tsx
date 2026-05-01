@@ -130,33 +130,15 @@ export default function BudgetSettings({ expenses, onClose }: BudgetSettingsProp
       <div style={{ display: 'flex', gap: '8px' }}>
         <button
           onClick={handleSave}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            backgroundColor: '#0369a1',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '0.95rem',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className="app-btn app-btn-primary"
+          style={{ flex: 1, fontSize: '0.95rem' }}
         >
           บันทึก
         </button>
         <button
           onClick={onClose}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            backgroundColor: '#f3f4f6',
-            color: '#333',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '0.95rem',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className="app-btn app-btn-secondary"
+          style={{ flex: 1, fontSize: '0.95rem' }}
         >
           ยกเลิก
         </button>
