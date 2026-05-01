@@ -17,11 +17,12 @@ const CATEGORY_LABELS: Record<string, string> = {
  * Convert expenses to CSV format
  */
 export function expensesToCSV(expenses: Expense[]): string {
-  // CSV headers
-  const headers = ['Date', 'Category', 'Note', 'Amount', 'Created'];
-  
+  // CSV headers (full fields for import/export roundtrip)
+  const headers = ['id', 'date', 'category', 'note', 'amount', 'createdAt'];
+
   // CSV rows
   const rows = expenses.map((expense) => [
+    expense.id,
     expense.date,
     CATEGORY_LABELS[expense.category] || expense.category,
     expense.note,
@@ -36,7 +37,7 @@ export function expensesToCSV(expenses: Expense[]): string {
       row
         .map((cell) => {
           // Escape quotes and wrap in quotes if contains comma or quote
-          const escaped = cell.replace(/"/g, '""');
+          const escaped = (cell ?? '').toString().replace(/"/g, '""');
           return escaped.includes(',') || escaped.includes('"') ? `"${escaped}"` : escaped;
         })
         .join(',')

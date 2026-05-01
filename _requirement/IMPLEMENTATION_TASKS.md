@@ -539,18 +539,46 @@ Requirement refs: FR-17
 
 Status: Ready for manual testing. CSV utility exports Thai text with proper UTF-8 BOM encoding.
 
-### G4. Prepare import-back placeholder
-- [ ] Add note or TODO for import support in v1.1
-- [~] Keep data shape compatible with later import flow (data shape is compatible)
+
+
+### G4. Implement import from CSV
+- [x] Add import button to UI
+- [x] Parse CSV and validate structure
+- [x] Merge imported data with existing data (avoid duplicate id)
+- [x] Show preview before import (confirm update if id exists)
+- [x] Handle error/invalid file gracefully
 
 Requirement refs: FR-18
 
-Status: Data shape is compatible with future import support. Import feature deferred to phase 3.1.
+Status: Completed
+
+Notes:
+- Export จะมี id, date, category, note, amount, createdAt ครบ
+- Import: ถ้ามี id ซ้ำจะถามยืนยันก่อน update, id ใหม่จะ insert, ไม่มี id จะสร้างใหม่
+- รองรับ merge/update/insert ตาม id สมบูรณ์
 
 Acceptance checklist:
-- [x] User can export data as CSV
-- [x] Exported file includes all expected fields (date, category, note, amount, createdAt)
-- [ ] Thai text is readable after opening the file (pending QA testing)
+- [x] User can import CSV file exported from app
+- [x] Data is merged and visible immediately
+- [x] Invalid file is rejected with clear error
+
+---
+
+## I. Historical Data View
+
+### I1. Implement month selector UI
+- [ ] Add dropdown or calendar for month selection
+- [ ] Default to current month
+
+### I2. Filter expense list by selected month
+- [ ] Show only expenses for selected month
+- [ ] Update summary, charts, and budget to reflect selected month
+
+### I3. Acceptance checklist
+- [ ] User can select any past month
+- [ ] All views update to show data for selected month
+
+---
 
 ---
 

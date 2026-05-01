@@ -2,12 +2,14 @@
 
 import './App.css'
 import { useState, useRef } from 'react';
+
 import QuickAddExpense from './components/QuickAddExpense';
 import ExpenseList from './components/ExpenseList';
 import Summary from './components/Summary';
 import EditExpense from './components/EditExpense';
 import BudgetSettings from './components/BudgetSettings';
 import BudgetStatus from './components/BudgetStatus';
+import ImportExpenses from './components/ImportExpenses';
 
 import { parseExpenseInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
@@ -112,6 +114,13 @@ function App() {
           >
             Export
           </button>
+          <ImportExpenses
+            onImport={merged => {
+              setExpenses(merged);
+              saveExpenses(merged);
+              alert('นำเข้าข้อมูลสำเร็จ!');
+            }}
+          />
           <button
             className="header-btn budget-btn"
             onClick={() => setShowBudgetSettings(true)}

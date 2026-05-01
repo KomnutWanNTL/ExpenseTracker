@@ -1,3 +1,10 @@
+.import-btn {
+  background: #f59e42;
+  color: #fff;
+}
+.import-btn:hover {
+  background: #d97706;
+}
 /* Header row redesign */
 .app-header-row {
   display: flex;
@@ -25,7 +32,7 @@
 }
 
 .header-btn {
-  padding: 7px 18px;
+  padding: 11px 18px;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
