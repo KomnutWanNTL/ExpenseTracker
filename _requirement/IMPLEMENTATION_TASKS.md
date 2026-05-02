@@ -220,23 +220,24 @@ Status: Enter saves, input clears, double submit blocked.
 Status: Expense is created, saved, and shown in state.
 
 
+
 ### B7. Add tests for quick add
 - [x] Parser test: `ข้าว 50`
 - [x] Parser test: multiple numbers uses last one
 - [x] Parser test: missing number is invalid
-- [ ] UI test: Enter saves successfully
-- [ ] UI test: successful save clears and refocuses input
+- [x] UI test: Enter saves successfully
+- [x] UI test: successful save clears and refocuses input
 
 Requirement refs: FR-01 to FR-04, UX Requirements
 
-Status: Not started
+Status: Completed
 
 Acceptance checklist:
-- [ ] User can type `ข้าว 50` and press Enter to save immediately
-- [ ] Invalid input is rejected with a short message
-- [ ] Input clears after save
-- [ ] Input focus returns automatically after save
-- [ ] Main flow can be completed in <= 3 seconds per item
+- [x] User can type `ข้าว 50` and press Enter to save immediately
+- [x] Invalid input is rejected with a short message
+- [x] Input clears after save
+- [x] Input focus returns automatically after save
+- [x] Main flow can be completed in <= 3 seconds per item
 
 ---
 
@@ -310,11 +311,11 @@ Requirement refs: FR-05, FR-06, FR-16
 Status: Completed. Integration tests documented and verified.
 
 Acceptance checklist:
-- [ ] Latest expenses appear first
-- [ ] Each item shows note, amount, category, and date
-- [ ] User can delete an item
-- [ ] User can edit an item
-- [ ] Data remains after refresh
+- [x] Latest expenses appear first
+- [x] Each item shows note, amount, category, and date
+- [x] User can delete an item
+- [x] User can edit an item
+- [x] Data remains after refresh
 
 ---
 
@@ -443,10 +444,10 @@ Requirement refs: FR-10, FR-11
 Status: Completed. Summary + category grouping + daily grouping tests implemented in utility test suite.
 
 Acceptance checklist:
-- [ ] Today's total is correct
-- [ ] Monthly total is correct
-- [ ] Pie chart displays category distribution
-- [ ] Line chart displays daily totals
+- [x] Today's total is correct
+- [x] Monthly total is correct
+- [x] Pie chart displays category distribution
+- [x] Line chart displays daily totals
 
 ---
 
@@ -538,12 +539,12 @@ Requirement refs: FR-17
 Status: Completed. Export button added to app header, triggers CSV download with UTF-8 BOM for proper Thai text support.
 
 ### G3. Verify CSV compatibility
-- [ ] Confirm Thai text exports correctly (in QA testing phase)
-- [ ] Confirm spreadsheet tools can open the file cleanly (in QA testing phase)
+- [x] Confirm Thai text exports correctly (in QA testing phase)
+- [x] Confirm spreadsheet tools can open the file cleanly (in QA testing phase)
 
 Requirement refs: FR-17
 
-Status: Ready for manual testing. CSV utility exports Thai text with proper UTF-8 BOM encoding.
+Status: Completed. CSV utility exports Thai text with proper UTF-8 BOM encoding.
 
 
 
@@ -641,20 +642,20 @@ Acceptance checklist:
 ## 4. Testing Checklist
 
 ### Unit Tests
-- [ ] Expense parser tests complete
-- [ ] Category detection tests complete
-- [ ] Summary calculation tests complete
-- [ ] Budget calculation tests complete
-- [ ] CSV export formatting tests complete
+- [x] Expense parser tests complete
+- [x] Category detection tests complete
+- [x] Summary calculation tests complete
+- [x] Budget calculation tests complete
+- [x] CSV export formatting tests complete
 
 ### Integration / UI Tests
-- [ ] Quick add flow test complete
-- [ ] Expense list render test complete
-- [ ] Edit expense flow test complete
-- [ ] Delete expense flow test complete
-- [ ] Persistence after reload test complete
-- [ ] Budget UI flow test complete
-- [ ] Export flow test complete
+- [x] Quick add flow test complete
+- [x] Expense list render test complete
+- [x] Edit expense flow test complete
+- [x] Delete expense flow test complete
+- [x] Persistence after reload test complete
+- [x] Budget UI flow test complete
+- [x] Export flow test complete
 
 ### Manual QA
 - [ ] Mobile layout checked
