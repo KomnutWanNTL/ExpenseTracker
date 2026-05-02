@@ -1,3 +1,4 @@
+
 import { describe, expect, it } from 'vitest';
 import {
   calculateTodayTotal,
@@ -6,15 +7,16 @@ import {
   groupCurrentMonthByDay,
 } from '../utils/summaryCalculations';
 import type { Expense } from '../types/expense';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 describe('Summary calculations', () => {
-  const today = new Date().toISOString().slice(0, 10);
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
-    .toISOString()
-    .slice(0, 10);
-  const lastMonth = new Date(new Date().setMonth(new Date().getMonth() - 1))
-    .toISOString()
-    .slice(0, 7);
+  const today = dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD');
+  const yesterday = dayjs().tz('Asia/Bangkok').subtract(1, 'day').format('YYYY-MM-DD');
+  const lastMonth = dayjs().tz('Asia/Bangkok').subtract(1, 'month').format('YYYY-MM');
 
   const expenses: Expense[] = [
     {
@@ -23,7 +25,7 @@ describe('Summary calculations', () => {
       amount: 50,
       category: 'food',
       date: today,
-      createdAt: new Date().toISOString(),
+      createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
     },
     {
       id: '2',
@@ -31,7 +33,7 @@ describe('Summary calculations', () => {
       amount: 30,
       category: 'food',
       date: today,
-      createdAt: new Date().toISOString(),
+      createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
     },
     {
       id: '3',
@@ -39,7 +41,7 @@ describe('Summary calculations', () => {
       amount: 100,
       category: 'transport',
       date: yesterday,
-      createdAt: new Date().toISOString(),
+      createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
     },
     {
       id: '4',
@@ -47,7 +49,7 @@ describe('Summary calculations', () => {
       amount: 500,
       category: 'shopping',
       date: lastMonth + '-15',
-      createdAt: new Date().toISOString(),
+      createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
     },
   ];
 

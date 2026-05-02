@@ -22,15 +22,14 @@ function getMonthPrefix(referenceDate: Date): string {
   return dayjs(referenceDate).tz('Asia/Bangkok').format('YYYY-MM');
 }
 
-export function calculateTodayTotal(expenses: Expense[], referenceDate: Date = new Date()): number {
-  const today = dayjs(referenceDate).tz('Asia/Bangkok').format('YYYY-MM-DD');
+export function calculateTodayTotal(expenses: Expense[], referenceDate: string = dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD')): number {
   return expenses
-    .filter(e => e.date === today)
+    .filter(e => e.date === referenceDate)
     .reduce((sum, e) => sum + e.amount, 0);
 }
 
-export function calculateMonthlyTotal(expenses: Expense[], referenceDate: Date = new Date()): number {
-  const currentMonth = getMonthPrefix(referenceDate);
+export function calculateMonthlyTotal(expenses: Expense[], referenceDate: string = dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD')): number {
+  const currentMonth = referenceDate.slice(0, 7);
   return expenses
     .filter(e => e.date.startsWith(currentMonth))
     .reduce((sum, e) => sum + e.amount, 0);
@@ -38,9 +37,9 @@ export function calculateMonthlyTotal(expenses: Expense[], referenceDate: Date =
 
 export function groupCurrentMonthByCategory(
   expenses: Expense[],
-  referenceDate: Date = new Date(),
+  referenceDate: string = dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD'),
 ): CategoryTotal[] {
-  const currentMonth = getMonthPrefix(referenceDate);
+  const currentMonth = referenceDate.slice(0, 7);
   const totals = new Map<Category, number>();
   for (const expense of expenses) {
     if (!expense.date.startsWith(currentMonth)) continue;
@@ -56,9 +55,9 @@ export function groupCurrentMonthByCategory(
 
 export function groupCurrentMonthByDay(
   expenses: Expense[],
-  referenceDate: Date = new Date(),
+  referenceDate: string = dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD'),
 ): DailyTotal[] {
-  const currentMonth = getMonthPrefix(referenceDate);
+  const currentMonth = referenceDate.slice(0, 7);
   const totals = new Map<string, number>();
   for (const expense of expenses) {
     if (!expense.date.startsWith(currentMonth)) continue;

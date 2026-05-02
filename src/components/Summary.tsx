@@ -1,3 +1,4 @@
+
 import { formatAmount } from '../utils/formatters';
 import {
   calculateTodayTotal,
@@ -20,42 +21,60 @@ interface SummaryProps {
   month?: string; // YYYY-MM
 }
 
-export default function Summary({ expenses, month }: SummaryProps) {
-  // referenceDate = first day of selected month, or today if not provided
-  const referenceDate = (typeof month === 'string' && month.length === 7)
-    ? dayjs.tz(month + '-01', 'Asia/Bangkok').toDate()
-    : dayjs().tz('Asia/Bangkok').toDate();
+function Summary({ expenses, month }: SummaryProps) {
+  // referenceDate: วันนี้ถ้าเลือกเดือนปัจจุบัน, วันสุดท้ายของเดือนถ้าเลือกเดือนอื่น
+  const currentMonth = dayjs().tz('Asia/Bangkok').format('YYYY-MM');
+  const isCurrentMonth = !month || month === currentMonth;
+  const referenceDate = isCurrentMonth
+    ? dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD')
+    : dayjs.tz(month + '-01', 'Asia/Bangkok').endOf('month').format('YYYY-MM-DD');
+  console.log('[Summary] expenses:', expenses);
+  console.log('[Summary] referenceDate:', referenceDate);
 
   const todayTotal = calculateTodayTotal(expenses, referenceDate);
   const monthlyTotal = calculateMonthlyTotal(expenses, referenceDate);
   const categoryData = groupCurrentMonthByCategory(expenses, referenceDate);
   const dailyData = groupCurrentMonthByDay(expenses, referenceDate);
 
+  // Helper for Thai month names
+  const thaiMonths = [
+    'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+    'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+  ];
+  let monthLabel = 'เดือนนี้';
+  if (!isCurrentMonth && month) {
+    const [y, m] = month.split('-');
+    const thaiMonth = thaiMonths[parseInt(m, 10) - 1];
+    monthLabel = `${thaiMonth} ${parseInt(y, 10) + 543}`; // พ.ศ.
+  }
+
   return (
     <section>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: isCurrentMonth ? '1fr 1fr' : '1fr',
           gap: '12px',
           marginBottom: '16px',
         }}
       >
-        <div
-          style={{
-            backgroundColor: '#dbeafe',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            textAlign: 'center',
-          }}
-        >
-          <div style={{ fontSize: '0.85rem', color: '#0369a1', marginBottom: '4px' }}>
-            วันนี้
+        {isCurrentMonth && (
+          <div
+            style={{
+              backgroundColor: '#dbeafe',
+              borderRadius: '8px',
+              padding: '12px 16px',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: '0.85rem', color: '#0369a1', marginBottom: '4px' }}>
+              วันนี้
+            </div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0369a1' }}>
+              {formatAmount(todayTotal)}
+            </div>
           </div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0369a1' }}>
-            {formatAmount(todayTotal)}
-          </div>
-        </div>
+        )}
         <div
           style={{
             backgroundColor: '#e0e7ff',
@@ -65,7 +84,7 @@ export default function Summary({ expenses, month }: SummaryProps) {
           }}
         >
           <div style={{ fontSize: '0.85rem', color: '#3730a3', marginBottom: '4px' }}>
-            เดือนนี้
+            {monthLabel}
           </div>
           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#3730a3' }}>
             {formatAmount(monthlyTotal)}
@@ -84,3 +103,5 @@ export default function Summary({ expenses, month }: SummaryProps) {
     </section>
   );
 }
+
+export default Summary;

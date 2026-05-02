@@ -42,7 +42,11 @@ function App() {
   const [input, setInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [expenses, setExpenses] = useState<Expense[]>(() => loadExpenses());
+  const [expenses, setExpenses] = useState<Expense[]>(() => {
+    const loaded = loadExpenses();
+    console.log('Loaded expenses:', loaded);
+    return loaded;
+  });
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [budgets, setBudgets] = useState(() => loadBudgets());
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
@@ -60,6 +64,7 @@ function App() {
     const filtered = expenses.filter(e => e.id !== id);
     setExpenses(filtered);
     saveExpenses(filtered);
+    console.log('Saved expenses (after delete):', filtered);
   }
 
   function handleEdit(expense: Expense) {
@@ -75,6 +80,7 @@ function App() {
     const updated = expenses.map(e => (e.id === updatedExpense.id ? fixedExpense : e));
     setExpenses(updated);
     saveExpenses(updated);
+    console.log('Saved expenses (after edit):', updated);
     setEditingExpense(null);
   }
 
@@ -109,6 +115,7 @@ function App() {
     const newExpenses = [expense, ...expenses];
     saveExpenses(newExpenses);
     setExpenses(newExpenses);
+    console.log('Saved expenses (after add):', newExpenses);
     setInput('');
     setIsSubmitting(false);
     setError(null);
@@ -173,7 +180,7 @@ function App() {
       {error && (
         <div style={{ color: '#ef4444', fontSize: '0.98rem', padding: '8px 12px', backgroundColor: '#fee2e2', borderRadius: '8px' }}>{error}</div>
       )}
-      <Summary expenses={filteredExpenses} month={selectedMonth} />
+      <Summary expenses={expenses} month={selectedMonth} />
       {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
       <section>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
