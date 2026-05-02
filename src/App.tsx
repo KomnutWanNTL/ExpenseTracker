@@ -61,6 +61,7 @@ function App() {
   const [pageSize, setPageSize] = useState(10);
 
   function handleDelete(id: string) {
+    if (!window.confirm('คุณต้องการลบรายการนี้หรือไม่?')) return;
     const filtered = expenses.filter(e => e.id !== id);
     setExpenses(filtered);
     saveExpenses(filtered);
@@ -72,6 +73,7 @@ function App() {
   }
 
   function handleSaveEdit(updatedExpense: Expense) {
+    if (!window.confirm('คุณต้องการบันทึกการแก้ไขรายการนี้หรือไม่?')) return;
     // Ensure edited date is also local date string if changed
     const fixedExpense = {
       ...updatedExpense,
@@ -183,25 +185,43 @@ function App() {
       <Summary expenses={expenses} month={selectedMonth} />
       {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
       <section>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-          <div>
-            <label htmlFor="pageSize" style={{ fontSize: '0.95rem', marginRight: 8 }}>แสดงต่อหน้า:</label>
-            <select
-              id="pageSize"
-              value={pageSize}
-              onChange={e => {
-                setPageSize(Number(e.target.value));
-                setPage(1);
-              }}
-              className="app-select"
-            >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </select>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8, gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <label htmlFor="pageSize" style={{ fontSize: '0.98rem', fontWeight: 500, marginRight: 2 }}>แสดงต่อหน้า</label>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <select
+                id="pageSize"
+                value={pageSize}
+                onChange={e => {
+                  setPageSize(Number(e.target.value));
+                  setPage(1);
+                }}
+                className="app-select"
+                style={{ minWidth: 70, paddingRight: 32 }}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+              {/* Arrow icon overlay for dropdown */}
+              <span style={{
+                pointerEvents: 'none',
+                position: 'absolute',
+                right: 10,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                display: 'flex',
+                alignItems: 'center',
+                height: 18
+              }}>
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.293 8.293a1 1 0 011.414 0L10 9.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z" fill="#2563eb"/>
+                </svg>
+              </span>
+            </div>
           </div>
-          <div style={{ fontSize: '0.95rem' }}>
+          <div style={{ fontSize: '0.98rem', color: '#374151', minWidth: 120, textAlign: 'right' }}>
             {totalItems > 0 && (
               <span>
                 {`หน้า ${page} / ${totalPages} (${totalItems} รายการ)`}
@@ -216,32 +236,28 @@ function App() {
         />
         {/* Pagination controls */}
         {totalPages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0' }}>
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
               className="app-btn app-btn-secondary"
-              style={{ padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 4 }}
+              style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
             >
-              <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
-                  <path d="M13 15l-5-5 5-5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                ก่อนหน้า
-              </span>
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
+                <path d="M13 15l-5-5 5-5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              ก่อนหน้า
             </button>
             <button
               onClick={() => setPage(p => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className="app-btn app-btn-secondary"
-              style={{ padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 4 }}
+              style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
             >
-              <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                ถัดไป
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: 4 }}>
-                  <path d="M7 5l5 5-5 5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </span>
+              ถัดไป
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: 4 }}>
+                <path d="M7 5l5 5-5 5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </div>
         )}
