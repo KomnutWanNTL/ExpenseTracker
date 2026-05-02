@@ -1,6 +1,9 @@
 
 
 import './App.css'
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { useState, useRef } from 'react';
 
 import QuickAddExpense from './components/QuickAddExpense';
@@ -17,15 +20,14 @@ import { saveExpenses, loadExpenses } from './storage/expenseStorage';
 import MonthSelector from './components/MonthSelector';
 import { loadBudgets } from './storage/budgetStorage';
 import { downloadExpensesAsCSV } from './utils/csvExport';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 import type { Expense } from './types/expense';
 
-// Always use Thailand local date (YYYY-MM-DD)
+// Always use Thailand local date (YYYY-MM-DD) using dayjs
 function getLocalDateString(): string {
-  const now = new Date();
-  // Convert to Asia/Bangkok timezone (UTC+7)
-  const tzOffset = -420; // minutes
-  const local = new Date(now.getTime() - (now.getTimezoneOffset() - tzOffset) * 60000);
-  return local.toISOString().slice(0, 10);
+  return dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD');
 }
 
 function getAllMonths(expenses: Expense[]): string[] {
@@ -102,7 +104,7 @@ function App() {
       amount: parsed.amount,
       category: detectCategoryFromNote(parsed.note),
       date: getLocalDateString(),
-      createdAt: new Date().toISOString(),
+      createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
     };
     const newExpenses = [expense, ...expenses];
     saveExpenses(newExpenses);

@@ -5,6 +5,12 @@ import {
   groupCurrentMonthByCategory,
   groupCurrentMonthByDay,
 } from '../utils/summaryCalculations';
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 import CategoryPieChart from './CategoryPieChart';
 import DailyLineChart from './DailyLineChart';
 import type { Expense } from '../types/expense';
@@ -17,8 +23,8 @@ interface SummaryProps {
 export default function Summary({ expenses, month }: SummaryProps) {
   // referenceDate = first day of selected month, or today if not provided
   const referenceDate = (typeof month === 'string' && month.length === 7)
-    ? new Date(month + '-01')
-    : new Date();
+    ? dayjs.tz(month + '-01', 'Asia/Bangkok').toDate()
+    : dayjs().tz('Asia/Bangkok').toDate();
 
   const todayTotal = calculateTodayTotal(expenses, referenceDate);
   const monthlyTotal = calculateMonthlyTotal(expenses, referenceDate);

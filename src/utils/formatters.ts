@@ -1,18 +1,17 @@
 // Formatting utilities for display
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 export function formatDate(isoDate: string): string {
   try {
-    const date = new Date(isoDate);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const yesterdayOnly = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
-    
-    if (dateOnly.getTime() === todayOnly.getTime()) return 'วันนี้';
-    if (dateOnly.getTime() === yesterdayOnly.getTime()) return 'เมื่อวาน';
-    
-    return date.toLocaleDateString('th-TH', { month: 'short', day: 'numeric' });
+    const date = dayjs(isoDate).tz('Asia/Bangkok');
+    const today = dayjs().tz('Asia/Bangkok');
+    const yesterday = today.subtract(1, 'day');
+    if (date.isSame(today, 'day')) return 'วันนี้';
+    if (date.isSame(yesterday, 'day')) return 'เมื่อวาน';
+    return date.format('D MMM');
   } catch {
     return isoDate;
   }

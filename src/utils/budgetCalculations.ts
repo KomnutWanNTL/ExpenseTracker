@@ -20,23 +20,15 @@ export interface BudgetSummary {
 /**
  * Get current month date range (YYYY-MM-DD format) in local timezone
  */
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 function getMonthDateRange(): { start: string; end: string } {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  
-  // First day of current month
-  const startDate = new Date(year, month, 1);
-  const start = startDate.getFullYear() + '-' + 
-                String(startDate.getMonth() + 1).padStart(2, '0') + '-' +
-                String(startDate.getDate()).padStart(2, '0');
-  
-  // Last day of current month
-  const endDate = new Date(year, month + 1, 0);
-  const end = endDate.getFullYear() + '-' + 
-              String(endDate.getMonth() + 1).padStart(2, '0') + '-' +
-              String(endDate.getDate()).padStart(2, '0');
-  
+  const now = dayjs().tz('Asia/Bangkok');
+  const start = now.startOf('month').format('YYYY-MM-DD');
+  const end = now.endOf('month').format('YYYY-MM-DD');
   return { start, end };
 }
 

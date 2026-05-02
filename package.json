@@ -23,6 +23,8 @@
     "convert-source-map": "^2.0.0",
     "cross-spawn": "^7.0.6",
     "csstype": "^3.2.3",
+    "dayjs": "^1.11.20",
+    "dayjs-plugin-utc": "^0.1.2",
     "debug": "^4.4.3",
     "deep-is": "^0.1.4",
     "detect-libc": "^2.1.2",

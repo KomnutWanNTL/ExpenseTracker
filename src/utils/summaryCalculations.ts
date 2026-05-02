@@ -1,4 +1,10 @@
 // Summary calculation utilities
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 import type { Expense } from '../types/expense';
 import type { Category } from '../types/expense';
 
@@ -13,11 +19,11 @@ export interface DailyTotal {
 }
 
 function getMonthPrefix(referenceDate: Date): string {
-  return `${referenceDate.getFullYear()}-${String(referenceDate.getMonth() + 1).padStart(2, '0')}`;
+  return dayjs(referenceDate).tz('Asia/Bangkok').format('YYYY-MM');
 }
 
 export function calculateTodayTotal(expenses: Expense[], referenceDate: Date = new Date()): number {
-  const today = referenceDate.toISOString().slice(0, 10);
+  const today = dayjs(referenceDate).tz('Asia/Bangkok').format('YYYY-MM-DD');
   return expenses
     .filter(e => e.date === today)
     .reduce((sum, e) => sum + e.amount, 0);
@@ -36,12 +42,10 @@ export function groupCurrentMonthByCategory(
 ): CategoryTotal[] {
   const currentMonth = getMonthPrefix(referenceDate);
   const totals = new Map<Category, number>();
-
   for (const expense of expenses) {
     if (!expense.date.startsWith(currentMonth)) continue;
     totals.set(expense.category, (totals.get(expense.category) ?? 0) + expense.amount);
   }
-
   return Array.from(totals.entries())
     .map(([category, total]) => ({ category, total }))
     .sort((a, b) => {
@@ -56,12 +60,10 @@ export function groupCurrentMonthByDay(
 ): DailyTotal[] {
   const currentMonth = getMonthPrefix(referenceDate);
   const totals = new Map<string, number>();
-
   for (const expense of expenses) {
     if (!expense.date.startsWith(currentMonth)) continue;
     totals.set(expense.date, (totals.get(expense.date) ?? 0) + expense.amount);
   }
-
   return Array.from(totals.entries())
     .map(([date, total]) => ({ date, total }))
     .sort((a, b) => a.date.localeCompare(b.date));
