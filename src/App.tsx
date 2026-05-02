@@ -235,32 +235,30 @@ function App() {
           onDelete={handleDelete}
         />
         {/* Pagination controls */}
-        {totalPages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0' }}>
-            <button
-              onClick={() => setPage(p => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="app-btn app-btn-secondary"
-              style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
-            >
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
-                <path d="M13 15l-5-5 5-5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              ก่อนหน้า
-            </button>
-            <button
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="app-btn app-btn-secondary"
-              style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
-            >
-              ถัดไป
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: 4 }}>
-                <path d="M7 5l5 5-5 5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        )}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0' }}>
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={totalPages === 1 || page === 1}
+            className="app-btn app-btn-secondary"
+            style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
+              <path d="M13 15l-5-5 5-5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            ก่อนหน้า
+          </button>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={totalPages === 1 || page === totalPages}
+            className="app-btn app-btn-secondary"
+            style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
+          >
+            ถัดไป
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: 4 }}>
+              <path d="M7 5l5 5-5 5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
       </section>
       {editingExpense && (
         <EditExpense

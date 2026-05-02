@@ -52,6 +52,14 @@
 .app-btn-danger:hover {
   background: #fecaca;
 }
+.app-btn:disabled {
+  opacity: 0.55;
+  background: #f3f4f6 !important;
+  color: #b0b3b8 !important;
+  cursor: not-allowed !important;
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+}
 .import-btn {
   background: #f59e42;
   color: #fff;
