@@ -1,8 +1,6 @@
 // Simple service worker for offline PWA
 const CACHE_NAME = 'expense-tracker-cache-v1';
 const URLS_TO_CACHE = [
-  '/',
-  '/index.html',
   '/manifest.json',
   '/favicon.svg',
   '/icons/icon-192.png',
