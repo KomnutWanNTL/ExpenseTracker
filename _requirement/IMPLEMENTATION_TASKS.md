@@ -760,9 +760,9 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 
 ## Category Learning (หมวดหมู่จดจำ)
 
-- [ ] ออกแบบโครงสร้างข้อมูลสำหรับ mapping note → category (เช่น เก็บใน localStorage เป็น object)
-- [ ] เมื่อผู้ใช้แก้ไขหมวดหมู่ใน EditExpense ให้บันทึก mapping note → category
-- [ ] ตอนเพิ่มรายการใหม่ ถ้า note ตรงกับ mapping ให้เลือก category ที่เคยแก้ไข
-- [ ] mapping ต้องบันทึกแบบ persistent (localStorage)
-- [ ] ทดสอบกรณีการแก้ไขและการ auto-assign category
-- [ ] (ถ้ามี) แจ้งเตือนผู้ใช้เมื่อระบบเลือก category ให้อัตโนมัติ
+- [x] ออกแบบโครงสร้างข้อมูลสำหรับ mapping note → category (เช่น เก็บใน localStorage เป็น object)
+- [x] เมื่อผู้ใช้แก้ไขหมวดหมู่ใน EditExpense ให้บันทึก mapping note → category
+- [x] ตอนเพิ่มรายการใหม่ ถ้า note ตรงกับ mapping ให้เลือก category ที่เคยแก้ไข
+- [x] mapping ต้องบันทึกแบบ persistent (localStorage)
+- [x] ทดสอบกรณีการแก้ไขและการ auto-assign category
+- [x] แจ้งเตือนผู้ใช้เมื่อระบบเลือก category ให้อัตโนมัติ
