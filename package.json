@@ -144,7 +144,6 @@
     "update-browserslist-db": "^1.2.3",
     "uri-js": "^4.4.1",
     "vite": "^8.0.10",
-    "vitest": "^4.1.5",
     "which": "^2.0.2",
     "why-is-node-running": "^2.3.0",
     "word-wrap": "^1.2.5",
@@ -174,6 +173,7 @@
   },
   "homepage": "https://komnutwanntl.github.io/ExpenseTracker/",
   "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.1"
+    "@vitejs/plugin-react": "^6.0.1",
+    "vitest": "^4.1.5"
   }
 }

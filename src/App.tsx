@@ -16,6 +16,7 @@ import ImportExpenses from './components/ImportExpenses';
 
 import { parseExpenseInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
+import { getCategoryForNote } from './storage/noteCategoryMapping';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
 import MonthSelector from './components/MonthSelector';
 import { loadBudgets } from './storage/budgetStorage';
@@ -105,12 +106,13 @@ function App() {
       setIsSubmitting(false);
       return;
     }
-    // Create expense object
+    // Use learned category if available, else auto-detect
+    let category = getCategoryForNote(parsed.note) || detectCategoryFromNote(parsed.note);
     const expense: Expense = {
       id: crypto.randomUUID(),
       note: parsed.note,
       amount: parsed.amount,
-      category: detectCategoryFromNote(parsed.note),
+      category,
       date: getLocalDateString(),
       createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
     };

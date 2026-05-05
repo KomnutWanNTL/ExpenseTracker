@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { setCategoryForNote } from '../storage/noteCategoryMapping';
 import type { Expense } from '../types/expense';
 
 interface EditExpenseProps {
@@ -22,6 +23,10 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       alert('วันที่ไม่ถูกต้อง');
       return;
+    }
+    // Save note→category mapping if category changed or always (safe to always update)
+    if (note.trim()) {
+      setCategoryForNote(note, category);
     }
     onSave({
       ...expense,
