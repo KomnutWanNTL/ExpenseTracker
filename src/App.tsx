@@ -49,6 +49,8 @@ function App() {
     return loaded;
   });
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  // State for showing auto-category notification
+  const [autoCategoryMsg, setAutoCategoryMsg] = useState<string | null>(null);
   const [budgets, setBudgets] = useState(() => loadBudgets());
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
   // Month selector state
@@ -107,7 +109,13 @@ function App() {
       return;
     }
     // Use learned category if available, else auto-detect
-    let category = getCategoryForNote(parsed.note) || detectCategoryFromNote(parsed.note);
+    const learnedCategory = getCategoryForNote(parsed.note);
+    let category = learnedCategory || detectCategoryFromNote(parsed.note);
+    if (learnedCategory) {
+      setAutoCategoryMsg('หมวดหมู่ถูกเลือกให้อัตโนมัติจากที่เคยตั้งไว้');
+    } else {
+      setAutoCategoryMsg(null);
+    }
     const expense: Expense = {
       id: crypto.randomUUID(),
       note: parsed.note,
@@ -121,6 +129,8 @@ function App() {
     setExpenses(newExpenses);
     console.log('Saved expenses (after add):', newExpenses);
     setInput('');
+    // Clear auto-category message after a short delay
+    setTimeout(() => setAutoCategoryMsg(null), 2000);
     setIsSubmitting(false);
     setError(null);
     // Restore focus after save
@@ -181,6 +191,11 @@ function App() {
         disabled={isSubmitting}
         ref={inputRef}
       />
+      {autoCategoryMsg && (
+        <div style={{ color: '#2563eb', fontSize: '0.98rem', padding: '6px 12px', backgroundColor: '#e0e7ff', borderRadius: '8px', marginTop: 4, marginBottom: 4 }}>
+          {autoCategoryMsg}
+        </div>
+      )}
       {error && (
         <div style={{ color: '#ef4444', fontSize: '0.98rem', padding: '8px 12px', backgroundColor: '#fee2e2', borderRadius: '8px' }}>{error}</div>
       )}
