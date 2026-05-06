@@ -1,6 +1,7 @@
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import type { CategoryTotal } from '../utils/summaryCalculations';
+import { CATEGORY_COLORS } from '../utils/categoryColors';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -18,15 +19,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: 'อื่น ๆ',
 };
 
-const COLORS = [
-  '#60a5fa', // food
-  '#fbbf24', // transport
-  '#f472b6', // shopping
-  '#a78bfa', // bills
-  '#34d399', // entertainment
-  '#f87171', // health
-  '#9ca3af', // other
-];
 
 export default function CategoryPieChart({ data }: CategoryPieChartProps) {
   if (!data.length) return <div style={{textAlign:'center',color:'#888'}}>ไม่มีข้อมูลรายจ่าย</div>;
@@ -36,7 +28,7 @@ export default function CategoryPieChart({ data }: CategoryPieChartProps) {
     datasets: [
       {
         data: data.map(d => d.total),
-        backgroundColor: COLORS.slice(0, data.length),
+        backgroundColor: data.map(d => CATEGORY_COLORS[d.category] || '#9ca3af'),
         borderWidth: 1,
       },
     ],

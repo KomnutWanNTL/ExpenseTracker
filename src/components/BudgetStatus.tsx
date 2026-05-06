@@ -2,6 +2,7 @@ import { formatAmount } from '../utils/formatters';
 import { calculateBudgetUsage } from '../utils/budgetCalculations';
 import type { Expense } from '../types/expense';
 import type { Budget } from '../types/budget';
+import { CATEGORY_COLORS } from '../utils/categoryColors';
 
 interface BudgetStatusProps {
   budgets: Budget[];
@@ -62,7 +63,16 @@ export default function BudgetStatus({ budgets, expenses }: BudgetStatusProps) {
                 marginBottom: '6px',
               }}
             >
-              <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', fontWeight: 600, fontSize: '0.95rem', gap: 8 }}>
+                <span style={{
+                  display: 'inline-block',
+                  width: 14,
+                  height: 14,
+                  borderRadius: '50%',
+                  backgroundColor: CATEGORY_COLORS[usage.category] || '#9ca3af',
+                  border: '1px solid #e5e7eb',
+                  marginRight: 2,
+                }} />
                 {CATEGORY_LABELS[usage.category]}
               </div>
               <div style={{ fontSize: '0.9rem', color: '#666' }}>
