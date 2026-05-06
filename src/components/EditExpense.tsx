@@ -165,7 +165,7 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
             }}
           >
             <option value="food">อาหาร</option>
-            <option value="transport">ขนส่ง</option>
+            <option value="transport">การเดินทาง</option>
             <option value="shopping">ช้อปปิ้ง</option>
             <option value="bills">ค่าบิล</option>
             <option value="entertainment">ความบันเทิง</option>
