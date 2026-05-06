@@ -150,6 +150,8 @@ function App() {
   // (useEffect is safer, but for simplicity, reset page to 1 if page > totalPages)
   if (page > totalPages) setPage(1);
 
+  const isCurrentMonth = selectedMonth === getLocalDateString().slice(0, 7);
+
   return (
     <main className="container" style={{ marginTop: '10px' }}>
       <header className="app-header-row">
@@ -167,10 +169,12 @@ function App() {
               saveExpenses(merged);
               alert('นำเข้าข้อมูลสำเร็จ!');
             }}
+            disabled={!isCurrentMonth}
           />
           <button
             className="header-btn budget-btn"
             onClick={() => setShowBudgetSettings(true)}
+            disabled={!isCurrentMonth}
           >
             Budget
           </button>
@@ -188,7 +192,7 @@ function App() {
           setError(null);
         }}
         onSubmit={handleSubmit}
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isCurrentMonth}
         ref={inputRef}
       />
       {autoCategoryMsg && (
@@ -248,8 +252,8 @@ function App() {
         </div>
         <ExpenseList
           expenses={pagedExpenses}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onEdit={isCurrentMonth ? handleEdit : undefined}
+          onDelete={isCurrentMonth ? handleDelete : undefined}
         />
         {/* Pagination controls */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0' }}>
@@ -277,7 +281,7 @@ function App() {
           </button>
         </div>
       </section>
-      {editingExpense && (
+      {editingExpense && isCurrentMonth && (
         <EditExpense
           expense={editingExpense}
           onSave={handleSaveEdit}

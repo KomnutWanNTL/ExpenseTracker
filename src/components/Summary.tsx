@@ -6,6 +6,7 @@ import {
   groupCurrentMonthByCategory,
   groupCurrentMonthByDay,
 } from '../utils/summaryCalculations';
+import { groupTodayByCategory } from '../utils/groupTodayByCategory';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -21,7 +22,10 @@ interface SummaryProps {
   month?: string; // YYYY-MM
 }
 
+import React, { useState } from 'react';
+
 function Summary({ expenses, month }: SummaryProps) {
+  const [pieMode, setPieMode] = useState<'month' | 'today'>('month');
   // referenceDate: วันนี้ถ้าเลือกเดือนปัจจุบัน, วันสุดท้ายของเดือนถ้าเลือกเดือนอื่น
   const currentMonth = dayjs().tz('Asia/Bangkok').format('YYYY-MM');
   const isCurrentMonth = !month || month === currentMonth;
@@ -33,7 +37,9 @@ function Summary({ expenses, month }: SummaryProps) {
 
   const todayTotal = calculateTodayTotal(expenses, referenceDate);
   const monthlyTotal = calculateMonthlyTotal(expenses, referenceDate);
-  const categoryData = groupCurrentMonthByCategory(expenses, referenceDate);
+  const categoryData = pieMode === 'month'
+    ? groupCurrentMonthByCategory(expenses, referenceDate)
+    : groupTodayByCategory(expenses, referenceDate);
   const dailyData = groupCurrentMonthByDay(expenses, referenceDate);
 
   // Helper for Thai month names
@@ -93,7 +99,50 @@ function Summary({ expenses, month }: SummaryProps) {
       </div>
 
       <div style={{marginBottom: 24}}>
-        <h3 style={{fontSize:'1.05rem',margin:'8px 0 8px 8px',color:'#0369a1'}}>สัดส่วนรายจ่าย (หมวดหมู่)</h3>
+        <div style={{display:'flex',alignItems:'center',gap:12,margin:'8px 0 8px 8px',minHeight:42}}>
+          <h3 style={{fontSize:'1.05rem',color:'#0369a1',margin:0}}>สัดส่วนรายจ่าย (หมวดหมู่)</h3>
+          {isCurrentMonth && (
+            <div style={{marginLeft:'auto'}}>
+              <button
+                onClick={() => setPieMode('today')}
+                style={{
+                  background: pieMode === 'today' ? '#f59e42' : '#f3f4f6',
+                  color: pieMode === 'today' ? '#fff' : '#f59e42',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '2px 10px',
+                  minHeight: 36,
+                  fontSize: '0.95rem',
+                  cursor: 'pointer',
+                  marginRight: 12,
+                  fontWeight: 600,
+                  boxShadow: pieMode === 'today' ? '0 2px 8px #f59e4280' : 'none',
+                  transition: 'all 0.15s',
+                }}
+              >
+                วันนี้
+              </button>
+              <button
+                onClick={() => setPieMode('month')}
+                style={{
+                  background: pieMode === 'month' ? '#2563eb' : '#f3f4f6',
+                  color: pieMode === 'month' ? '#fff' : '#2563eb',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '2px 10px',
+                  minHeight: 36,
+                  fontSize: '0.95rem',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  boxShadow: pieMode === 'month' ? '0 2px 8px #2563eb80' : 'none',
+                  transition: 'all 0.15s',
+                }}
+              >
+                เดือนนี้
+              </button>
+            </div>
+          )}
+        </div>
         <CategoryPieChart data={categoryData} />
       </div>
       <div>

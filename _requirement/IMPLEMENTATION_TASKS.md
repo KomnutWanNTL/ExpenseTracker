@@ -1,5 +1,6 @@
 ### 2026-05-01 (ต่อ)
-- เพิ่มฟีเจอร์ pagination ใน Expense List (เลือกจำนวนแสดงต่อหน้า 10/20/50/100, มีปุ่มเปลี่ยนหน้า)
+- [x] เพิ่มฟีเจอร์ pagination ใน Expense List (เลือกจำนวนแสดงต่อหน้า 10/20/50/100, มีปุ่มเปลี่ยนหน้า)
+- [x] ดู/เปลี่ยนจำนวนรายการต่อหน้าและเปลี่ยนหน้าได้แม้ดูเดือนย้อนหลัง
 - ปรับปุ่มทุกจุดในระบบให้ใช้ style/className เดียวกัน (primary/secondary/danger)
 - ปรับ dropdown selector (จำนวนแสดงต่อหน้า) ให้ใช้ style เดียวกับปุ่ม
 - เพิ่มลูกศร (arrow icon) ให้กับปุ่ม pagination (ก่อนหน้า/ถัดไป) และ dropdown selector
@@ -25,11 +26,48 @@
 
 ## 1. Project Status
 
-**Current Phase:** Phase 1: MVP Implementation
 
-**Current Focus:** Quick Add, Expense List, Summary
+**Current Phase:** Phase 3: Implementation Complete (รอ Manual QA/Polish)
 
-**Last Updated:** 2026-04-30
+**Current Focus:** Manual QA, Reliability, Performance, Mobile UX
+
+**Last Updated:** 2026-05-06
+
+**Blocked By:** None
+
+---
+
+## 2. Delivery Plan
+
+### Phase 0: Foundation
+- [x] Project scaffold พร้อมใช้งาน
+- [x] App structure และ shared types พร้อม
+
+# Expense Tracker Implementation Checklist
+
+อ้างอิงจาก [requirement.md](./requirement.md)
+
+ไฟล์นี้ใช้สำหรับ:
+- เช็คว่างานทำครบตาม requirement หรือยัง
+- ใช้เป็น working checklist เพื่อกลับมาทำงานต่อจากจุดเดิมได้ทันที
+- ใช้เป็นเกณฑ์ก่อนปิด MVP และ phase ถัดไป
+
+## วิธีใช้
+
+- เปลี่ยน `[ ]` เป็น `[x]` เมื่องานเสร็จจริง
+- ถ้างานเริ่มแล้วแต่ยังไม่เสร็จ ให้เติมสถานะในบรรทัด `Status:`
+- ถ้ามี decision สำคัญ ให้บันทึกไว้ใน `Notes:` ของ task นั้น
+- ห้ามข้าม acceptance checklist ของแต่ละ section
+
+---
+
+## 1. Project Status
+
+**Current Phase:** Phase 3: Implementation Complete (รอ Manual QA/Polish)
+
+**Current Focus:** Manual QA, Reliability, Performance, Mobile UX
+
+**Last Updated:** 2026-05-06
 
 **Blocked By:** None
 
@@ -42,6 +80,15 @@
 - [x] App structure และ shared types พร้อม
 - [x] Storage abstraction พร้อม
 - [x] Mobile-first shell พร้อม
+
+Requirement refs: Tech Constraints, NFR Performance
+
+Status: Completed
+
+Notes:
+- Build tool: Vite
+- Frontend: React
+- README มี usage note และ deploy note
 
 ### Phase 1: MVP
 - [x] Quick add ใช้งานได้ครบ
@@ -63,60 +110,24 @@
 
 ---
 
+### Phase 4: QA, Polish & Performance (Planned)
+- [ ] Manual QA: Mobile layout, keyboard flow, reload, offline, invalid input
+- [ ] Reliability hardening: invalid/corrupt storage, silent failure prevention
+- [ ] Performance: validate add flow, page load, avoid re-render
+- [ ] Mobile usability: one-handed, keyboard-first, no extra popups, ≤2 steps
+
+---
+
 ## 3. Implementation Backlog
 
-## A. Setup and Architecture
+### 2026-05-01 (ต่อ)
+- [x] เพิ่มฟีเจอร์ pagination ใน Expense List (เลือกจำนวนแสดงต่อหน้า 10/20/50/100, มีปุ่มเปลี่ยนหน้า)
+- [x] ดู/เปลี่ยนจำนวนรายการต่อหน้าและเปลี่ยนหน้าได้แม้ดูเดือนย้อนหลัง
+- ปรับปุ่มทุกจุดในระบบให้ใช้ style/className เดียวกัน (primary/secondary/danger)
+- ปรับ dropdown selector (จำนวนแสดงต่อหน้า) ให้ใช้ style เดียวกับปุ่ม
+- เพิ่มลูกศร (arrow icon) ให้กับปุ่ม pagination (ก่อนหน้า/ถัดไป) และ dropdown selector
+- ปรับ layout ให้ label "แสดงต่อหน้า:" และ selector ชัดเจนขึ้น
 
-### A1. Bootstrap project
-- [x] Create React + Vite project
-- [x] Confirm dev server starts successfully
-- [x] Confirm production build succeeds
-- [x] Add basic README usage notes
-
-Requirement refs: Tech Constraints, NFR Performance
-
-Status: Completed
-
-Notes:
-- Build tool: Vite
-- Frontend: React
-- README มี usage note และ deploy note
-
-### A2. Define folder structure
-- [x] Create folders for `src/app`
-- [x] Create folders for `src/components`
-- [x] Create folders for `src/features/expenses`
-- [x] Create folders for `src/features/dashboard`
-- [x] Create folders for `src/features/budget`
-- [x] Create folders for `src/storage`
-- [x] Create folders for `src/utils`
-- [x] Create folders for `src/types`
-
-Requirement refs: Tech Constraints
-
-Status: Completed
-
-Notes:
-- Feature boundaries แยกชัดเจน ลด refactor cost
-
-### A3. Define shared domain types
-- [x] Define `Expense` type from the requirement data model
-- [x] Define `Category` type/list
-- [x] Define `Budget` type
-- [x] Define `BudgetStatus` type
-- [x] Define storage payload types if needed
-
-Requirement refs: Section 5 Data Model, FR-12, FR-13
-
-Status: Completed
-
-Notes:
-- Expense: id, amount, category, note, date, createdAt (src/types/expense.ts)
-- Budget/type อื่นๆ ครบใน src/types/
-
-### A4. Create storage abstraction
-- [x] Create expense storage service
-- [x] Create budget storage service
 - [x] Add safe parse/serialize handling
 - [x] Add fallback for empty or corrupted local data
 - [x] Ensure reload persists data correctly
@@ -591,6 +602,7 @@ Acceptance checklist:
 
 ## H. Reliability, Offline, and Performance
 
+
 ### H1. Reliability hardening
 - [ ] Handle invalid input safely
 - [ ] Handle empty storage safely
@@ -600,6 +612,7 @@ Acceptance checklist:
 Requirement refs: Reliability, FR-04
 
 Status: Not started
+
 
 
 ### H2. Offline-ready behavior
@@ -639,6 +652,7 @@ Acceptance checklist:
 
 ---
 
+
 ## 4. Testing Checklist
 
 ### Unit Tests
@@ -657,6 +671,7 @@ Acceptance checklist:
 - [x] Budget UI flow test complete
 - [x] Export flow test complete
 
+
 ### Manual QA
 - [ ] Mobile layout checked
 - [ ] Keyboard-first flow checked
@@ -665,6 +680,7 @@ Acceptance checklist:
 - [ ] Invalid input behavior checked
 
 ---
+
 
 ## 5. MVP Exit Criteria
 
@@ -686,6 +702,7 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 
 ---
 
+
 ## 6. Phase 2 Exit Criteria
 
 - [x] ระบบ auto-detect category ได้
@@ -696,6 +713,7 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 - [x] Line chart ใช้งานได้
 
 ---
+
 
 
 ## 7. Phase 3 Exit Criteria
@@ -710,6 +728,7 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 
 ---
 
+
 ## 8. Open Decisions
 
 - [ ] Decide whether to use TypeScript or plain JavaScript
@@ -719,6 +738,7 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 - [ ] Decide whether quick add should support decimal amounts in v1
 
 ---
+
 
 ## 9. Work Log
 
@@ -737,6 +757,7 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
   - E7: Dashboard logic tests for summary calculations
 - **MVP is now ready for manual testing and validation**
 
+
 ### 2026-04-30 (continued)
 - **Phase 2 Smart Categorization + Dashboard Completed:**
   - D1-D6: Auto category detection with keyword matching, manual override support
@@ -752,13 +773,19 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
   - G2: Export button added to app header
   - All Phase 3 exit criteria met
   - Total tests passing: 30 (+ 4 skipped)
-  
+
 **PROJECT STATUS: All planned features implemented (Phases 0-3) ✅**
-**Next: Manual QA testing and potential Phase 4 enhancements**
+**Next: Manual QA testing and Phase 4: Polish, Reliability, Performance**
+
+### 2026-05-06
+- ตรวจสอบความคืบหน้าล่าสุด: Feature หลักครบทุก phase, เหลือ Manual QA, Reliability, Performance, Mobile usability, polish UI/UX
+- เตรียมแผน Phase 4: Manual QA, reliability hardening, performance, usability, polish
+
 
 ---
 
-## Category Learning (หมวดหมู่จดจำ)
+
+## 10. Category Learning (หมวดหมู่จดจำ)
 
 - [x] ออกแบบโครงสร้างข้อมูลสำหรับ mapping note → category (เช่น เก็บใน localStorage เป็น object)
 - [x] เมื่อผู้ใช้แก้ไขหมวดหมู่ใน EditExpense ให้บันทึก mapping note → category
