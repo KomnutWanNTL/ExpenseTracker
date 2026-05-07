@@ -1,0 +1,18 @@
+graph TD
+  A[User (Browser)]
+  B[React App (App.tsx)]
+  C[UI Components]
+  D[Storage Abstractions]
+  E[Utility Modules]
+  F[LocalStorage]
+  G[Service Worker]
+  H[Chart.js Visualizations]
+
+  A --> B
+  B --> C
+  B --> D
+  B --> E
+  C --> H
+  D --> F
+  B --> G
+  D --> E

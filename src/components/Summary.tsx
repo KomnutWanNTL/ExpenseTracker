@@ -22,13 +22,19 @@ interface SummaryProps {
   month?: string; // YYYY-MM
 }
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 
 function Summary({ expenses, month }: SummaryProps) {
-  const [pieMode, setPieMode] = useState<'month' | 'today'>('month');
-  // referenceDate: วันนี้ถ้าเลือกเดือนปัจจุบัน, วันสุดท้ายของเดือนถ้าเลือกเดือนอื่น
   const currentMonth = dayjs().tz('Asia/Bangkok').format('YYYY-MM');
   const isCurrentMonth = !month || month === currentMonth;
+  // Default pieMode: 'today' ถ้าเดือนปัจจุบัน, 'month' ถ้าเดือนย้อนหลัง
+  const [pieMode, setPieMode] = useState<'month' | 'today'>(isCurrentMonth ? 'today' : 'month');
+  // Reset pieMode เมื่อ month เปลี่ยน
+  useEffect(() => {
+    setPieMode(isCurrentMonth ? 'today' : 'month');
+  }, [month]);
+  // referenceDate: วันนี้ถ้าเลือกเดือนปัจจุบัน, วันสุดท้ายของเดือนถ้าเลือกเดือนอื่น
   const referenceDate = isCurrentMonth
     ? dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD')
     : dayjs.tz(month + '-01', 'Asia/Bangkok').endOf('month').format('YYYY-MM-DD');
