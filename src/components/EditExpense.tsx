@@ -170,6 +170,7 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
             <option value="bills">ค่าบิล</option>
             <option value="entertainment">ความบันเทิง</option>
             <option value="health">สุขภาพ</option>
+            <option value="family">ครอบครัว</option>
             <option value="other">อื่น ๆ</option>
           </select>
         </div>
