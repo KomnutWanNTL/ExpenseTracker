@@ -729,13 +729,14 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 ---
 
 
+
 ## 8. Open Decisions
 
-- [ ] Decide whether to use TypeScript or plain JavaScript
-- [ ] Decide chart library (`Chart.js` or equivalent)
-- [ ] Decide edit UX (`inline`, `drawer`, or `modal`)
-- [ ] Decide whether PWA setup is included in MVP or only PWA-ready structure
-- [ ] Decide whether quick add should support decimal amounts in v1
+- [x] TypeScript: **ใช้ TypeScript** (tsconfig, .ts/.tsx ทุกไฟล์)
+- [x] Chart library: **ใช้ Chart.js** (ผ่าน react-chartjs-2)
+- [x] Edit UX: **ใช้ bottom drawer modal** (EditExpense)
+- [x] PWA: **PWA-ready structure + service worker** (manifest, sw.js, offline cache)
+- [x] Quick add decimal: **ยังไม่รองรับ decimal amounts ใน v1**
 
 ---
 

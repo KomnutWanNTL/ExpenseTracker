@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant U as User
+    participant UI as UI Component (QuickAddExpense)
+    participant App as App State (App.tsx)
+    participant Store as Storage Module (expenseStorage)
+    participant LS as Browser localStorage
+
+    U->>UI: Enter expense details & submit
+    UI->>App: onAddExpense(newExpense)
+    App->>Store: saveExpenses([...expenses, newExpense])
+    Store->>LS: Write updated expenses
+    Store-->>App: Confirm save
+    App->>UI: Update expense list
+    UI->>U: Show updated expenses
