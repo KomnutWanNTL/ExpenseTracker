@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { setCategoryForNote } from '../storage/noteCategoryMapping';
-import type { Expense } from '../types/expense';
+import type { Expense, Category } from '../types/expense';
 
 interface EditExpenseProps {
   expense: Expense;
@@ -154,7 +154,7 @@ export default function EditExpense({ expense, onSave, onClose }: EditExpensePro
           </label>
           <select
             value={category}
-            onChange={e => setCategory(e.target.value as any)}
+            onChange={e => setCategory(e.target.value as Category)}
             style={{
               width: '100%',
               padding: '8px 12px',

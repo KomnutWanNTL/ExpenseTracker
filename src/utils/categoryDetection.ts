@@ -67,6 +67,16 @@ const CATEGORY_KEYWORDS: Record<Category, string[]> = {
     'clinic',
     'vitamin',
   ],
+  family: [
+    'ครอบครัว',
+    'ลูก',
+    'พ่อ',
+    'แม่',
+    'ภรรยา',
+    'สามี',
+    'ค่าเทอม',
+    'เลี้ยงลูก',
+  ],
   other: [],
 };
 
@@ -77,6 +87,7 @@ const DETECTION_ORDER: Category[] = [
   'shopping',
   'entertainment',
   'health',
+  'family',
 ];
 
 function normalizeNote(note: string): string {

@@ -1,6 +1,17 @@
 import { formatDate, formatAmount } from '../utils/formatters';
 import type { Expense } from '../types/expense';
 
+const CATEGORY_LABELS: Record<string, string> = {
+  food: 'อาหาร',
+  transport: 'เดินทาง',
+  shopping: 'ช็อปปิ้ง',
+  bills: 'บิล',
+  entertainment: 'บันเทิง',
+  health: 'สุขภาพ',
+  family: 'ครอบครัว',
+  other: 'อื่น ๆ',
+};
+
 interface ExpenseItemProps {
   expense: Expense;
   onEdit?: (expense: Expense) => void;
@@ -24,7 +35,7 @@ export default function ExpenseItem({ expense, onEdit, onDelete }: ExpenseItemPr
           {expense.note || '(ไม่มีหมายเหตุ)'}
         </div>
         <div style={{ fontSize: '0.85rem', color: '#6b7280' }}>
-          {formatDate(expense.date)} • {expense.category}
+          {formatDate(expense.date)} • {CATEGORY_LABELS[expense.category] || expense.category}
         </div>
       </div>
       <div style={{ fontSize: '0.98rem', fontWeight: 600, marginRight: '12px' }}>

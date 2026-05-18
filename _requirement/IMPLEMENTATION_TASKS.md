@@ -5,6 +5,12 @@
 - ปรับ dropdown selector (จำนวนแสดงต่อหน้า) ให้ใช้ style เดียวกับปุ่ม
 - เพิ่มลูกศร (arrow icon) ให้กับปุ่ม pagination (ก่อนหน้า/ถัดไป) และ dropdown selector
 - ปรับ layout ให้ label "แสดงต่อหน้า:" และ selector ชัดเจนขึ้น
+
+### 2026-05-12
+- [ ] เพิ่มมุมมองข้อมูลรายสัปดาห์ (เลือกสัปดาห์ปัจจุบัน/ย้อนหลังได้)
+- [x] เพิ่ม group ใหม่ชื่อ "ครอบครัว" ทุกจุดของระบบ
+- [ ] เพิ่มหน้า Summary ใหม่ รองรับรายวัน/รายสัปดาห์/รายเดือน
+- [ ] ทำ group รายการตามหัวข้อและ expand ดู detail ได้
 # Expense Tracker Implementation Checklist
 
 อ้างอิงจาก [requirement.md](./requirement.md)
@@ -598,6 +604,65 @@ Acceptance checklist:
 
 ---
 
+## J. Weekly View + Advanced Summary
+
+### J1. Add new category/group "ครอบครัว"
+- [x] Add category key/value for "ครอบครัว" in shared types/constants
+- [x] Update category selector options in quick add/edit/summaries
+- [x] Add category color and display label mapping
+- [x] Update auto category detection to support family-related keywords
+
+Requirement refs: FR-19, FR-07, FR-09
+
+Status: Completed
+
+### J2. Implement weekly range support
+- [ ] Add week range utility (start/end of week)
+- [ ] Add week selector state and controls
+- [ ] Filter expense list by selected week
+- [ ] Ensure monthly selector and weekly selector do not conflict
+
+Requirement refs: FR-20
+
+Status: Not started
+
+### J3. Build advanced summary page (day/week/month)
+- [ ] Add Summary period toggle: daily / weekly / monthly
+- [ ] Compute totals and datasets by selected period
+- [ ] Keep interaction simple on mobile and keyboard-friendly
+
+Requirement refs: FR-21, UX Requirements
+
+Status: Not started
+
+### J4. Group summary by topic and expandable details
+- [ ] Group summary data by category/topic
+- [ ] Show subtotal per group and count per group
+- [ ] Add expand/collapse UI to view detail items per group
+- [ ] Keep expanded state stable while changing period/filter when possible
+
+Requirement refs: FR-22, FR-23
+
+Status: Not started
+
+### J5. Add tests for weekly + summary grouping
+- [ ] Week range calculation test
+- [ ] Weekly filter test (boundary dates)
+- [ ] Family category mapping/detection test
+- [ ] Summary grouping + expand/collapse behavior test
+
+Requirement refs: FR-19 to FR-23
+
+Status: Not started
+
+Acceptance checklist:
+- [ ] ผู้ใช้เลือกดูข้อมูลรายสัปดาห์ได้
+- [ ] หมวด "ครอบครัว" ใช้งานได้ครบทั้งเพิ่ม/แก้ไข/สรุปผล
+- [ ] หน้า Summary สลับรายวัน/รายสัปดาห์/รายเดือนได้
+- [ ] รายการถูก group ตามหัวข้อ และกด expand ดู detail ได้
+
+---
+
 ---
 
 ## H. Reliability, Offline, and Performance
@@ -661,6 +726,9 @@ Acceptance checklist:
 - [x] Summary calculation tests complete
 - [x] Budget calculation tests complete
 - [x] CSV export formatting tests complete
+- [ ] Weekly range/filter tests complete
+- [x] Family category tests complete
+- [ ] Summary group expand/collapse tests complete
 
 ### Integration / UI Tests
 - [x] Quick add flow test complete
@@ -670,6 +738,9 @@ Acceptance checklist:
 - [x] Persistence after reload test complete
 - [x] Budget UI flow test complete
 - [x] Export flow test complete
+- [ ] Weekly view flow test complete
+- [ ] Summary day/week/month toggle flow test complete
+- [ ] Grouped summary expand detail flow test complete
 
 
 ### Manual QA

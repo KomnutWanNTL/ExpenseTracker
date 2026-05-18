@@ -12,6 +12,7 @@ const CATEGORIES: Category[] = [
   'bills',
   'entertainment',
   'health',
+  'family',
   'other',
 ];
 
@@ -22,6 +23,7 @@ const CATEGORY_LABELS: Record<Category, string> = {
   bills: 'บิล',
   entertainment: 'บันเทิง',
   health: 'สุขภาพ',
+  family: 'ครอบครัว',
   other: 'อื่น ๆ',
 };
 

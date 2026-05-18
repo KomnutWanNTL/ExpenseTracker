@@ -16,6 +16,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   bills: 'บิล',
   entertainment: 'บันเทิง',
   health: 'สุขภาพ',
+  family: 'ครอบครัว',
   other: 'อื่น ๆ',
 };
 
