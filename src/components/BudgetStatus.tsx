@@ -25,17 +25,13 @@ export default function BudgetStatus({ budgets, expenses }: BudgetStatusProps) {
 
   if (budgetUsages.length === 0) {
     return (
-      <div style={{ padding: '12px 16px', color: '#666', fontSize: '0.9rem' }}>
-        ยังไม่มีการตั้ง Budget
-      </div>
+      <div className="budget-empty-state">ยังไม่มีการตั้ง Budget</div>
     );
   }
 
   return (
-    <section style={{ marginBottom: '24px' }}>
-      <h3 style={{ fontSize: '1.05rem', margin: '8px 0 12px 8px', color: '#0369a1' }}>
-        สถานะ Budget
-      </h3>
+    <section className="card-surface budget-section">
+      <h3 className="budget-title">สถานะ Budget</h3>
       
       {budgetUsages.map((usage) => {
         const statusColor =
@@ -48,56 +44,35 @@ export default function BudgetStatus({ budgets, expenses }: BudgetStatusProps) {
         return (
           <div
             key={usage.category}
-            style={{
-              marginBottom: '12px',
-              padding: '12px 16px',
-              backgroundColor: '#f9fafb',
-              borderRadius: '8px',
-              borderLeft: `3px solid ${statusColor}`,
-            }}
+            className="budget-item"
+            style={{ borderLeftColor: statusColor }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                marginBottom: '6px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', fontWeight: 600, fontSize: '0.95rem', gap: 8 }}>
-                <span style={{
-                  display: 'inline-block',
-                  width: 14,
-                  height: 14,
-                  borderRadius: '50%',
-                  backgroundColor: CATEGORY_COLORS[usage.category] || '#9ca3af',
-                  border: '1px solid #e5e7eb',
-                  marginRight: 2,
-                }} />
+            <div className="budget-item-head">
+              <div className="budget-item-category">
+                <span
+                  className="budget-item-dot"
+                  style={{ backgroundColor: CATEGORY_COLORS[usage.category] || '#9ca3af' }}
+                />
                 {CATEGORY_LABELS[usage.category]}
               </div>
-              <div style={{ fontSize: '0.9rem', color: '#666' }}>
+              <div className="budget-item-value">
                 {formatAmount(usage.spentAmount)} / {formatAmount(usage.budgetAmount)}
               </div>
             </div>
 
-            <div style={{ marginBottom: '4px', height: '6px', backgroundColor: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+            <div className="budget-progress-track">
               <div
+                className="budget-progress-fill"
                 style={{
-                  height: '100%',
                   backgroundColor: statusColor,
                   width: `${Math.min(usage.percentageUsed, 100)}%`,
-                  transition: 'width 0.2s ease',
                 }}
               />
             </div>
 
             <div
-              style={{
-                fontSize: '0.8rem',
-                color: statusColor,
-                fontWeight: 600,
-              }}
+              className="budget-progress-text"
+              style={{ color: statusColor }}
             >
               {usage.percentageUsed}%{' '}
               {usage.status === 'over-budget' && '(เกิน)'}

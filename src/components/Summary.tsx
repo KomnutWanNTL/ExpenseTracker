@@ -61,71 +61,46 @@ function Summary({ expenses, month }: SummaryProps) {
   }
 
   return (
-    <section>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: isCurrentMonth ? '1fr 1fr' : '1fr',
-          gap: '12px',
-          marginBottom: '16px',
-        }}
-      >
+    <section className="card-surface summary-section">
+      <div className={`summary-cards ${isCurrentMonth ? 'summary-cards-two' : ''}`}>
         {isCurrentMonth && (
           <div
-            style={{
-              backgroundColor: pieMode === 'today' ? '#f59e42' : '#dbeafe',
-              borderRadius: '8px',
-              padding: '12px 16px',
-              textAlign: 'center',
-              cursor: 'pointer',
-              boxShadow: pieMode === 'today' ? '0 2px 8px #f59e4280' : 'none',
-              border: pieMode === 'today' ? '2px solid #f59e42' : '2px solid transparent',
-              transition: 'all 0.15s',
-            }}
+            className={`summary-card summary-card-today ${pieMode === 'today' ? 'summary-card-active' : ''}`}
             onClick={() => setPieMode('today')}
             title="ดูสรุปวันนี้"
           >
-            <div style={{ fontSize: '0.85rem', color: pieMode === 'today' ? '#fff' : '#0369a1', marginBottom: '4px' }}>
+            <div className="summary-card-label">
               วันนี้
             </div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: pieMode === 'today' ? '#fff' : '#0369a1' }}>
+            <div className="summary-card-value">
               {formatAmount(todayTotal)}
             </div>
           </div>
         )}
         <div
-          style={{
-            backgroundColor: pieMode === 'month' ? '#2563eb' : '#e0e7ff',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            textAlign: 'center',
-            cursor: 'pointer',
-            boxShadow: pieMode === 'month' ? '0 2px 8px #2563eb80' : 'none',
-            border: pieMode === 'month' ? '2px solid #2563eb' : '2px solid transparent',
-            transition: 'all 0.15s',
-          }}
+          className={`summary-card summary-card-month ${pieMode === 'month' ? 'summary-card-active' : ''}`}
           onClick={() => setPieMode('month')}
           title="ดูสรุปเดือนนี้"
         >
-          <div style={{ fontSize: '0.85rem', color: pieMode === 'month' ? '#fff' : '#3730a3', marginBottom: '4px' }}>
+          <div className="summary-card-label">
             {monthLabel}
           </div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 700, color: pieMode === 'month' ? '#fff' : '#3730a3' }}>
+          <div className="summary-card-value">
             {formatAmount(monthlyTotal)}
           </div>
         </div>
       </div>
 
-      <div style={{marginBottom: 24}}>
-        <div style={{display:'flex',alignItems:'center',gap:12,margin:'8px 0 8px 8px',minHeight:42}}>
-          <h3 style={{fontSize:'1.05rem',color:'#0369a1',margin:0}}>
+      <div className="summary-chart-block">
+        <div className="summary-chart-header">
+          <h3 className="summary-chart-title">
             {pieMode === 'today' ? 'Summary วันนี้ (หมวดหมู่)' : 'Summary เดือนนี้ (หมวดหมู่)'}
           </h3>
         </div>
         <CategoryPieChart data={categoryData} />
       </div>
-      <div>
-        <h3 style={{fontSize:'1.05rem',margin:'8px 0 8px 8px',color:'#0369a1'}}>แนวโน้มรายวัน (บาท)</h3>
+      <div className="summary-chart-block">
+        <h3 className="summary-chart-title">แนวโน้มรายวัน (บาท)</h3>
         <DailyLineChart data={dailyData} />
       </div>
     </section>

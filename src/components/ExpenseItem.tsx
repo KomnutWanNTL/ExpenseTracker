@@ -20,33 +20,23 @@ interface ExpenseItemProps {
 
 export default function ExpenseItem({ expense, onEdit, onDelete }: ExpenseItemProps) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingBottom: '12px',
-        marginBottom: '12px',
-        borderBottom: '1px solid #e5e7eb',
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 500, fontSize: '0.98rem', marginBottom: '2px' }}>
+    <div className="expense-item">
+      <div className="expense-item-main">
+        <div className="expense-item-note">
           {expense.note || '(ไม่มีหมายเหตุ)'}
         </div>
-        <div style={{ fontSize: '0.85rem', color: '#6b7280' }}>
+        <div className="expense-item-meta">
           {formatDate(expense.date)} • {CATEGORY_LABELS[expense.category] || expense.category}
         </div>
       </div>
-      <div style={{ fontSize: '0.98rem', fontWeight: 600, marginRight: '12px' }}>
+      <div className="expense-item-amount">
         {formatAmount(expense.amount)}
       </div>
-      <div style={{ display: 'flex', gap: '4px' }}>
+      <div className="expense-item-actions">
         {onEdit && (
           <button
             onClick={() => onEdit(expense)}
             className="app-btn app-btn-secondary"
-            style={{ padding: '4px 8px', fontSize: '0.85rem' }}
           >
             แก้ไข
           </button>
@@ -55,7 +45,6 @@ export default function ExpenseItem({ expense, onEdit, onDelete }: ExpenseItemPr
           <button
             onClick={() => onDelete(expense.id)}
             className="app-btn app-btn-danger"
-            style={{ padding: '4px 8px', fontSize: '0.85rem' }}
           >
             ลบ
           </button>
