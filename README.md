@@ -18,7 +18,7 @@ Personal expense tracker focused on speed, local-first privacy, and mobile-first
 - Quick Add with one input (example: `ข้าว 50`) and Enter-to-save flow
 - Auto category detection + learned category mapping from user corrections
 - Expense list with month filter, edit/delete, and pagination (10/20/50/100)
-- Summary dashboard (today, monthly, category pie, daily trend line)
+- Summary dashboard (today, monthly, category pie with percentage labels, daily trend chart with line/bar toggle)
 - Monthly budget per category with near-limit/over-limit status
 - CSV export and CSV import (merge/update by `id`)
 - Offline-friendly setup (PWA manifest + service worker registration)

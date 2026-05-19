@@ -73,8 +73,8 @@
 
 **FR-11** แสดงกราฟ:
 
-* Pie chart: สัดส่วนตาม category
-* Line chart: รายจ่ายรายวัน
+* Pie chart: สัดส่วนตาม category พร้อมแสดงเปอร์เซ็นต์
+* Daily trend chart: รายจ่ายรายวัน โดยรองรับการแสดงผลแบบเส้น (Line) หรือแท่ง (Bar)
 
 (ใช้ Chart.js หรือเทียบเท่า)
 
