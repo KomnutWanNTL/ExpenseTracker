@@ -1,5 +1,6 @@
 
 import { useRef, useEffect, forwardRef } from 'react';
+import type { KeyboardEvent } from 'react';
 
 interface QuickAddExpenseProps {
   value: string;
@@ -17,7 +18,7 @@ const QuickAddExpense = forwardRef<HTMLInputElement, QuickAddExpenseProps>(
       if (inputRef.current) inputRef.current.focus();
     }, []);
 
-    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
       if (e.key === 'Enter' && !disabled) {
         onSubmit();
       }
@@ -31,7 +32,7 @@ const QuickAddExpense = forwardRef<HTMLInputElement, QuickAddExpenseProps>(
     };
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div className="quick-add-wrap">
         <input
           ref={setRefs}
           type="text"
@@ -40,14 +41,7 @@ const QuickAddExpense = forwardRef<HTMLInputElement, QuickAddExpenseProps>(
           onKeyDown={handleKeyDown}
           placeholder="ข้าว 50"
           aria-label="เพิ่มค่าใช้จ่าย"
-          style={{
-            width: '100%',
-            fontSize: '1.1rem',
-            padding: '12px 16px',
-            borderRadius: 8,
-            border: '1px solid #e5e7eb',
-            boxSizing: 'border-box',
-          }}
+          className="quick-add-input"
           autoComplete="off"
           disabled={disabled}
         />

@@ -153,63 +153,70 @@ function App() {
   const isCurrentMonth = selectedMonth === getLocalDateString().slice(0, 7);
 
   return (
-    <main className="container" style={{ marginTop: '10px' }}>
-      <header className="app-header-row">
-        <h1 className="app-title">Expense Tracker</h1>
-        <div className="header-btn-group">
-          <button
-            className="header-btn export-btn"
-            onClick={() => downloadExpensesAsCSV(expenses)}
-          >
-            Export
-          </button>
-          <ImportExpenses
-            onImport={merged => {
-              setExpenses(merged);
-              saveExpenses(merged);
-              alert('นำเข้าข้อมูลสำเร็จ!');
-            }}
-            disabled={!isCurrentMonth}
+    <main className="container">
+      <div className="bg-orb bg-orb-top" />
+      <div className="bg-orb bg-orb-bottom" />
+
+      <div className="app-shell">
+        <header className="app-header-row card-surface">
+          <div>
+            <h1 className="app-title">Expense Tracker</h1>
+            <p className="app-subtitle">บันทึกรายจ่ายให้ชัดเจนขึ้นในทุกวัน</p>
+          </div>
+          <div className="header-btn-group">
+            <button
+              className="header-btn export-btn"
+              onClick={() => downloadExpensesAsCSV(expenses)}
+            >
+              Export
+            </button>
+            <ImportExpenses
+              onImport={merged => {
+                setExpenses(merged);
+                saveExpenses(merged);
+                alert('นำเข้าข้อมูลสำเร็จ!');
+              }}
+              disabled={!isCurrentMonth}
+            />
+            <button
+              className="header-btn budget-btn"
+              onClick={() => setShowBudgetSettings(true)}
+              disabled={!isCurrentMonth}
+            >
+              Budget
+            </button>
+          </div>
+        </header>
+
+        <section className="card-surface control-panel">
+          <MonthSelector
+            months={allMonths.length > 0 ? allMonths : [defaultMonth]}
+            value={selectedMonth}
+            onChange={setSelectedMonth}
           />
-          <button
-            className="header-btn budget-btn"
-            onClick={() => setShowBudgetSettings(true)}
-            disabled={!isCurrentMonth}
-          >
-            Budget
-          </button>
-        </div>
-      </header>
-      <MonthSelector
-        months={allMonths.length > 0 ? allMonths : [defaultMonth]}
-        value={selectedMonth}
-        onChange={setSelectedMonth}
-      />
-      <QuickAddExpense
-        value={input}
-        onChange={v => {
-          setInput(v);
-          setError(null);
-        }}
-        onSubmit={handleSubmit}
-        disabled={isSubmitting || !isCurrentMonth}
-        ref={inputRef}
-      />
-      {autoCategoryMsg && (
-        <div style={{ color: '#2563eb', fontSize: '0.98rem', padding: '6px 12px', backgroundColor: '#e0e7ff', borderRadius: '8px', marginTop: 4, marginBottom: 4 }}>
-          {autoCategoryMsg}
-        </div>
-      )}
-      {error && (
-        <div style={{ color: '#ef4444', fontSize: '0.98rem', padding: '8px 12px', backgroundColor: '#fee2e2', borderRadius: '8px' }}>{error}</div>
-      )}
-      <Summary expenses={expenses} month={selectedMonth} />
-      {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
-      <section>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8, gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <label htmlFor="pageSize" style={{ fontSize: '0.98rem', fontWeight: 500, marginRight: 2 }}>แสดงต่อหน้า</label>
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+          <QuickAddExpense
+            value={input}
+            onChange={v => {
+              setInput(v);
+              setError(null);
+            }}
+            onSubmit={handleSubmit}
+            disabled={isSubmitting || !isCurrentMonth}
+            ref={inputRef}
+          />
+          {autoCategoryMsg && (
+            <div className="status-banner status-banner-info">{autoCategoryMsg}</div>
+          )}
+          {error && <div className="status-banner status-banner-error">{error}</div>}
+        </section>
+
+        <Summary expenses={expenses} month={selectedMonth} />
+        {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
+
+        <section className="card-surface expense-section">
+          <div className="expense-toolbar">
+            <div className="expense-toolbar-left">
+              <label htmlFor="pageSize" className="expense-toolbar-label">แสดงต่อหน้า</label>
               <select
                 id="pageSize"
                 value={pageSize}
@@ -217,70 +224,46 @@ function App() {
                   setPageSize(Number(e.target.value));
                   setPage(1);
                 }}
-                className="app-select"
-                style={{ minWidth: 70, paddingRight: 32 }}
+                className="app-select page-size-select"
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
               </select>
-              {/* Arrow icon overlay for dropdown */}
-              <span style={{
-                pointerEvents: 'none',
-                position: 'absolute',
-                right: 10,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                display: 'flex',
-                alignItems: 'center',
-                height: 18
-              }}>
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M7.293 8.293a1 1 0 011.414 0L10 9.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z" fill="#2563eb"/>
-                </svg>
-              </span>
+            </div>
+            <div className="expense-toolbar-meta">
+              {totalItems > 0 && (
+                <span>{`หน้า ${page} / ${totalPages} (${totalItems} รายการ)`}</span>
+              )}
             </div>
           </div>
-          <div style={{ fontSize: '0.98rem', color: '#374151', minWidth: 120, textAlign: 'right' }}>
-            {totalItems > 0 && (
-              <span>
-                {`หน้า ${page} / ${totalPages} (${totalItems} รายการ)`}
-              </span>
-            )}
+
+          <ExpenseList
+            expenses={pagedExpenses}
+            onEdit={isCurrentMonth ? handleEdit : undefined}
+            onDelete={isCurrentMonth ? handleDelete : undefined}
+          />
+
+          <div className="pagination-row">
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={totalPages === 1 || page === 1}
+              className="app-btn app-btn-secondary nav-btn"
+            >
+              ก่อนหน้า
+            </button>
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={totalPages === 1 || page === totalPages}
+              className="app-btn app-btn-secondary nav-btn"
+            >
+              ถัดไป
+            </button>
           </div>
-        </div>
-        <ExpenseList
-          expenses={pagedExpenses}
-          onEdit={isCurrentMonth ? handleEdit : undefined}
-          onDelete={isCurrentMonth ? handleDelete : undefined}
-        />
-        {/* Pagination controls */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '16px 0' }}>
-          <button
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-            disabled={totalPages === 1 || page === 1}
-            className="app-btn app-btn-secondary"
-            style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
-              <path d="M13 15l-5-5 5-5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            ก่อนหน้า
-          </button>
-          <button
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-            disabled={totalPages === 1 || page === totalPages}
-            className="app-btn app-btn-secondary"
-            style={{ padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 6, minWidth: 90 }}
-          >
-            ถัดไป
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: 4 }}>
-              <path d="M7 5l5 5-5 5" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </section>
+        </section>
+      </div>
+
       {editingExpense && isCurrentMonth && (
         <EditExpense
           expense={editingExpense}
@@ -289,39 +272,15 @@ function App() {
         />
       )}
       {showBudgetSettings && (
-        <div style={bottomDrawerStyle}>
-          <div style={bottomDrawerContentStyle}>
-            <BudgetSettings
-              expenses={expenses}
-              onClose={handleCloseBudgetSettings}
-            />
+        <div className="bottom-drawer-overlay">
+          <div className="bottom-drawer-content">
+            <BudgetSettings expenses={expenses} onClose={handleCloseBudgetSettings} />
           </div>
         </div>
       )}
     </main>
   );
 }
-
-const bottomDrawerStyle: React.CSSProperties = {
-  position: 'fixed',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: 'rgba(0,0,0,0.5)',
-  display: 'flex',
-  alignItems: 'flex-end',
-  zIndex: 999,
-};
-
-const bottomDrawerContentStyle: React.CSSProperties = {
-  width: '100%',
-  backgroundColor: 'white',
-  borderTopLeftRadius: '12px',
-  borderTopRightRadius: '12px',
-  maxHeight: '80vh',
-  overflowY: 'auto',
-  animation: 'slideUp 0.3s ease-out',
-};
 
 export default App
 

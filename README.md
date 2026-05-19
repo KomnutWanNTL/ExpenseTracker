@@ -1,82 +1,81 @@
 
 # Expense Tracker (React + Vite)
 
-> **Personal Expense Tracker – Fast, Local, Mobile-first**
+Personal expense tracker focused on speed, local-first privacy, and mobile-first usage.
 
-## Project Status
+## Live Demo
 
-- **Phase 3: All core features implemented**
-- **Current focus:** Manual QA, Reliability, Performance, Mobile UX polish
+- GitHub Pages: https://komnutwanntl.github.io/ExpenseTracker/
 
----
+## Current Status
 
-## Features
+- Core implementation (Quick Add, list/edit/delete, dashboard, budgets, CSV import/export, PWA shell) is available.
+- Current focus is QA, reliability hardening, and UX polish.
+- Some automated tests are still failing (see Testing section).
 
-- **Quick Add:** เพิ่มรายจ่ายด้วย input เดียว (เช่น `ข้าว 50`) กด Enter บันทึกทันที
-- **Auto Categorization:** ระบบแยกหมวดหมู่อัตโนมัติ + จดจำหมวดหมู่ที่ผู้ใช้แก้ไข
-- **Expense List:** ดู/แก้ไข/ลบรายการย้อนหลัง, เลือกเดือน, pagination
-- **Dashboard:** สรุปยอดรายวัน/รายเดือน, Pie chart, Line chart
-- **Budget Control:** ตั้งงบรายเดือนต่อหมวด, แจ้งเตือนเมื่อใกล้เต็ม/เกินงบ
-- **CSV Export/Import:** ส่งออก/นำเข้าข้อมูลเป็นไฟล์ CSV
-- **Offline-first:** ใช้งานได้แม้ไม่มีอินเทอร์เน็ต (PWA-ready)
-- **Local Storage:** ข้อมูลเก็บในเครื่องคุณเท่านั้น ไม่มี backend/cloud
-- **Mobile-first:** ออกแบบให้ใช้งานง่ายบนมือถือ, รองรับ one-handed/keyboard-first
+## Implemented Features
 
----
+- Quick Add with one input (example: `ข้าว 50`) and Enter-to-save flow
+- Auto category detection + learned category mapping from user corrections
+- Expense list with month filter, edit/delete, and pagination (10/20/50/100)
+- Summary dashboard (today, monthly, category pie, daily trend line)
+- Monthly budget per category with near-limit/over-limit status
+- CSV export and CSV import (merge/update by `id`)
+- Offline-friendly setup (PWA manifest + service worker registration)
+- Local-only data persistence with `localStorage`
 
-## Usage
+## Planned / In Progress
 
-### Development
-
-```sh
-npm install
-npm run dev
-```
-
-### Production Build
-
-```sh
-npm run build
-npm run preview
-```
-
-### Deploy to GitHub Pages
-
-```sh
-npm run deploy
-```
-ดูผลลัพธ์ที่ branch `gh-pages` (ดูวิธีตั้งค่าใน Settings > Pages)
-
----
-
-## Data & Privacy
-
-- ข้อมูลทั้งหมดเก็บในเครื่อง (localStorage)
-- ไม่มีการส่งข้อมูลออกนอกเครื่อง/ไม่มี backend
-- รองรับ export/import CSV เพื่อ backup หรือย้ายข้อมูล
-
----
-
-## Reset/Import/Export
-
-- Export: ปุ่มส่งออก CSV อยู่ในหน้าแอป
-- Import: ปุ่มนำเข้า CSV อยู่ในหน้าแอป (รองรับ merge/replace)
-- Reset: ลบข้อมูลได้จาก UI (หรือ clear localStorage ด้วย browser devtools)
-
----
-
-## Requirements & Implementation
-
-- ดูรายละเอียดฟีเจอร์, ข้อกำหนด, และแผนงานได้ที่:
-  - [`_requirement/requirement.md`](./_requirement/requirement.md)
-  - [`_requirement/IMPLEMENTATION_TASKS.md`](./_requirement/IMPLEMENTATION_TASKS.md)
-
----
+- Manual QA coverage for mobile, keyboard flow, and offline behavior
+- Reliability/performance hardening
+- Weekly view and advanced grouped summary views (tracked in requirements/tasks)
 
 ## Tech Stack
 
-- React + TypeScript + Vite
-- Chart.js (ผ่าน react-chartjs-2)
-- LocalStorage (พร้อมต่อยอด IndexedDB)
+- React 19 + TypeScript
+- Vite 8
+- Chart.js via `react-chartjs-2`
+- `dayjs` (timezone handling)
+- Vitest (unit tests)
 
----
+## Scripts
+
+```sh
+npm install
+npm run dev       # start development server
+npm run build     # production build
+npm run preview   # preview production build
+npm run test      # run unit tests
+npm run deploy    # deploy dist/ to gh-pages branch
+```
+
+## Testing
+
+Current `npm run test` result:
+
+- Passing: 30
+- Failing: 4
+- Todo: 4
+
+Known failing areas:
+
+- `src/utils/csvExport.test.ts` (header expectation mismatch)
+- `src/utils/summaryCalculations.test.ts` (referenceDate type mismatch in tests)
+
+## Data & Privacy
+
+- Data is stored locally on your device (`localStorage`)
+- No backend and no cloud sync in this version
+- CSV export/import supports backup and migration
+
+## Import / Export / Reset
+
+- Export: use the Export button in the app header
+- Import: use the Import button in the app header (supports merge/update by `id`)
+- Reset: clear data from UI flows or browser storage tools
+
+## Requirement and Planning Docs
+
+- `_requirement/requirement.md`
+- `_requirement/IMPLEMENTATION_TASKS.md`
+- `_architecture/Project_Architecture_Blueprint.md`
