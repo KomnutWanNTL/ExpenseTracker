@@ -10,6 +10,10 @@ describe('detectCategoryFromNote', () => {
     expect(detectCategoryFromNote('BTS ไปทำงาน')).toBe('transport');
   });
 
+  it('returns family for known family keyword', () => {
+    expect(detectCategoryFromNote('ค่าเทอมลูก')).toBe('family');
+  });
+
   it('returns other when no keyword matches', () => {
     expect(detectCategoryFromNote('ของฝากให้เพื่อน')).toBe('other');
   });

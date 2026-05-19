@@ -9,6 +9,7 @@ export type Category =
   | 'bills'
   | 'entertainment'
   | 'health'
+  | 'family'
   | 'other';
 
 // Expense record type
