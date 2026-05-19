@@ -1,14 +1,15 @@
-import { Line } from 'react-chartjs-2';
-import { Chart, LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend } from 'chart.js';
+import { Bar, Line } from 'react-chartjs-2';
+import { Chart, LineElement, PointElement, BarElement, LinearScale, CategoryScale, Tooltip, Legend } from 'chart.js';
 import type { DailyTotal } from '../utils/summaryCalculations';
 
-Chart.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
+Chart.register(LineElement, PointElement, BarElement, LinearScale, CategoryScale, Tooltip, Legend);
 
 interface DailyLineChartProps {
   data: DailyTotal[];
+  chartType?: 'line' | 'bar';
 }
 
-export default function DailyLineChart({ data }: DailyLineChartProps) {
+export default function DailyLineChart({ data, chartType = 'line' }: DailyLineChartProps) {
   if (!data.length) return <div style={{textAlign:'center',color:'#888'}}>ไม่มีข้อมูลรายวัน</div>;
 
   const chartData = {
@@ -17,17 +18,28 @@ export default function DailyLineChart({ data }: DailyLineChartProps) {
       {
         label: 'ยอดใช้จ่าย (บาท)',
         data: data.map(d => d.total),
-        fill: false,
+        fill: chartType === 'line' ? false : true,
         borderColor: '#60a5fa',
         backgroundColor: '#60a5fa',
-        tension: 0.2,
+        tension: chartType === 'line' ? 0.2 : 0,
+        borderRadius: chartType === 'bar' ? 6 : 0,
+        maxBarThickness: chartType === 'bar' ? 26 : undefined,
       },
     ],
   };
 
+  const commonOptions = {
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true } },
+  };
+
   return (
     <div style={{maxWidth:340,margin:'0 auto'}}>
-      <Line data={chartData} options={{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}} />
+      {chartType === 'bar' ? (
+        <Bar data={chartData} options={commonOptions} />
+      ) : (
+        <Line data={chartData} options={commonOptions} />
+      )}
     </div>
   );
 }

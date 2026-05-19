@@ -30,6 +30,7 @@ function Summary({ expenses, month }: SummaryProps) {
   const isCurrentMonth = !month || month === currentMonth;
   // Default pieMode: 'today' ถ้าเดือนปัจจุบัน, 'month' ถ้าเดือนย้อนหลัง
   const [pieMode, setPieMode] = useState<'month' | 'today'>(isCurrentMonth ? 'today' : 'month');
+  const [dailyChartType, setDailyChartType] = useState<'line' | 'bar'>('bar');
   // Reset pieMode เมื่อ month เปลี่ยน
   useEffect(() => {
     setPieMode(isCurrentMonth ? 'today' : 'month');
@@ -100,8 +101,26 @@ function Summary({ expenses, month }: SummaryProps) {
         <CategoryPieChart data={categoryData} />
       </div>
       <div className="summary-chart-block">
-        <h3 className="summary-chart-title">แนวโน้มรายวัน (บาท)</h3>
-        <DailyLineChart data={dailyData} />
+        <div className="summary-chart-header summary-chart-header-with-actions">
+          <h3 className="summary-chart-title">แนวโน้มรายวัน (บาท)</h3>
+          <div className="chart-type-toggle" role="group" aria-label="เลือกประเภทกราฟรายวัน">
+            <button
+              type="button"
+              className={`chart-type-btn ${dailyChartType === 'bar' ? 'chart-type-btn-active' : ''}`}
+              onClick={() => setDailyChartType('bar')}
+            >
+              แท่ง
+            </button>
+            <button
+              type="button"
+              className={`chart-type-btn ${dailyChartType === 'line' ? 'chart-type-btn-active' : ''}`}
+              onClick={() => setDailyChartType('line')}
+            >
+              เส้น
+            </button>
+          </div>
+        </div>
+        <DailyLineChart data={dailyData} chartType={dailyChartType} />
       </div>
     </section>
   );

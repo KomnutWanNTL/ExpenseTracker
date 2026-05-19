@@ -252,6 +252,36 @@
   align-items: center;
 }
 
+.summary-chart-header-with-actions {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chart-type-toggle {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+}
+
+.chart-type-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.chart-type-btn-active {
+  color: #0c5f59;
+  background: #d8f4ee;
+}
+
 .summary-chart-title,
 .budget-title {
   color: var(--text);
@@ -630,6 +660,15 @@
 
   .summary-cards-two {
     grid-template-columns: 1fr;
+  }
+
+  .summary-chart-header-with-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .chart-type-toggle {
+    width: fit-content;
   }
 
   .expense-toolbar {
