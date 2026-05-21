@@ -4,7 +4,7 @@ import './App.css'
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { useState, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import QuickAddExpense from './components/QuickAddExpense';
 import ExpenseList from './components/ExpenseList';
@@ -25,6 +25,17 @@ import { downloadExpensesAsCSV } from './utils/csvExport';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 import type { Expense } from './types/expense';
+
+const CATEGORY_LABELS: Record<Expense['category'], string> = {
+  food: 'อาหาร',
+  transport: 'เดินทาง',
+  shopping: 'ช็อปปิ้ง',
+  bills: 'บิล',
+  entertainment: 'บันเทิง',
+  health: 'สุขภาพ',
+  family: 'ครอบครัว',
+  other: 'อื่น ๆ',
+};
 
 // Always use Thailand local date (YYYY-MM-DD) using dayjs
 function getLocalDateString(): string {
@@ -62,6 +73,7 @@ function App() {
   // Pagination state
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | Expense['category']>('all');
 
   function handleDelete(id: string) {
     if (!window.confirm('คุณต้องการลบรายการนี้หรือไม่?')) return;
@@ -141,7 +153,27 @@ function App() {
 
 
   // Filter expenses by selected month
-  const filteredExpenses = expenses.filter(e => e.date.startsWith(selectedMonth));
+  const monthFilteredExpenses = useMemo(
+    () => expenses.filter(e => e.date.startsWith(selectedMonth)),
+    [expenses, selectedMonth]
+  );
+  const availableCategories = useMemo(
+    () => Array.from(new Set(monthFilteredExpenses.map(e => e.category))).sort(),
+    [monthFilteredExpenses]
+  );
+  const filteredExpenses = useMemo(
+    () => (selectedCategory === 'all'
+      ? monthFilteredExpenses
+      : monthFilteredExpenses.filter(e => e.category === selectedCategory)),
+    [monthFilteredExpenses, selectedCategory]
+  );
+
+  useEffect(() => {
+    if (selectedCategory !== 'all' && !availableCategories.includes(selectedCategory)) {
+      setSelectedCategory('all');
+    }
+  }, [availableCategories, selectedCategory]);
+
   // Pagination logic
   const totalItems = filteredExpenses.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
@@ -230,6 +262,24 @@ function App() {
                 <option value={20}>20</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
+              </select>
+
+              <label htmlFor="categoryFilter" className="expense-toolbar-label">หมวดหมู่</label>
+              <select
+                id="categoryFilter"
+                value={selectedCategory}
+                onChange={e => {
+                  setSelectedCategory(e.target.value as 'all' | Expense['category']);
+                  setPage(1);
+                }}
+                className="app-select category-filter-select"
+              >
+                <option value="all">ทั้งหมด</option>
+                {availableCategories.map(category => (
+                  <option key={category} value={category}>
+                    {CATEGORY_LABELS[category]}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="expense-toolbar-meta">

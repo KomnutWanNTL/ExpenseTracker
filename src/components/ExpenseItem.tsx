@@ -21,34 +21,38 @@ interface ExpenseItemProps {
 export default function ExpenseItem({ expense, onEdit, onDelete }: ExpenseItemProps) {
   return (
     <div className="expense-item">
-      <div className="expense-item-main">
+      <div className="expense-item-top">
         <div className="expense-item-note">
           {expense.note || '(ไม่มีหมายเหตุ)'}
         </div>
-        <div className="expense-item-meta">
-          {formatDate(expense.date)} • {CATEGORY_LABELS[expense.category] || expense.category}
+        <div className="expense-item-amount">
+          {formatAmount(expense.amount)}
         </div>
-      </div>
-      <div className="expense-item-amount">
-        {formatAmount(expense.amount)}
-      </div>
-      <div className="expense-item-actions">
         {onEdit && (
-          <button
-            onClick={() => onEdit(expense)}
-            className="app-btn app-btn-secondary"
-          >
-            แก้ไข
-          </button>
+          <>
+            <button
+              onClick={() => onEdit(expense)}
+              className="app-btn app-btn-secondary expense-item-action-btn"
+            >
+              แก้ไข
+            </button>
+          </>
         )}
         {onDelete && (
-          <button
-            onClick={() => onDelete(expense.id)}
-            className="app-btn app-btn-danger"
-          >
-            ลบ
-          </button>
+          <>
+            <button
+              onClick={() => onDelete(expense.id)}
+              className="app-btn app-btn-danger expense-item-action-btn"
+            >
+              ลบ
+            </button>
+          </>
         )}
+      </div>
+      <div className="expense-item-meta-row">
+        <span>{formatDate(expense.date)}</span>
+        <span className="expense-item-separator" aria-hidden="true">|</span>
+        <span>{CATEGORY_LABELS[expense.category] || expense.category}</span>
       </div>
     </div>
   );

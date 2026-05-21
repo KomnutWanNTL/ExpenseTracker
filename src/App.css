@@ -374,11 +374,16 @@
 .expense-toolbar-left {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .page-size-select {
   min-width: 84px;
+}
+
+.category-filter-select {
+  min-width: 128px;
 }
 
 .expense-toolbar-meta {
@@ -394,42 +399,58 @@
 
 .expense-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px 10px;
+  gap: 3px;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 10px;
+  padding: 8px 10px;
   background: var(--surface-soft);
 }
 
-.expense-item-main {
+.expense-item-top {
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .expense-item-note {
-  font-size: 0.97rem;
+  min-width: 0;
+  flex: 1;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.expense-item-meta {
-  font-size: 0.82rem;
+.expense-item-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  line-height: 1.2;
   color: var(--muted);
 }
 
 .expense-item-amount {
-  text-align: right;
-  font-size: 0.98rem;
+  font-size: 0.87rem;
+  line-height: 1.1;
   font-weight: 700;
   color: var(--brand-strong);
 }
 
-.expense-item-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
+.expense-item-separator {
+  color: color-mix(in oklab, var(--muted) 75%, #ffffff 25%);
+  font-size: 0.74rem;
+  line-height: 1;
+}
+
+.expense-item-action-btn {
+  padding: 4px 7px;
+  font-size: 0.74rem;
+  border-radius: 8px;
+  min-height: 24px;
 }
 
 .app-btn {
@@ -656,10 +677,6 @@
 
   .edit-actions {
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .summary-cards-two {
-    grid-template-columns: 1fr;
   }
 
   .summary-chart-header-with-actions {
