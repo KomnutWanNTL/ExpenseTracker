@@ -43,8 +43,13 @@ function getLocalDateString(): string {
 }
 
 function getAllMonths(expenses: Expense[]): string[] {
-  // Return all months in format YYYY-MM, sorted desc, unique
-  const months = Array.from(new Set(expenses.map(e => e.date.slice(0, 7))));
+  // Return all months in format YYYY-MM, sorted desc, unique.
+  // Always include the current month so users can add expenses
+  // even when the new month has no entries yet.
+  const currentMonth = getLocalDateString().slice(0, 7);
+  const months = Array.from(
+    new Set([currentMonth, ...expenses.map(e => e.date.slice(0, 7))])
+  );
   return months.sort((a, b) => b.localeCompare(a));
 }
 
@@ -66,7 +71,7 @@ function App() {
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
   // Month selector state
   const allMonths = getAllMonths(expenses);
-  const defaultMonth = allMonths.length > 0 ? allMonths[0] : getLocalDateString().slice(0, 7);
+  const defaultMonth = getLocalDateString().slice(0, 7);
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
