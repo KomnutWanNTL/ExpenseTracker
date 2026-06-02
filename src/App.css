@@ -1,88 +1,121 @@
+/* =========================================================================
+   Expense Tracker — Apple design system
+   Tokens sourced from DESIGN.md (apple-design-analysis, version alpha)
+   Single accent (#0066cc Action Blue), parchment/white surfaces,
+   near-black ink, SF Pro typography, pill CTAs, hairlines, no gradients.
+   ========================================================================= */
+
 :root {
-  --bg: #f2f6f9;
-  --surface: #ffffff;
-  --surface-soft: #f8fbfd;
-  --text: #16212f;
-  --muted: #617487;
-  --line: #d9e2eb;
-  --brand: #0f766e;
-  --brand-strong: #0c5f59;
-  --accent: #ea580c;
-  --danger: #dc2626;
-  --success: #0f9f6e;
-  --radius: 18px;
-  --shadow: 0 18px 42px rgba(12, 31, 43, 0.1);
+  /* Colors */
+  --primary: #0066cc;          /* Action Blue */
+  --primary-focus: #0071e3;    /* Focus ring */
+  --primary-on-dark: #2997ff;  /* Sky link blue */
+  --ink: #1d1d1f;              /* Body & headlines */
+  --ink-muted-80: #333333;
+  --ink-muted-48: #7a7a7a;
+  --canvas: #ffffff;
+  --canvas-parchment: #f5f5f7;
+  --surface-pearl: #fafafc;
+  --hairline: #e0e0e0;
+  --divider-soft: #f0f0f0;
+  --surface-tile-1: #272729;
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+
+  /* Semantic status (Apple uses photographic atmosphere; these are kept
+     muted and unsaturated to coexist with the single-accent system.) */
+  --status-success: #1a8754;
+  --status-warning: #b25e09;
+  --status-danger: #b91d1d;
+  --status-info-bg: #eef4ff;
+  --status-danger-bg: #fdecec;
+
+  /* Radii (DESIGN.md ladder) */
+  --r-sm: 8px;
+  --r-md: 11px;
+  --r-lg: 18px;
+  --r-pill: 9999px;
+
+  /* Spacing */
+  --sp-xxs: 4px;
+  --sp-xs: 8px;
+  --sp-sm: 12px;
+  --sp-md: 17px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --sp-xxl: 48px;
+
+  /* The single product-shadow allowed by the system — reserved
+     for elevation only on imagery / floating surfaces. */
+  --product-shadow: 0 3px 30px 5px rgba(0, 0, 0, 0.22);
 }
 
+/* -------------------------------------------------------------------------
+   Page container
+   ------------------------------------------------------------------------- */
 .container {
   position: relative;
-  padding: 28px 16px 40px;
+  padding: 40px 16px 64px;
+  background: var(--canvas-parchment);
+  min-height: 100vh;
   overflow-x: clip;
-  background: radial-gradient(circle at 8% 8%, #ffe6cb 0, transparent 34%),
-    radial-gradient(circle at 94% 78%, #d8f4ee 0, transparent 36%),
-    linear-gradient(160deg, #f7fbfd 0%, #edf3f8 100%);
 }
 
+/* Decorative orbs / gradients are not part of the Apple system.
+   Hide if any remain in markup. */
 .bg-orb {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(18px);
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.bg-orb-top {
-  width: 220px;
-  height: 220px;
-  top: -72px;
-  right: -84px;
-  background: #f9d8b8;
-}
-
-.bg-orb-bottom {
-  width: 180px;
-  height: 180px;
-  left: -56px;
-  bottom: 24px;
-  background: #bde9df;
+  display: none !important;
 }
 
 .app-shell {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: min(760px, 100%);
+  max-width: min(980px, 100%);
   margin: 0 auto;
   display: grid;
-  gap: 14px;
-  animation: fade-in 0.4s ease-out;
+  gap: 24px;
 }
 
+/* -------------------------------------------------------------------------
+   Card surfaces (flat, hairline-bordered, no shadow)
+   ------------------------------------------------------------------------- */
 .card-surface {
-  background: color-mix(in oklab, var(--surface) 94%, #ffffff 6%);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 24px;
 }
 
+/* -------------------------------------------------------------------------
+   Header row
+   ------------------------------------------------------------------------- */
 .app-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  background: transparent;
+  border: none;
+  padding: 0 4px;
+  border-radius: 0;
 }
 
 .app-title {
-  font-size: clamp(1.4rem, 3vw, 1.95rem);
-  letter-spacing: -0.03em;
-  color: var(--text);
+  font-size: clamp(2rem, 4vw, 2.5rem); /* approx display-lg → hero-display */
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  color: var(--ink);
 }
 
 .app-subtitle {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.92rem;
+  margin-top: 8px;
+  color: var(--ink-muted-48);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: -0.012em;
 }
 
 .header-btn-group {
@@ -92,43 +125,107 @@
   justify-content: flex-end;
 }
 
+/* -------------------------------------------------------------------------
+   Buttons — Apple grammar
+   .header-btn, .app-btn-primary  → blue pill (button-primary)
+   .app-btn-secondary             → ghost pill
+   .app-btn-danger                → soft danger pill (kept minimal)
+   ------------------------------------------------------------------------- */
 .app-btn,
 .header-btn {
   appearance: none;
-  border: none;
-  border-radius: 12px;
-  font-size: 0.93rem;
-  font-weight: 600;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.012em;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  transition: transform 0.18s ease, background-color 0.18s ease,
+    border-color 0.18s ease, color 0.18s ease;
+  border-radius: var(--r-pill);
+  padding: 11px 22px;
 }
 
-.header-btn {
-  padding: 10px 14px;
-  color: #ffffff;
+/* Press = scale(0.96) — the system micro-interaction */
+.app-btn:active,
+.header-btn:active {
+  transform: scale(0.96);
+}
+
+.app-btn:focus-visible,
+.header-btn:focus-visible {
+  outline: 2px solid var(--primary-focus);
+  outline-offset: 2px;
+}
+
+/* Primary blue pill */
+.header-btn,
+.app-btn-primary,
+.export-btn,
+.import-btn,
+.budget-btn {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
 }
 
 .header-btn:hover,
-.app-btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.03);
+.app-btn-primary:hover,
+.export-btn:hover,
+.import-btn:hover,
+.budget-btn:hover {
+  background: #005bb8; /* perceptual press tone of Action Blue */
+  border-color: #005bb8;
 }
 
-.export-btn {
-  background: linear-gradient(135deg, #0f9f6e, #0f766e);
+/* Ghost pill — used for secondary CTAs and pagination */
+.app-btn-secondary {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
-.import-btn {
-  background: linear-gradient(135deg, #f59e0b, #ea580c);
+.app-btn-secondary:hover {
+  background: rgba(0, 102, 204, 0.06);
 }
 
-.budget-btn {
-  background: linear-gradient(135deg, #0ea5a2, #0c8a88);
+/* Danger — kept quiet, follows the same pill grammar */
+.app-btn-danger {
+  background: transparent;
+  color: var(--status-danger);
+  border-color: var(--status-danger);
 }
 
+.app-btn-danger:hover {
+  background: rgba(185, 29, 29, 0.06);
+}
+
+.app-btn:disabled,
+.header-btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Compact row-action buttons (edit / delete inside a list item).
+   Smaller pill at caption typography. */
+.expense-item-action-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  letter-spacing: -0.016em;
+}
+
+.nav-btn {
+  min-width: 120px;
+}
+
+/* -------------------------------------------------------------------------
+   Control panel (month + quick add)
+   ------------------------------------------------------------------------- */
 .control-panel {
   display: grid;
-  gap: 10px;
+  gap: 16px;
 }
 
 .month-selector {
@@ -138,63 +235,76 @@
 
 .month-selector-label,
 .expense-toolbar-label {
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 600;
+  color: var(--ink-muted-48);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.016em;
 }
 
+/* -------------------------------------------------------------------------
+   Inputs — pill search-style (DESIGN.md search-input)
+   ------------------------------------------------------------------------- */
 .app-select,
 .quick-add-input {
   width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 1rem;
-  padding: 11px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: -0.012em;
+  padding: 12px 20px;
+  height: 44px;
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .app-select {
   appearance: none;
-  padding-right: 40px;
-  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 8l5 5 5-5' fill='none' stroke='%23617487' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  padding-right: 44px;
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 8l5 5 5-5' fill='none' stroke='%231d1d1f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
+  background-position: right 18px center;
 }
 
 .app-select:focus,
 .quick-add-input:focus {
   outline: none;
-  border-color: #77c2b5;
-  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+  border-color: var(--primary-focus);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.18);
 }
 
+/* -------------------------------------------------------------------------
+   Status banners — quiet, hairline, no decorative gradient
+   ------------------------------------------------------------------------- */
 .status-banner {
-  border-radius: 12px;
-  padding: 9px 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: var(--r-md);
+  padding: 10px 14px;
+  font-size: 14px;
+  letter-spacing: -0.016em;
 }
 
 .status-banner-info {
-  color: #0c4a6e;
-  background: #dff3ff;
+  color: var(--primary);
+  background: var(--status-info-bg);
 }
 
 .status-banner-error {
-  color: #7f1d1d;
-  background: #fee2e2;
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
 }
 
+/* -------------------------------------------------------------------------
+   Summary section
+   ------------------------------------------------------------------------- */
 .summary-section {
   display: grid;
-  gap: 14px;
+  gap: 24px;
 }
 
 .summary-cards {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   grid-template-columns: 1fr;
 }
 
@@ -203,47 +313,42 @@
 }
 
 .summary-card {
-  border-radius: 14px;
-  border: 1px solid transparent;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: var(--canvas-parchment);
   cursor: pointer;
-  padding: 12px;
-  transition: transform 0.18s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 20px;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+  color: var(--ink);
 }
 
 .summary-card:hover {
-  transform: translateY(-1px);
-}
-
-.summary-card-today {
-  background: #fff5e8;
-  color: #9a3412;
-}
-
-.summary-card-month {
-  background: #e7f7f4;
-  color: #115e59;
+  background: var(--surface-pearl);
 }
 
 .summary-card-active {
-  border-color: color-mix(in oklab, currentColor 30%, #ffffff 70%);
-  box-shadow: 0 10px 24px rgba(14, 36, 49, 0.12);
+  border-color: var(--primary);
+  background: var(--canvas);
 }
 
 .summary-card-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  opacity: 0.92;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.016em;
+  color: var(--ink-muted-48);
 }
 
 .summary-card-value {
-  margin-top: 3px;
-  font-size: clamp(1rem, 2.8vw, 1.34rem);
-  font-weight: 700;
+  margin-top: 6px;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  color: var(--ink);
 }
 
 .summary-chart-block {
   display: grid;
-  gap: 6px;
+  gap: 12px;
 }
 
 .summary-chart-header {
@@ -254,70 +359,80 @@
 
 .summary-chart-header-with-actions {
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 
 .chart-type-toggle {
   display: inline-flex;
   padding: 2px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--surface-soft);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--hairline);
+  background: var(--canvas-parchment);
 }
 
 .chart-type-btn {
   border: 0;
   background: transparent;
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 600;
+  color: var(--ink-muted-48);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.016em;
   line-height: 1;
-  padding: 7px 10px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
   cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
 .chart-type-btn-active {
-  color: #0c5f59;
-  background: #d8f4ee;
+  color: var(--on-primary);
+  background: var(--primary);
 }
 
 .summary-chart-title,
 .budget-title {
-  color: var(--text);
-  font-size: 1rem;
-  font-weight: 700;
+  color: var(--ink);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
 }
 
+/* -------------------------------------------------------------------------
+   Budget section
+   ------------------------------------------------------------------------- */
 .budget-section {
   display: grid;
-  gap: 10px;
+  gap: 16px;
 }
 
 .budget-empty-state,
 .expense-empty-state {
   text-align: center;
-  color: var(--muted);
-  padding: 14px;
-  border: 1px dashed var(--line);
-  border-radius: 12px;
-  background: var(--surface-soft);
+  color: var(--ink-muted-48);
+  padding: 24px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--canvas);
+  font-size: 14px;
+  letter-spacing: -0.016em;
 }
 
 .budget-item {
-  border-left: 4px solid var(--success);
-  background: var(--surface-soft);
-  border-radius: 12px;
-  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--status-success);
+  background: var(--canvas-parchment);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .budget-item-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 
 .budget-item-category {
@@ -325,27 +440,28 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: var(--text);
+  font-size: 17px;
+  letter-spacing: -0.012em;
+  color: var(--ink);
 }
 
 .budget-item-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  border: 1px solid #ffffff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
 .budget-item-value {
-  font-size: 0.88rem;
-  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: -0.016em;
+  color: var(--ink-muted-48);
 }
 
 .budget-progress-track {
   width: 100%;
-  height: 7px;
-  border-radius: 999px;
-  background: #dce6ee;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--divider-soft);
   overflow: hidden;
 }
 
@@ -355,71 +471,81 @@
 }
 
 .budget-progress-text {
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.016em;
 }
 
+/* -------------------------------------------------------------------------
+   Expense section + list
+   ------------------------------------------------------------------------- */
 .expense-section {
   display: grid;
-  gap: 10px;
+  gap: 16px;
 }
 
 .expense-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .expense-toolbar-left {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
 }
 
 .page-size-select {
-  min-width: 84px;
+  min-width: 96px;
 }
 
 .category-filter-select {
-  min-width: 128px;
+  min-width: 144px;
 }
 
 .expense-toolbar-meta {
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 500;
+  color: var(--ink-muted-48);
+  font-size: 14px;
+  letter-spacing: -0.016em;
 }
 
 .expense-list {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .expense-item {
   display: grid;
-  gap: 3px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 8px 10px;
-  background: var(--surface-soft);
+  gap: 4px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  background: var(--canvas);
+  transition: background-color 0.18s ease;
+}
+
+.expense-item:hover {
+  background: var(--canvas-parchment);
 }
 
 .expense-item-top {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   white-space: nowrap;
 }
 
 .expense-item-note {
   min-width: 0;
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 17px;
   font-weight: 600;
-  color: var(--text);
+  letter-spacing: -0.012em;
+  color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -427,111 +553,79 @@
 .expense-item-meta-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.76rem;
-  line-height: 1.2;
-  color: var(--muted);
+  gap: 8px;
+  font-size: 14px;
+  letter-spacing: -0.016em;
+  line-height: 1.3;
+  color: var(--ink-muted-48);
 }
 
 .expense-item-amount {
-  font-size: 0.87rem;
-  line-height: 1.1;
-  font-weight: 700;
-  color: var(--brand-strong);
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--ink);
 }
 
 .expense-item-separator {
-  color: color-mix(in oklab, var(--muted) 75%, #ffffff 25%);
-  font-size: 0.74rem;
+  color: var(--hairline);
+  font-size: 14px;
   line-height: 1;
 }
 
-.expense-item-action-btn {
-  padding: 4px 7px;
-  font-size: 0.74rem;
-  border-radius: 8px;
-  min-height: 24px;
-}
-
-.app-btn {
-  padding: 8px 12px;
-  border: 1px solid transparent;
-  line-height: 1;
-}
-
-.app-btn-secondary {
-  color: #194760;
-  background: #dcecf8;
-}
-
-.app-btn-danger {
-  color: #9f1239;
-  background: #ffe4e6;
-}
-
-.app-btn-primary {
-  color: #ffffff;
-  background: linear-gradient(135deg, #0f766e, #0c5f59);
-}
-
-.nav-btn {
-  min-width: 92px;
-}
-
+/* -------------------------------------------------------------------------
+   Pagination row
+   ------------------------------------------------------------------------- */
 .pagination-row {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
   padding-top: 4px;
 }
 
-.app-btn:disabled,
-.header-btn:disabled {
-  transform: none;
-  filter: grayscale(0.2);
-  opacity: 0.55;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
+/* -------------------------------------------------------------------------
+   Drawers & modals — flat, hairline, single drop-shadow (product-shadow)
+   used here for the elevated floating surface.
+   ------------------------------------------------------------------------- */
 .bottom-drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(9, 21, 31, 0.48);
+  background: rgba(29, 29, 31, 0.42);
   display: flex;
   align-items: flex-end;
   z-index: 1000;
-  backdrop-filter: blur(2px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 
 .bottom-drawer-content {
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  background: #ffffff;
-  border-radius: 20px 20px 0 0;
+  background: var(--canvas);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  box-shadow: var(--product-shadow);
   animation: slide-up 0.28s ease-out;
-  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.15);
 }
 
 .edit-overlay {
   position: fixed;
   inset: 0;
   z-index: 1100;
-  background: rgba(9, 21, 31, 0.54);
+  background: rgba(29, 29, 31, 0.48);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding: 8px;
-  backdrop-filter: blur(2px);
+  backdrop-filter: saturate(180%) blur(20px);
 }
 
 .edit-sheet {
   width: min(100%, 560px);
   max-height: min(88dvh, 760px);
-  background: #ffffff;
-  border-radius: 18px 18px 0 0;
-  box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.2);
+  background: var(--canvas);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  box-shadow: var(--product-shadow);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -539,24 +633,25 @@
 }
 
 .edit-header {
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--line);
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--hairline);
 }
 
 .edit-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  color: var(--ink);
   text-align: center;
 }
 
 .edit-body {
-  padding: 14px 16px;
+  padding: 20px 24px;
   overflow-y: auto;
 }
 
 .edit-field {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .edit-field:last-child {
@@ -565,37 +660,42 @@
 
 .edit-label {
   display: block;
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--muted);
-  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.016em;
+  color: var(--ink-muted-48);
+  margin-bottom: 6px;
 }
 
 .edit-input,
 .edit-select {
   width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 16px;
-  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: -0.012em;
+  padding: 12px 20px;
+  height: 44px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .edit-input:focus,
 .edit-select:focus {
   outline: none;
-  border-color: #77c2b5;
-  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+  border-color: var(--primary-focus);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.18);
 }
 
 .edit-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--line);
-  background: #ffffff;
+  gap: 12px;
+  padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--hairline);
+  background: var(--canvas);
 }
 
 .edit-actions .app-btn {
@@ -611,27 +711,18 @@
 @media (min-width: 701px) {
   .edit-overlay {
     align-items: center;
-    padding: 18px;
+    padding: 24px;
   }
 
   .edit-sheet {
-    border-radius: 18px;
+    border-radius: var(--r-lg);
     max-height: min(86dvh, 760px);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
   }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* -------------------------------------------------------------------------
+   Animations
+   ------------------------------------------------------------------------- */
 @keyframes slide-up {
   from {
     transform: translateY(20px);
@@ -643,9 +734,26 @@
   }
 }
 
+/* -------------------------------------------------------------------------
+   Responsive — DESIGN.md breakpoints
+   ------------------------------------------------------------------------- */
+@media (max-width: 833px) {
+  .container {
+    padding: 24px 16px 48px;
+  }
+
+  .app-shell {
+    gap: 16px;
+  }
+
+  .card-surface {
+    padding: 20px;
+  }
+}
+
 @media (max-width: 700px) {
   .container {
-    padding: 14px 10px 24px;
+    padding: 20px 12px 40px;
   }
 
   .app-header-row {
@@ -672,11 +780,11 @@
   }
 
   .edit-body {
-    padding: 12px;
+    padding: 16px;
   }
 
   .edit-actions {
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .summary-chart-header-with-actions {
@@ -695,5 +803,15 @@
 
   .expense-toolbar-meta {
     text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 1.75rem;
+  }
+
+  .card-surface {
+    padding: 16px;
   }
 }

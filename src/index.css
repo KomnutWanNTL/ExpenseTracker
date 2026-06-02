@@ -1,11 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;600;700&display=swap');
 
 :root {
-  font-family: 'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
-  line-height: 1.5;
+  /* SF Pro Text for body — resolves to native SF Pro on Apple platforms;
+     IBM Plex Sans Thai retained as Thai script fallback. */
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    system-ui, 'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
+  font-size: 17px;
+  line-height: 1.47;
   font-weight: 400;
-  color: #16212f;
-  background-color: #f2f6f9;
+  letter-spacing: -0.012em;
+  color: #1d1d1f;
+  background-color: #f5f5f7;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -31,6 +36,7 @@ html {
 
 body {
   margin: 0;
+  background-color: #f5f5f7;
 }
 
 h1,
@@ -38,7 +44,11 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-family: 'Sora', 'IBM Plex Sans Thai', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui,
+    'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  color: #1d1d1f;
 }
 
 p {

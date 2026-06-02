@@ -36,10 +36,10 @@ export default function BudgetStatus({ budgets, expenses }: BudgetStatusProps) {
       {budgetUsages.map((usage) => {
         const statusColor =
           usage.status === 'over-budget'
-            ? '#ef4444'
+            ? '#b91d1d'
             : usage.status === 'near-limit'
-              ? '#f59e0b'
-              : '#10b981';
+              ? '#b25e09'
+              : '#1a8754';
 
         return (
           <div

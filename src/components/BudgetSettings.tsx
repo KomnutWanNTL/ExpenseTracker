@@ -66,10 +66,20 @@ export default function BudgetSettings({ expenses, onClose }: BudgetSettingsProp
   }
 
   return (
-    <div style={{ padding: '16px 16px 24px 16px' }}>
-      <h2 style={{ margin: '0 0 16px 0', fontSize: '1.3rem' }}>ตั้งค่า Budget</h2>
-      
-      <div style={{ marginBottom: '20px' }}>
+    <div style={{ padding: '24px 24px 32px 24px' }}>
+      <h2
+        style={{
+          margin: '0 0 24px 0',
+          fontSize: '21px',
+          fontWeight: 600,
+          letterSpacing: '-0.018em',
+          color: '#1d1d1f',
+        }}
+      >
+        ตั้งค่า Budget
+      </h2>
+
+      <div style={{ marginBottom: '24px' }}>
         {CATEGORIES.map((category) => {
           const usage = budgetUsages.find((u) => u.category === category);
           const inputValue = editingAmount[category] || '';
@@ -79,15 +89,23 @@ export default function BudgetSettings({ expenses, onClose }: BudgetSettingsProp
               key={category}
               style={{
                 marginBottom: '16px',
-                paddingBottom: '12px',
-                borderBottom: '1px solid #eee',
+                paddingBottom: '16px',
+                borderBottom: '1px solid #e0e0e0',
               }}
             >
-              <div style={{ marginBottom: '6px', fontWeight: 600, fontSize: '0.95rem' }}>
+              <div
+                style={{
+                  marginBottom: '8px',
+                  fontWeight: 600,
+                  fontSize: '17px',
+                  letterSpacing: '-0.012em',
+                  color: '#1d1d1f',
+                }}
+              >
                 {CATEGORY_LABELS[category]}
               </div>
 
-              <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <input
                   type="number"
                   min="0"
@@ -95,28 +113,24 @@ export default function BudgetSettings({ expenses, onClose }: BudgetSettingsProp
                   value={inputValue}
                   onChange={(e) => handleAmountChange(category, e.target.value)}
                   placeholder="0"
-                  style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    border: '1px solid #ddd',
-                    borderRadius: '6px',
-                    fontSize: '0.95rem',
-                  }}
+                  className="edit-input"
+                  style={{ flex: 1 }}
                 />
-                <span style={{ fontSize: '0.9rem', color: '#999' }}>บาท/เดือน</span>
+                <span style={{ fontSize: '14px', letterSpacing: '-0.016em', color: '#7a7a7a' }}>บาท/เดือน</span>
               </div>
 
               {usage && usage.budgetAmount > 0 && (
-                <div style={{ fontSize: '0.85rem', color: '#666' }}>
-                  จ่ายไปแล้ว: <strong>{formatAmount(usage.spentAmount)}</strong> (
+                <div style={{ fontSize: '14px', letterSpacing: '-0.016em', color: '#7a7a7a' }}>
+                  จ่ายไปแล้ว: <strong style={{ color: '#1d1d1f' }}>{formatAmount(usage.spentAmount)}</strong> (
                   <span
                     style={{
+                      fontWeight: 600,
                       color:
                         usage.status === 'over-budget'
-                          ? '#ef4444'
+                          ? '#b91d1d'
                           : usage.status === 'near-limit'
-                            ? '#f59e0b'
-                            : '#10b981',
+                            ? '#b25e09'
+                            : '#1a8754',
                     }}
                   >
                     {usage.percentageUsed}%
@@ -129,20 +143,20 @@ export default function BudgetSettings({ expenses, onClose }: BudgetSettingsProp
         })}
       </div>
 
-      <div style={{ display: 'flex', gap: '8px' }}>
-        <button
-          onClick={handleSave}
-          className="app-btn app-btn-primary"
-          style={{ flex: 1, fontSize: '0.95rem' }}
-        >
-          บันทึก
-        </button>
+      <div style={{ display: 'flex', gap: '12px' }}>
         <button
           onClick={onClose}
           className="app-btn app-btn-secondary"
-          style={{ flex: 1, fontSize: '0.95rem' }}
+          style={{ flex: 1 }}
         >
           ยกเลิก
+        </button>
+        <button
+          onClick={handleSave}
+          className="app-btn app-btn-primary"
+          style={{ flex: 1 }}
+        >
+          บันทึก
         </button>
       </div>
     </div>

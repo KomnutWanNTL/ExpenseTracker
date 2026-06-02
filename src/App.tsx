@@ -191,9 +191,6 @@ function App() {
 
   return (
     <main className="container">
-      <div className="bg-orb bg-orb-top" />
-      <div className="bg-orb bg-orb-bottom" />
-
       <div className="app-shell">
         <header className="app-header-row card-surface">
           <div>
