@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
-import type { Expense } from '../types/expense';
+import type { Category, Expense } from '../types/expense';
 
 interface ImportExpensesProps {
   onImport: (expenses: Expense[]) => void;
+  disabled?: boolean;
 }
 
 // Map Thai category label back to key
-const CATEGORY_LABELS: Record<string, string> = {
+const CATEGORY_LABELS: Record<string, Category> = {
   'อาหาร': 'food',
   'เดินทาง': 'transport',
   'ช็อปปิ้ง': 'shopping',
@@ -16,6 +17,17 @@ const CATEGORY_LABELS: Record<string, string> = {
   'ครอบครัว': 'family',
   'อื่น ๆ': 'other',
 };
+
+const VALID_CATEGORIES: Category[] = [
+  'food',
+  'transport',
+  'shopping',
+  'bills',
+  'entertainment',
+  'health',
+  'family',
+  'other',
+];
 
 function parseCSV(csv: string): Expense[] {
   const lines = csv.trim().split(/\r?\n/);
@@ -44,10 +56,11 @@ function parseCSV(csv: string): Expense[] {
       }
       cols.push(cur);
       // Map Thai label to key if needed
-      let category = cols[idx('category')].replace(/^"|"$/g, '').trim();
-      if (Object.keys(CATEGORY_LABELS).includes(category)) {
-        category = CATEGORY_LABELS[category];
-      }
+      const rawCategory = cols[idx('category')].replace(/^"|"$/g, '').trim();
+      const mappedCategory = CATEGORY_LABELS[rawCategory] ?? rawCategory;
+      const category: Category = VALID_CATEGORIES.includes(mappedCategory as Category)
+        ? (mappedCategory as Category)
+        : 'other';
       let id = cols[idx('id')].replace(/^"|"$/g, '').trim();
       if (!id) id = crypto.randomUUID();
       return {
@@ -88,7 +101,7 @@ function mergeExpensesWithConfirmation(existing: Expense[], imported: Expense[])
   return [...toInsert, ...updated];
 }
 
-const ImportExpenses: React.FC<ImportExpensesProps> = ({ onImport }) => {
+const ImportExpenses: React.FC<ImportExpensesProps> = ({ onImport, disabled = false }) => {
   const fileInput = useRef<HTMLInputElement>(null);
   // Get current expenses from localStorage (sync with app)
   function getCurrentExpenses(): Expense[] {
@@ -137,8 +150,9 @@ const ImportExpenses: React.FC<ImportExpensesProps> = ({ onImport }) => {
         className="header-btn import-btn"
         style={{ minWidth: 0 }}
         onClick={() => fileInput.current?.click()}
+        disabled={disabled}
       >
-        Import
+        Import Transaction
       </button>
     </>
   );

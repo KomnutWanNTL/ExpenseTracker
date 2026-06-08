@@ -13,14 +13,17 @@ import EditExpense from './components/EditExpense';
 import BudgetSettings from './components/BudgetSettings';
 import BudgetStatus from './components/BudgetStatus';
 import ImportExpenses from './components/ImportExpenses';
+import AdminReport from './components/AdminReport';
 
 import { parseExpenseInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
 import { getCategoryForNote } from './storage/noteCategoryMapping';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
 import MonthSelector from './components/MonthSelector';
-import { loadBudgets } from './storage/budgetStorage';
+import { loadBudgets, saveBudgets } from './storage/budgetStorage';
 import { downloadExpensesAsCSV } from './utils/csvExport';
+import { getAllNoteCategoryMappings, setAllNoteCategoryMappings } from './storage/noteCategoryMapping';
+import { fetchRemoteData, mergeData, type AppData } from './storage/remoteDataStorage';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -70,10 +73,30 @@ function App() {
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // On startup: fetch data.json from GitHub Pages and merge into local state
+  useEffect(() => {
+    fetchRemoteData().then(remote => {
+      if (!remote) return;
+      const localData: AppData = {
+        expenses: loadExpenses(),
+        budgets: loadBudgets(),
+        noteCategoryMap: getAllNoteCategoryMappings(),
+      };
+      const merged = mergeData(localData, remote);
+      saveExpenses(merged.expenses);
+      saveBudgets(merged.budgets);
+      setAllNoteCategoryMappings(merged.noteCategoryMap);
+      setExpenses(merged.expenses);
+      setBudgets(merged.budgets);
+    });
+  }, []);
   // Pagination state
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<'all' | Expense['category']>('all');
+  const [activeView, setActiveView] = useState<'tracker' | 'adminReport'>('tracker');
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   function handleDelete(id: string) {
     if (!window.confirm('คุณต้องการลบรายการนี้หรือไม่?')) return;
@@ -99,6 +122,22 @@ function App() {
     saveExpenses(updated);
     console.log('Saved expenses (after edit):', updated);
     setEditingExpense(null);
+  }
+
+  function handleSyncExport() {
+    const data: AppData = {
+      expenses,
+      budgets: loadBudgets(),
+      noteCategoryMap: getAllNoteCategoryMappings(),
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.json';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   function handleCloseBudgetSettings() {
@@ -189,129 +228,206 @@ function App() {
       <div className="bg-orb bg-orb-top" />
       <div className="bg-orb bg-orb-bottom" />
 
-      <div className="app-shell">
-        <header className="app-header-row card-surface">
-          <div>
-            <h1 className="app-title">Expense Tracker</h1>
-            <p className="app-subtitle">บันทึกรายจ่ายให้ชัดเจนขึ้นในทุกวัน</p>
+      <div className="app-shell app-shell-with-sidebar">
+        <aside className={`card-surface side-nav ${isMobileNavOpen ? 'side-nav-mobile-open' : ''}`}>
+          <div className="side-nav-title-wrap">
+            <h2 className="side-nav-title">Navigation</h2>
+            <p className="side-nav-subtitle">เลือกหน้าที่ต้องการใช้งาน</p>
           </div>
-          <div className="header-btn-group">
+
+          <nav className="side-nav-list" aria-label="Main navigation">
             <button
-              className="header-btn export-btn"
-              onClick={() => downloadExpensesAsCSV(expenses)}
-            >
-              Export
-            </button>
-            <ImportExpenses
-              onImport={merged => {
-                setExpenses(merged);
-                saveExpenses(merged);
-                alert('นำเข้าข้อมูลสำเร็จ!');
+              className={`side-nav-item ${activeView === 'tracker' ? 'side-nav-item-active' : ''}`}
+              onClick={() => {
+                setActiveView('tracker');
+                setIsMobileNavOpen(false);
               }}
-              disabled={!isCurrentMonth}
-            />
+            >
+              หน้าหลัก
+            </button>
             <button
-              className="header-btn budget-btn"
-              onClick={() => setShowBudgetSettings(true)}
-              disabled={!isCurrentMonth}
+              className={`side-nav-item ${activeView === 'adminReport' ? 'side-nav-item-active' : ''}`}
+              onClick={() => {
+                setActiveView('adminReport');
+                setIsMobileNavOpen(false);
+              }}
+            >
+              Admin Report
+            </button>
+          </nav>
+
+          <div className="side-nav-divider" />
+
+          <div className="side-nav-actions">
+            <button
+              className="header-btn sync-btn side-action-btn"
+              onClick={() => {
+                handleSyncExport();
+                setIsMobileNavOpen(false);
+              }}
+              title="ดาวน์โหลด data.json เพื่อ push เข้า git"
+              disabled={activeView !== 'tracker'}
+            >
+              Backup Category
+            </button>
+            <button
+              className="header-btn export-btn side-action-btn"
+              onClick={() => {
+                downloadExpensesAsCSV(expenses);
+                setIsMobileNavOpen(false);
+              }}
+              disabled={activeView !== 'tracker'}
+            >
+              Export Transaction
+            </button>
+            <div className="side-action-btn-wrap">
+              <ImportExpenses
+                onImport={merged => {
+                  setExpenses(merged);
+                  saveExpenses(merged);
+                  alert('นำเข้าข้อมูลสำเร็จ!');
+                  setIsMobileNavOpen(false);
+                }}
+                disabled={!isCurrentMonth || activeView !== 'tracker'}
+              />
+            </div>
+            {/* <button
+              className="header-btn budget-btn side-action-btn"
+              onClick={() => {
+                setShowBudgetSettings(true);
+                setIsMobileNavOpen(false);
+              }}
+              disabled={!isCurrentMonth || activeView !== 'tracker'}
             >
               Budget
-            </button>
+            </button> */}
           </div>
-        </header>
-
-        <section className="card-surface control-panel">
-          <MonthSelector
-            months={allMonths.length > 0 ? allMonths : [defaultMonth]}
-            value={selectedMonth}
-            onChange={setSelectedMonth}
+        </aside>
+        {isMobileNavOpen && (
+          <button
+            type="button"
+            className="side-nav-backdrop"
+            aria-label="ปิดเมนูนำทาง"
+            onClick={() => setIsMobileNavOpen(false)}
           />
-          <QuickAddExpense
-            value={input}
-            onChange={v => {
-              setInput(v);
-              setError(null);
-            }}
-            onSubmit={handleSubmit}
-            disabled={isSubmitting || !isCurrentMonth}
-            ref={inputRef}
-          />
-          {autoCategoryMsg && (
-            <div className="status-banner status-banner-info">{autoCategoryMsg}</div>
-          )}
-          {error && <div className="status-banner status-banner-error">{error}</div>}
-        </section>
+        )}
 
-        <Summary expenses={expenses} month={selectedMonth} />
-        {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
-
-        <section className="card-surface expense-section">
-          <div className="expense-toolbar">
-            <div className="expense-toolbar-left">
-              <label htmlFor="pageSize" className="expense-toolbar-label">แสดงต่อหน้า</label>
-              <select
-                id="pageSize"
-                value={pageSize}
-                onChange={e => {
-                  setPageSize(Number(e.target.value));
-                  setPage(1);
-                }}
-                className="app-select page-size-select"
-              >
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-              </select>
-
-              <label htmlFor="categoryFilter" className="expense-toolbar-label">หมวดหมู่</label>
-              <select
-                id="categoryFilter"
-                value={selectedCategory}
-                onChange={e => {
-                  setSelectedCategory(e.target.value as 'all' | Expense['category']);
-                  setPage(1);
-                }}
-                className="app-select category-filter-select"
-              >
-                <option value="all">ทั้งหมด</option>
-                {availableCategories.map(category => (
-                  <option key={category} value={category}>
-                    {CATEGORY_LABELS[category]}
-                  </option>
-                ))}
-              </select>
+        <div className="app-main">
+          <header className="app-header-row card-surface">
+            <div>
+              <h1 className="app-title">Expense Tracker</h1>
+              <p className="app-subtitle">บันทึกรายจ่ายให้ชัดเจนขึ้นในทุกวัน</p>
             </div>
-            <div className="expense-toolbar-meta">
-              {totalItems > 0 && (
-                <span>{`หน้า ${page} / ${totalPages} (${totalItems} รายการ)`}</span>
+            <button
+              type="button"
+              className="mobile-nav-toggle"
+              aria-label={isMobileNavOpen ? 'ซ่อนเมนูนำทาง' : 'แสดงเมนูนำทาง'}
+              aria-expanded={isMobileNavOpen}
+              onClick={() => setIsMobileNavOpen(open => !open)}
+            >
+              {isMobileNavOpen ? 'ซ่อนเมนู' : 'เมนู'}
+            </button>
+          </header>
+
+          {activeView === 'tracker' ? (
+          <>
+            <section className="card-surface control-panel">
+              <MonthSelector
+                months={allMonths.length > 0 ? allMonths : [defaultMonth]}
+                value={selectedMonth}
+                onChange={setSelectedMonth}
+              />
+              <QuickAddExpense
+                value={input}
+                onChange={v => {
+                  setInput(v);
+                  setError(null);
+                }}
+                onSubmit={handleSubmit}
+                disabled={isSubmitting || !isCurrentMonth}
+                ref={inputRef}
+              />
+              {autoCategoryMsg && (
+                <div className="status-banner status-banner-info">{autoCategoryMsg}</div>
               )}
-            </div>
-          </div>
+              {error && <div className="status-banner status-banner-error">{error}</div>}
+            </section>
 
-          <ExpenseList
-            expenses={pagedExpenses}
-            onEdit={isCurrentMonth ? handleEdit : undefined}
-            onDelete={isCurrentMonth ? handleDelete : undefined}
-          />
+            <Summary expenses={expenses} month={selectedMonth} />
+            {budgets.length > 0 && <BudgetStatus budgets={budgets} expenses={filteredExpenses} />}
 
-          <div className="pagination-row">
-            <button
-              onClick={() => setPage(p => Math.max(1, p - 1))}
-              disabled={totalPages === 1 || page === 1}
-              className="app-btn app-btn-secondary nav-btn"
-            >
-              ก่อนหน้า
-            </button>
-            <button
-              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              disabled={totalPages === 1 || page === totalPages}
-              className="app-btn app-btn-secondary nav-btn"
-            >
-              ถัดไป
-            </button>
-          </div>
-        </section>
+            <section className="card-surface expense-section">
+              <div className="expense-toolbar">
+                <div className="expense-toolbar-left">
+                  <label htmlFor="pageSize" className="expense-toolbar-label">แสดงต่อหน้า</label>
+                  <select
+                    id="pageSize"
+                    value={pageSize}
+                    onChange={e => {
+                      setPageSize(Number(e.target.value));
+                      setPage(1);
+                    }}
+                    className="app-select page-size-select"
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
+
+                  <label htmlFor="categoryFilter" className="expense-toolbar-label">หมวดหมู่</label>
+                  <select
+                    id="categoryFilter"
+                    value={selectedCategory}
+                    onChange={e => {
+                      setSelectedCategory(e.target.value as 'all' | Expense['category']);
+                      setPage(1);
+                    }}
+                    className="app-select category-filter-select"
+                  >
+                    <option value="all">ทั้งหมด</option>
+                    {availableCategories.map(category => (
+                      <option key={category} value={category}>
+                        {CATEGORY_LABELS[category]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="expense-toolbar-meta">
+                  {totalItems > 0 && (
+                    <span>{`หน้า ${page} / ${totalPages} (${totalItems} รายการ)`}</span>
+                  )}
+                </div>
+              </div>
+
+              <ExpenseList
+                expenses={pagedExpenses}
+                onEdit={isCurrentMonth ? handleEdit : undefined}
+                onDelete={isCurrentMonth ? handleDelete : undefined}
+              />
+
+              <div className="pagination-row">
+                <button
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={totalPages === 1 || page === 1}
+                  className="app-btn app-btn-secondary nav-btn"
+                >
+                  ก่อนหน้า
+                </button>
+                <button
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={totalPages === 1 || page === totalPages}
+                  className="app-btn app-btn-secondary nav-btn"
+                >
+                  ถัดไป
+                </button>
+              </div>
+            </section>
+          </>
+        ) : (
+          <AdminReport expenses={expenses} categoryLabels={CATEGORY_LABELS} />
+        )}
+        </div>
       </div>
 
       {editingExpense && isCurrentMonth && (

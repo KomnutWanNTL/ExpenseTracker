@@ -44,3 +44,7 @@ export function removeCategoryForNote(note: string): void {
 export function getAllNoteCategoryMappings(): NoteCategoryMap {
   return loadNoteCategoryMap();
 }
+
+export function setAllNoteCategoryMappings(map: NoteCategoryMap): void {
+  saveNoteCategoryMap(map);
+}
