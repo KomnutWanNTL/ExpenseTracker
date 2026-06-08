@@ -263,6 +263,8 @@
 .app-select,
 .quick-add-input {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface);
@@ -285,6 +287,17 @@
   outline: none;
   border-color: #77c2b5;
   box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+}
+
+.quick-add-input[type='date'],
+.edit-input[type='date'] {
+  min-height: 44px;
+  padding-right: 40px;
+}
+
+.quick-add-input[type='date']::-webkit-date-and-time-value,
+.edit-input[type='date']::-webkit-date-and-time-value {
+  text-align: left;
 }
 
 .status-banner {
@@ -778,6 +791,8 @@
 .edit-input,
 .edit-select {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface);
