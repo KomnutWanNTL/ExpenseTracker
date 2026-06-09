@@ -1,5 +1,30 @@
 {
   "expenses": [],
   "budgets": [],
-  "noteCategoryMap": {}
+  "noteCategoryMap": {
+    "uniqlo": "shopping",
+    "บีทีเอส": "transport",
+    "น้พมันมะกอก": "shopping",
+    "ขนม": "food",
+    "ไข่ไก่": "food",
+    "fuku": "food",
+    "นมดาริน": "shopping",
+    "ผลไม้": "food",
+    "siriraj": "shopping",
+    "น้ำมันมะกอก": "shopping",
+    "7-11": "food",
+    "โจ๊ก": "food",
+    "bolt": "transport",
+    "ซาลาเปา": "food",
+    "cerave": "shopping",
+    "ขนมไข่": "food",
+    "ทาโกะ": "food",
+    "ไอติม": "food",
+    "ขนมครก": "food",
+    "ขนมดาริน": "shopping",
+    "dha ดาริน": "shopping",
+    "dha ดรีม ไอซ์": "shopping",
+    "tada": "transport",
+    "white story": "food"
+  }
 }
