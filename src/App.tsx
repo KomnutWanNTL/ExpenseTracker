@@ -40,6 +40,8 @@ const CATEGORY_LABELS: Record<Expense['category'], string> = {
   other: 'อื่น ๆ',
 };
 
+const APP_VERSION = __APP_VERSION__;
+
 // Always use Thailand local date (YYYY-MM-DD) using dayjs
 function getLocalDateString(): string {
   return dayjs().tz('Asia/Bangkok').format('YYYY-MM-DD');
@@ -317,6 +319,7 @@ function App() {
             <div>
               <h1 className="app-title">Expense Tracker</h1>
               <p className="app-subtitle">บันทึกรายจ่ายให้ชัดเจนขึ้นในทุกวัน</p>
+              <p className="app-version">Version {APP_VERSION}</p>
             </div>
             <button
               type="button"

@@ -43,11 +43,16 @@ export function mergeData(local: AppData, remote: AppData): AppData {
   // Budgets: use local if non-empty, else fall back to remote
   const budgets = local.budgets.length > 0 ? local.budgets : remote.budgets;
 
-  // noteCategoryMap: merge, local wins on conflict
-  const noteCategoryMap: NoteCategoryMap = {
-    ...remote.noteCategoryMap,
-    ...local.noteCategoryMap,
-  };
+  // noteCategoryMap: local usually wins, except local "other" should not override
+  // a more specific remote category when key conflicts.
+  const noteCategoryMap: NoteCategoryMap = { ...remote.noteCategoryMap };
+  for (const [noteKey, localCategory] of Object.entries(local.noteCategoryMap)) {
+    const remoteCategory = noteCategoryMap[noteKey];
+    if (localCategory === 'other' && remoteCategory && remoteCategory !== 'other') {
+      continue;
+    }
+    noteCategoryMap[noteKey] = localCategory;
+  }
 
   return { expenses, budgets, noteCategoryMap };
 }
