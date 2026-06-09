@@ -532,10 +532,29 @@
 .admin-criteria-item {
   display: grid;
   gap: 6px;
+  min-width: 0;
 }
 
 .admin-criteria-item-wide {
   grid-column: 1 / -1;
+}
+
+.admin-date-input {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.admin-date-input::-webkit-date-and-time-value {
+  min-width: 0;
+}
+
+.admin-date-input::-webkit-calendar-picker-indicator {
+  margin-left: 6px;
 }
 
 .admin-action-row {
@@ -968,6 +987,12 @@
 
   .admin-criteria-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-date-input {
+    font-size: 16px;
+    min-height: 44px;
+    padding-right: 34px;
   }
 
   .expense-toolbar-meta {

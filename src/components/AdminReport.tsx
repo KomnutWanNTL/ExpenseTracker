@@ -122,7 +122,7 @@ export default function AdminReport({ expenses, categoryLabels }: AdminReportPro
           <input
             id="reportStartDate"
             type="date"
-            className="quick-add-input"
+            className="quick-add-input admin-date-input"
             value={filters.startDate}
             onChange={event => handleStartDateChange(event.target.value)}
           />
@@ -133,7 +133,7 @@ export default function AdminReport({ expenses, categoryLabels }: AdminReportPro
           <input
             id="reportEndDate"
             type="date"
-            className="quick-add-input"
+            className="quick-add-input admin-date-input"
             value={filters.endDate}
             onChange={event => handleEndDateChange(event.target.value)}
           />
