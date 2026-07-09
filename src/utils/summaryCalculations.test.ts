@@ -70,7 +70,7 @@ describe('Summary calculations', () => {
   });
 
   it('groups current month totals by category', () => {
-    const referenceDate = new Date('2026-04-20T08:00:00.000Z');
+    const referenceDate = '2026-04-20';
     const monthlyExpenses: Expense[] = [
       {
         id: 'a',
@@ -115,7 +115,7 @@ describe('Summary calculations', () => {
   });
 
   it('groups current month totals by day (ascending)', () => {
-    const referenceDate = new Date('2026-04-20T08:00:00.000Z');
+    const referenceDate = '2026-04-20';
     const monthlyExpenses: Expense[] = [
       {
         id: 'a',

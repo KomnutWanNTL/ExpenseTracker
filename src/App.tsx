@@ -4,7 +4,7 @@ import './App.css'
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import QuickAddExpense from './components/QuickAddExpense';
 import ExpenseList from './components/ExpenseList';
@@ -14,6 +14,8 @@ import BudgetSettings from './components/BudgetSettings';
 import BudgetStatus from './components/BudgetStatus';
 import ImportExpenses from './components/ImportExpenses';
 import AdminReport from './components/AdminReport';
+import ConfirmModal from './components/ConfirmModal';
+import Toast from './components/Toast';
 
 import { parseMultiLineInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
@@ -24,21 +26,11 @@ import { loadBudgets, saveBudgets } from './storage/budgetStorage';
 import { downloadExpensesAsCSV } from './utils/csvExport';
 import { getAllNoteCategoryMappings, setAllNoteCategoryMappings } from './storage/noteCategoryMapping';
 import { fetchRemoteData, mergeData, type AppData } from './storage/remoteDataStorage';
+import { CATEGORY_LABELS } from './utils/labels';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 import type { Expense } from './types/expense';
-
-const CATEGORY_LABELS: Record<Expense['category'], string> = {
-  food: 'อาหาร',
-  transport: 'เดินทาง',
-  shopping: 'ช็อปปิ้ง',
-  bills: 'บิล',
-  entertainment: 'บันเทิง',
-  health: 'สุขภาพ',
-  family: 'ครอบครัว',
-  other: 'อื่น ๆ',
-};
 
 const APP_VERSION = __APP_VERSION__;
 
@@ -67,6 +59,10 @@ function App() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   // State for showing auto-category notification
   const [autoCategoryMsg, setAutoCategoryMsg] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [confirmEditExpense, setConfirmEditExpense] = useState<Expense | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info'; onUndo?: () => void } | null>(null);
+  const deletedExpenseRef = useRef<Expense | null>(null);
   const [budgets, setBudgets] = useState(() => loadBudgets());
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
   // Month selector state
@@ -102,12 +98,34 @@ function App() {
   const [activeView, setActiveView] = useState<'tracker' | 'adminReport'>('tracker');
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
+  const dismissToast = useCallback(() => setToast(null), []);
+
   function handleDelete(id: string) {
-    if (!window.confirm('คุณต้องการลบรายการนี้หรือไม่?')) return;
+    const target = expenses.find(e => e.id === id);
+    if (target) deletedExpenseRef.current = target;
+    setConfirmDeleteId(id);
+  }
+
+  function handleDeleteConfirmed() {
+    const id = confirmDeleteId;
+    if (!id) return;
     const filtered = expenses.filter(e => e.id !== id);
     setExpenses(filtered);
     saveExpenses(filtered);
-    console.log('Saved expenses (after delete):', filtered);
+    setConfirmDeleteId(null);
+    setToast({
+      message: 'ลบรายการแล้ว',
+      type: 'success',
+      onUndo: () => {
+        if (deletedExpenseRef.current) {
+          const restored = [deletedExpenseRef.current, ...expenses.filter(e => e.id !== id)];
+          setExpenses(restored);
+          saveExpenses(restored);
+          deletedExpenseRef.current = null;
+        }
+        setToast(null);
+      },
+    });
   }
 
   function handleEdit(expense: Expense) {
@@ -115,17 +133,22 @@ function App() {
   }
 
   function handleSaveEdit(updatedExpense: Expense) {
-    if (!window.confirm('คุณต้องการบันทึกการแก้ไขรายการนี้หรือไม่?')) return;
-    // Ensure edited date is also local date string if changed
+    setConfirmEditExpense(updatedExpense);
+  }
+
+  function handleEditConfirmed() {
+    const expense = confirmEditExpense;
+    if (!expense) return;
     const fixedExpense = {
-      ...updatedExpense,
-      date: updatedExpense.date ? updatedExpense.date : getLocalDateString(),
+      ...expense,
+      date: expense.date ? expense.date : getLocalDateString(),
     };
-    const updated = expenses.map(e => (e.id === updatedExpense.id ? fixedExpense : e));
+    const updated = expenses.map(e => (e.id === expense.id ? fixedExpense : e));
     setExpenses(updated);
     saveExpenses(updated);
-    console.log('Saved expenses (after edit):', updated);
+    setConfirmEditExpense(null);
     setEditingExpense(null);
+    setToast({ message: 'บันทึกการแก้ไขเรียบร้อย', type: 'success' });
   }
 
   function handleSyncExport() {
@@ -167,7 +190,8 @@ function App() {
       return;
     }
 
-    const newExpenses: Expense[] = validResults.map(r => {
+    // Show the latest typed line first in the expense table.
+    const newExpenses: Expense[] = [...validResults].reverse().map(r => {
       const learnedCategory = getCategoryForNote(r.note!);
       const category = learnedCategory || detectCategoryFromNote(r.note!);
       if (learnedCategory) {
@@ -298,7 +322,7 @@ function App() {
                 onImport={merged => {
                   setExpenses(merged);
                   saveExpenses(merged);
-                  alert('นำเข้าข้อมูลสำเร็จ!');
+                  setToast({ message: 'นำเข้าข้อมูลสำเร็จ!', type: 'success' });
                   setIsMobileNavOpen(false);
                 }}
                 disabled={!isCurrentMonth || activeView !== 'tracker'}
@@ -457,6 +481,33 @@ function App() {
             <BudgetSettings expenses={expenses} onClose={handleCloseBudgetSettings} />
           </div>
         </div>
+      )}
+
+      <ConfirmModal
+        open={confirmDeleteId !== null}
+        title="ลบรายการ"
+        message="คุณต้องการลบรายการนี้หรือไม่?"
+        confirmLabel="ลบ"
+        danger
+        onConfirm={handleDeleteConfirmed}
+        onCancel={() => setConfirmDeleteId(null)}
+      />
+
+      <ConfirmModal
+        open={confirmEditExpense !== null}
+        title="บันทึกการแก้ไข"
+        message="คุณต้องการบันทึกการแก้ไขรายการนี้หรือไม่?"
+        onConfirm={handleEditConfirmed}
+        onCancel={() => setConfirmEditExpense(null)}
+      />
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onUndo={toast.onUndo}
+          onClose={dismissToast}
+        />
       )}
     </main>
   );

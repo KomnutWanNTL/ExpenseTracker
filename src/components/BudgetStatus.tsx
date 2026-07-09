@@ -3,22 +3,7 @@ import { calculateBudgetUsage } from '../utils/budgetCalculations';
 import type { Expense } from '../types/expense';
 import type { Budget } from '../types/budget';
 import { CATEGORY_COLORS } from '../utils/categoryColors';
-
-interface BudgetStatusProps {
-  budgets: Budget[];
-  expenses: Expense[];
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  food: 'อาหาร',
-  transport: 'เดินทาง',
-  shopping: 'ช็อปปิ้ง',
-  bills: 'บิล',
-  entertainment: 'บันเทิง',
-  health: 'สุขภาพ',
-  family: 'ครอบครัว',
-  other: 'อื่น ๆ',
-};
+import { CATEGORY_LABELS } from '../utils/labels';
 
 export default function BudgetStatus({ budgets, expenses }: BudgetStatusProps) {
   const budgetUsages = calculateBudgetUsage(budgets, expenses);

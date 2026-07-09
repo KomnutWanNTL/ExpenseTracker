@@ -1,16 +1,6 @@
 import { formatDate, formatAmount } from '../utils/formatters';
 import type { Expense } from '../types/expense';
-
-const CATEGORY_LABELS: Record<string, string> = {
-  food: 'อาหาร',
-  transport: 'เดินทาง',
-  shopping: 'ช็อปปิ้ง',
-  bills: 'บิล',
-  entertainment: 'บันเทิง',
-  health: 'สุขภาพ',
-  family: 'ครอบครัว',
-  other: 'อื่น ๆ',
-};
+import { CATEGORY_LABELS } from '../utils/labels';
 
 interface ExpenseItemProps {
   expense: Expense;

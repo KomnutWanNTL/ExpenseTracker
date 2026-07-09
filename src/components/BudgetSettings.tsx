@@ -4,6 +4,7 @@ import { loadBudgets, saveBudgets } from '../storage/budgetStorage';
 import { calculateBudgetUsage } from '../utils/budgetCalculations';
 import type { Expense, Category } from '../types/expense';
 import type { Budget } from '../types/budget';
+import { CATEGORY_LABELS } from '../utils/labels';
 
 const CATEGORIES: Category[] = [
   'food',
@@ -15,17 +16,6 @@ const CATEGORIES: Category[] = [
   'family',
   'other',
 ];
-
-const CATEGORY_LABELS: Record<Category, string> = {
-  food: 'อาหาร',
-  transport: 'เดินทาง',
-  shopping: 'ช็อปปิ้ง',
-  bills: 'บิล',
-  entertainment: 'บันเทิง',
-  health: 'สุขภาพ',
-  family: 'ครอบครัว',
-  other: 'อื่น ๆ',
-};
 
 interface BudgetSettingsProps {
   expenses: Expense[];
