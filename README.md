@@ -9,9 +9,9 @@ Personal expense tracker focused on speed, local-first privacy, and mobile-first
 
 ## Current Status
 
-- Core implementation (Quick Add, list/edit/delete, dashboard, budgets, CSV import/export, PWA shell) is available.
+- Core implementation with all Phase 0-3 features complete, plus multi-line input, admin report, and note category learning.
 - Current focus is QA, reliability hardening, and UX polish.
-- Some automated tests are still failing (see Testing section).
+- 32 tests passing (see Testing section).
 
 ## Implemented Features
 
@@ -28,7 +28,8 @@ Personal expense tracker focused on speed, local-first privacy, and mobile-first
 
 - Manual QA coverage for mobile, keyboard flow, and offline behavior
 - Reliability/performance hardening
-- Weekly view and advanced grouped summary views (tracked in requirements/tasks)
+- Weekly view and advanced grouped summary views
+- Fix remaining 4 failing tests (csvExport header, summaryCalculations referenceDate)
 
 ## Tech Stack
 
@@ -53,7 +54,7 @@ npm run deploy    # deploy dist/ to gh-pages branch
 
 Current `npm run test` result:
 
-- Passing: 30
+- Passing: 32
 - Failing: 4
 - Todo: 4
 

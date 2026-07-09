@@ -853,6 +853,15 @@ MVP ถือว่าเสร็จเมื่อทุกข้อด้า�
 - ตรวจสอบความคืบหน้าล่าสุด: Feature หลักครบทุก phase, เหลือ Manual QA, Reliability, Performance, Mobile usability, polish UI/UX
 - เตรียมแผน Phase 4: Manual QA, reliability hardening, performance, usability, polish
 
+### 2026-07-09
+- fix: register Filler plugin to resolve Chart.js fill option warning
+- feat: support multi-line input (Shift+Enter) in quick add expense
+- feat: enhance admin report date input styling and functionality
+- fix: always include current month in month selector so new months are usable immediately
+- feat: update dependencies, enhance service worker, add note category mappings
+- bump version to 1.1.0
+- update README.md status and test count
+
 
 ---
 
