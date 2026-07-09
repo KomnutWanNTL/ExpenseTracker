@@ -29,3 +29,11 @@ export function parseExpenseInput(input: string): ParseResult {
   const note = trimmed.replace(new RegExp(amountStr + '$'), '').trim();
   return { note, amount, valid: true };
 }
+
+export function parseMultiLineInput(input: string): ParseResult[] {
+  const lines = input.split('\n');
+  return lines
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .map(line => parseExpenseInput(line));
+}

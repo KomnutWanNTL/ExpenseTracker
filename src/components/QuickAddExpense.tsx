@@ -9,42 +9,50 @@ interface QuickAddExpenseProps {
   disabled?: boolean;
 }
 
-const QuickAddExpense = forwardRef<HTMLInputElement, QuickAddExpenseProps>(
+const QuickAddExpense = forwardRef<HTMLTextAreaElement, QuickAddExpenseProps>(
   ({ value, onChange, onSubmit, disabled }, ref) => {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    // Autofocus on mount
     useEffect(() => {
-      if (inputRef.current) inputRef.current.focus();
+      if (textareaRef.current) textareaRef.current.focus();
     }, []);
 
-    function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-      if (e.key === 'Enter' && !disabled) {
-        onSubmit();
+    function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (!disabled) onSubmit();
       }
     }
 
-    // Allow parent to control ref for focus recovery
-    const setRefs = (el: HTMLInputElement | null) => {
-      (inputRef as any).current = el;
+    const setRefs = (el: HTMLTextAreaElement | null) => {
+      (textareaRef as any).current = el;
       if (typeof ref === 'function') ref(el);
       else if (ref && typeof ref === 'object') (ref as any).current = el;
     };
 
     return (
       <div className="quick-add-wrap">
-        <input
+        <textarea
           ref={setRefs}
-          type="text"
           value={value}
           onChange={e => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="ข้าว 50"
-          aria-label="เพิ่มค่าใช้จ่าย"
-          className="quick-add-input"
+          placeholder="ข้าว 50&#10;กาแฟ 35&#10;น้ำ 20"
+          aria-label="เพิ่มค่าใช้จ่ายหลายรายการ"
+          className="quick-add-input quick-add-textarea"
           autoComplete="off"
           disabled={disabled}
+          rows={3}
         />
+        <button
+          type="button"
+          className="quick-add-submit"
+          onClick={onSubmit}
+          disabled={disabled || !value.trim()}
+          aria-label="บันทึกรายจ่าย"
+        >
+          + เพิ่ม
+        </button>
       </div>
     );
   }

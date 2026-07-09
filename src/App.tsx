@@ -15,7 +15,7 @@ import BudgetStatus from './components/BudgetStatus';
 import ImportExpenses from './components/ImportExpenses';
 import AdminReport from './components/AdminReport';
 
-import { parseExpenseInput } from './utils/expenseParser';
+import { parseMultiLineInput } from './utils/expenseParser';
 import { detectCategoryFromNote } from './utils/categoryDetection';
 import { getCategoryForNote } from './storage/noteCategoryMapping';
 import { saveExpenses, loadExpenses } from './storage/expenseStorage';
@@ -76,7 +76,7 @@ function App() {
   const defaultMonth = allMonths.length > 0 ? allMonths[0] : currentMonth;
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // On startup: fetch data.json from GitHub Pages and merge into local state
   useEffect(() => {
@@ -151,44 +151,53 @@ function App() {
 
   function handleSubmit() {
     if (!input.trim() || isSubmitting) return;
-    // Prevent rapid double submit
     const now = Date.now();
     if (now - lastSubmit.current < 500) return;
     lastSubmit.current = now;
     setIsSubmitting(true);
     setError(null);
-    const parsed = parseExpenseInput(input);
-    if (!parsed.valid || !parsed.amount) {
-      setError(parsed.error || 'ข้อมูลไม่ถูกต้อง');
+
+    const results = parseMultiLineInput(input);
+    const validResults = results.filter(r => r.valid && r.amount);
+    const invalidResults = results.filter(r => !r.valid);
+
+    if (validResults.length === 0) {
+      setError(invalidResults[0]?.error || 'ข้อมูลไม่ถูกต้อง');
       setIsSubmitting(false);
       return;
     }
-    // Use learned category if available, else auto-detect
-    const learnedCategory = getCategoryForNote(parsed.note);
-    let category = learnedCategory || detectCategoryFromNote(parsed.note);
-    if (learnedCategory) {
-      setAutoCategoryMsg('หมวดหมู่ถูกเลือกให้อัตโนมัติจากที่เคยตั้งไว้');
-    } else {
-      setAutoCategoryMsg(null);
-    }
-    const expense: Expense = {
-      id: crypto.randomUUID(),
-      note: parsed.note,
-      amount: parsed.amount,
-      category,
-      date: getLocalDateString(),
-      createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
-    };
-    const newExpenses = [expense, ...expenses];
-    saveExpenses(newExpenses);
-    setExpenses(newExpenses);
-    console.log('Saved expenses (after add):', newExpenses);
+
+    const newExpenses: Expense[] = validResults.map(r => {
+      const learnedCategory = getCategoryForNote(r.note!);
+      const category = learnedCategory || detectCategoryFromNote(r.note!);
+      if (learnedCategory) {
+        setAutoCategoryMsg('หมวดหมู่ถูกเลือกให้อัตโนมัติจากที่เคยตั้งไว้');
+      }
+      return {
+        id: crypto.randomUUID(),
+        note: r.note!,
+        amount: r.amount!,
+        category,
+        date: getLocalDateString(),
+        createdAt: dayjs().tz('Asia/Bangkok').toISOString(),
+      };
+    });
+
+    const updated = [...newExpenses, ...expenses];
+    saveExpenses(updated);
+    setExpenses(updated);
+    console.log('Saved expenses (after add):', updated);
     setInput('');
-    // Clear auto-category message after a short delay
-    setTimeout(() => setAutoCategoryMsg(null), 2000);
+
+    if (invalidResults.length > 0) {
+      const errorLines = invalidResults.map(r => r.error).filter(Boolean).join('; ');
+      setError(`เพิ่ม ${validResults.length} รายการสำเร็จ, ข้าม ${invalidResults.length} รายการ (${errorLines})`);
+    } else {
+      setAutoCategoryMsg(`เพิ่ม ${validResults.length} รายการสำเร็จ`);
+      setTimeout(() => setAutoCategoryMsg(null), 2000);
+    }
+
     setIsSubmitting(false);
-    setError(null);
-    // Restore focus after save
     setTimeout(() => {
       if (inputRef.current) inputRef.current.focus();
     }, 0);
