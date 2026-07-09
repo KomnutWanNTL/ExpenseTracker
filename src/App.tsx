@@ -73,7 +73,7 @@ function App() {
   const currentMonth = getLocalDateString().slice(0, 7);
   const allMonths = getAllMonths(expenses);
   const availableMonths = Array.from(new Set([...allMonths, currentMonth])).sort((a, b) => b.localeCompare(a));
-  const defaultMonth = allMonths.length > 0 ? allMonths[0] : currentMonth;
+  const defaultMonth = currentMonth;
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
