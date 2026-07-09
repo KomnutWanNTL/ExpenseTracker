@@ -1,8 +1,7 @@
 import { Bar, Line } from 'react-chartjs-2';
-import { Chart, LineElement, PointElement, BarElement, LinearScale, CategoryScale, Tooltip, Legend } from 'chart.js';
-import type { DailyTotal } from '../utils/summaryCalculations';
+import { Chart, LineElement, PointElement, BarElement, LinearScale, CategoryScale, Tooltip, Legend, Filler } from 'chart.js';
 
-Chart.register(LineElement, PointElement, BarElement, LinearScale, CategoryScale, Tooltip, Legend);
+Chart.register(LineElement, PointElement, BarElement, LinearScale, CategoryScale, Tooltip, Legend, Filler);
 
 interface DailyLineChartProps {
   data: DailyTotal[];
