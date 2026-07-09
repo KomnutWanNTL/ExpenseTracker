@@ -8,7 +8,7 @@ describe('csvExport', () => {
     it('returns CSV with headers', () => {
       const expenses: Expense[] = [];
       const csv = expensesToCSV(expenses);
-      expect(csv).toContain('Date,Category,Note,Amount,Created');
+      expect(csv).toContain('id,date,category,note,amount,createdAt');
     });
 
     it('exports expenses with correct fields', () => {
@@ -90,7 +90,7 @@ describe('csvExport', () => {
       
       // Should have header + 2 data rows
       expect(lines).toHaveLength(3);
-      expect(lines[0]).toContain('Date,Category,Note,Amount,Created');
+      expect(lines[0]).toContain('id,date,category,note,amount,createdAt');
       expect(lines[1]).toContain('2026-04-30');
       expect(lines[2]).toContain('2026-04-30');
     });

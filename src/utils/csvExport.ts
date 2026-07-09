@@ -2,17 +2,7 @@
 
 import type { Expense } from '../types/expense';
 import { formatAmount } from './formatters';
-
-const CATEGORY_LABELS: Record<string, string> = {
-  food: 'อาหาร',
-  transport: 'เดินทาง',
-  shopping: 'ช็อปปิ้ง',
-  bills: 'บิล',
-  entertainment: 'บันเทิง',
-  health: 'สุขภาพ',
-  family: 'ครอบครัว',
-  other: 'อื่น ๆ',
-};
+import { CATEGORY_LABELS } from './labels';
 
 /**
  * Convert expenses to CSV format

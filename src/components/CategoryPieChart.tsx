@@ -1,25 +1,12 @@
+import '../utils/chartSetup';
 import { Pie } from 'react-chartjs-2';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import type { CategoryTotal } from '../utils/summaryCalculations';
 import { CATEGORY_COLORS } from '../utils/categoryColors';
-
-Chart.register(ArcElement, Tooltip, Legend);
+import { CATEGORY_LABELS } from '../utils/labels';
 
 interface CategoryPieChartProps {
   data: CategoryTotal[];
 }
-
-const CATEGORY_LABELS: Record<string, string> = {
-  food: 'อาหาร',
-  transport: 'เดินทาง',
-  shopping: 'ช็อปปิ้ง',
-  bills: 'บิล',
-  entertainment: 'บันเทิง',
-  health: 'สุขภาพ',
-  family: 'ครอบครัว',
-  other: 'อื่น ๆ',
-};
-
 
 export default function CategoryPieChart({ data }: CategoryPieChartProps) {
   if (!data.length) return <div style={{textAlign:'center',color:'#888'}}>ไม่มีข้อมูลรายจ่าย</div>;

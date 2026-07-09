@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
+import { useRef, useState } from 'react';
 import type { Category, Expense } from '../types/expense';
+import ConfirmModal from './ConfirmModal';
 
 interface ImportExpensesProps {
   onImport: (expenses: Expense[]) => void;
   disabled?: boolean;
 }
 
-// Map Thai category label back to key
 const CATEGORY_LABELS: Record<string, Category> = {
   'อาหาร': 'food',
   'เดินทาง': 'transport',
@@ -19,25 +19,17 @@ const CATEGORY_LABELS: Record<string, Category> = {
 };
 
 const VALID_CATEGORIES: Category[] = [
-  'food',
-  'transport',
-  'shopping',
-  'bills',
-  'entertainment',
-  'health',
-  'family',
-  'other',
+  'food', 'transport', 'shopping', 'bills',
+  'entertainment', 'health', 'family', 'other',
 ];
 
 function parseCSV(csv: string): Expense[] {
   const lines = csv.trim().split(/\r?\n/);
   if (lines.length < 2) return [];
   const headers = lines[0].split(',').map(h => h.trim());
-  // Only support new export format: id, date, category, note, amount, createdAt
   if (headers.includes('id') && headers.includes('date') && headers.includes('category')) {
     const idx = (name: string) => headers.findIndex(h => h === name);
     return lines.slice(1).map(line => {
-      // Split CSV line with support for quoted cells
       const cols: string[] = [];
       let cur = '', inQuotes = false;
       for (let i = 0; i < line.length; ++i) {
@@ -55,7 +47,6 @@ function parseCSV(csv: string): Expense[] {
         }
       }
       cols.push(cur);
-      // Map Thai label to key if needed
       const rawCategory = cols[idx('category')].replace(/^"|"$/g, '').trim();
       const mappedCategory = CATEGORY_LABELS[rawCategory] ?? rawCategory;
       const category: Category = VALID_CATEGORIES.includes(mappedCategory as Category)
@@ -76,45 +67,38 @@ function parseCSV(csv: string): Expense[] {
   return [];
 }
 
-
-// Merge logic: update if id exists, insert if new
-function mergeExpensesWithConfirmation(existing: Expense[], imported: Expense[]): Expense[] | null {
+function mergeExpenses(existing: Expense[], imported: Expense[], updateExisting: boolean): Expense[] {
+  if (!updateExisting) {
+    const existingIds = new Set(existing.map(e => e.id));
+    return [...imported.filter(i => !existingIds.has(i.id)), ...existing];
+  }
   const existingMap = new Map(existing.map(e => [e.id, e]));
-  const toUpdate: Expense[] = [];
-  const toInsert: Expense[] = [];
   for (const imp of imported) {
-    if (imp.id && existingMap.has(imp.id)) {
-      toUpdate.push(imp);
-    } else {
-      toInsert.push(imp);
-    }
+    if (imp.id) existingMap.set(imp.id, imp);
   }
-  if (toUpdate.length > 0) {
-    const confirmMsg = `พบข้อมูลซ้ำจำนวน ${toUpdate.length} รายการ\nต้องการอัปเดตข้อมูลเดิมหรือไม่?\n(OK = อัปเดต, Cancel = ข้าม)`;
-    if (!window.confirm(confirmMsg)) return null;
+  const merged = Array.from(existingMap.values());
+  for (const imp of imported) {
+    if (!imp.id || !existingMap.has(imp.id)) merged.push(imp);
   }
-  // Update: replace by id, Insert: append
-  const updated = existing.map(e => {
-    const found = toUpdate.find(i => i.id === e.id);
-    return found ? found : e;
-  });
-  return [...toInsert, ...updated];
+  return merged;
 }
 
-const ImportExpenses: React.FC<ImportExpensesProps> = ({ onImport, disabled = false }) => {
+export default function ImportExpenses({ onImport, disabled = false }: ImportExpensesProps) {
   const fileInput = useRef<HTMLInputElement>(null);
-  // Get current expenses from localStorage (sync with app)
+  const [pendingImport, setPendingImport] = useState<Expense[] | null>(null);
+  const [pendingUpdateCount, setPendingUpdateCount] = useState(0);
+
   function getCurrentExpenses(): Expense[] {
     try {
       const raw = localStorage.getItem('expenses');
       if (!raw) return [];
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed.expenses)) return parsed.expenses;
-      // fallback for old format
       if (Array.isArray(parsed)) return parsed;
       return [];
     } catch { return []; }
   }
+
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -127,16 +111,42 @@ const ImportExpenses: React.FC<ImportExpensesProps> = ({ onImport, disabled = fa
         return;
       }
       const current = getCurrentExpenses();
-      const merged = mergeExpensesWithConfirmation(current, imported);
-      if (!merged) return; // user cancelled
-      // Save to localStorage in correct payload shape
-      try {
-        localStorage.setItem('expenses', JSON.stringify({ expenses: merged }));
-      } catch {}
-      onImport(merged);
+      const existingIds = new Set(current.map(e => e.id));
+      const updateCount = imported.filter(i => i.id && existingIds.has(i.id)).length;
+      if (updateCount > 0) {
+        setPendingImport(imported);
+        setPendingUpdateCount(updateCount);
+      } else {
+        doImport(current, imported, false);
+      }
     };
     reader.readAsText(file, 'utf-8');
   };
+
+  function doImport(current: Expense[], imported: Expense[], updateExisting: boolean) {
+    const merged = mergeExpenses(current, imported, updateExisting);
+    try {
+      localStorage.setItem('expenses', JSON.stringify({ expenses: merged }));
+    } catch {}
+    onImport(merged);
+  }
+
+  function handleImportConfirm() {
+    if (!pendingImport) return;
+    const current = getCurrentExpenses();
+    doImport(current, pendingImport, true);
+    setPendingImport(null);
+    setPendingUpdateCount(0);
+  }
+
+  function handleImportCancel() {
+    if (!pendingImport) return;
+    const current = getCurrentExpenses();
+    doImport(current, pendingImport, false);
+    setPendingImport(null);
+    setPendingUpdateCount(0);
+  }
+
   return (
     <>
       <input
@@ -154,8 +164,16 @@ const ImportExpenses: React.FC<ImportExpensesProps> = ({ onImport, disabled = fa
       >
         Import Transaction
       </button>
+
+      <ConfirmModal
+        open={pendingImport !== null}
+        title="นำเข้าข้อมูล"
+        message={`พบข้อมูลซ้ำจำนวน ${pendingUpdateCount} รายการ\nต้องการอัปเดตข้อมูลเดิมหรือไม่?`}
+        confirmLabel="อัปเดต"
+        cancelLabel="ข้ามรายการซ้ำ"
+        onConfirm={handleImportConfirm}
+        onCancel={handleImportCancel}
+      />
     </>
   );
-};
-
-export default ImportExpenses;
+}
