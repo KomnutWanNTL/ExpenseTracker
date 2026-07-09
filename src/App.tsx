@@ -70,8 +70,10 @@ function App() {
   const [budgets, setBudgets] = useState(() => loadBudgets());
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
   // Month selector state
+  const currentMonth = getLocalDateString().slice(0, 7);
   const allMonths = getAllMonths(expenses);
-  const defaultMonth = allMonths.length > 0 ? allMonths[0] : getLocalDateString().slice(0, 7);
+  const availableMonths = Array.from(new Set([...allMonths, currentMonth])).sort((a, b) => b.localeCompare(a));
+  const defaultMonth = allMonths.length > 0 ? allMonths[0] : currentMonth;
   const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
   const lastSubmit = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -336,7 +338,7 @@ function App() {
           <>
             <section className="card-surface control-panel">
               <MonthSelector
-                months={allMonths.length > 0 ? allMonths : [defaultMonth]}
+                months={availableMonths}
                 value={selectedMonth}
                 onChange={setSelectedMonth}
               />
